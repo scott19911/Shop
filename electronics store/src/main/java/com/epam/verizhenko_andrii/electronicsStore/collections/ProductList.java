@@ -10,6 +10,15 @@ public class ProductList<T> implements List<T> {
     private T[] products = (T[]) new Object[START_CAPACITY];
     private int size = 0;
 
+    public T[] getProducts(){
+        return products;
+    }
+
+    public void setProducts(T[] products) {
+        this.products = products;
+        size = products.length;
+    }
+
     @Override
     public int size() {
         return size;
@@ -28,7 +37,7 @@ public class ProductList<T> implements List<T> {
 
     public Iterator<T> iterator(Predicate<T> predicate){
         return new Iterate<>(predicate);
-        }
+    }
     @Override
     public Iterator<T> iterator() {
         Predicate<T> predicate = t-> true;
@@ -126,9 +135,9 @@ public class ProductList<T> implements List<T> {
         size++;
     }
     public void indexOutBounds(int index){
-        if (index < 0 && index >= size){
+        if (index < 0 || index >= size){
             throw new IndexOutOfBoundsException();
-         }
+        }
     }
     @Override
     public T remove(int index) {
@@ -174,10 +183,10 @@ public class ProductList<T> implements List<T> {
         int newSize = 0;
         T [] temp = (T[]) new Object[products.length];
         for (int i = 0; i < col.length; i++){
-                if(contains(col[i])) {
-                    temp[i] = col[i];
-                    newSize++;
-        }
+            if(contains(col[i])) {
+                temp[i] = col[i];
+                newSize++;
+            }
 
         }
         if(newSize != size){
