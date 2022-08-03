@@ -57,8 +57,8 @@ public class ProductList<T> implements List<T> {
         return curentSize == size - 1;
     }
     private void addCapacity(int numberInput){
-      if (size + numberInput >= products.length) {
-          int newSize;
+        if (size + numberInput >= products.length) {
+            int newSize;
             if (products.length * 2 + 1 > 0) {
                 newSize = products.length * 2 + 1;
             } else if (products.length + numberInput > 0){
@@ -66,9 +66,9 @@ public class ProductList<T> implements List<T> {
             } else {
                 throw new IllegalArgumentException ("The value is larger than Integer.MAX_VALUE! ");
             }
-          T[] tempArr = (T[]) new Object[newSize];
-          System.arraycopy(products, 0, tempArr, 0, products.length);
-          products = tempArr;
+            T[] tempArr = (T[]) new Object[newSize];
+            System.arraycopy(products, 0, tempArr, 0, products.length);
+            products = tempArr;
         }
     }
     @Override
@@ -83,12 +83,12 @@ public class ProductList<T> implements List<T> {
 
     @Override
     public boolean addAll(Collection c) {
-       T[] product = (T[]) c.toArray(new Object[c.size()]);
+        T[] product = (T[]) c.toArray(new Object[c.size()]);
 
-       int newSize = size + product.length;
-       addCapacity(product.length);
-       System.arraycopy(product,0,products,size,product.length);
-       size += product.length;
+        int newSize = size + product.length;
+        addCapacity(product.length);
+        System.arraycopy(product,0,products,size,product.length);
+        size += product.length;
 
         return newSize == size();
     }
@@ -107,7 +107,8 @@ public class ProductList<T> implements List<T> {
 
     @Override
     public void clear() {
-    products = (T[]) new Object[10];
+        products = (T[]) new Object[10];
+        size = 0;
     }
 
     @Override
@@ -127,7 +128,7 @@ public class ProductList<T> implements List<T> {
     public void add(int index, T element) {
         indexOutBounds(index);
         if(size + 1 >= products.length){
-             addCapacity(1);
+            addCapacity(1);
         }
         System.arraycopy(products, 0, products, 0, index);
         System.arraycopy(products,  index, products,  index + 1, products.length - index - 1);
@@ -201,11 +202,11 @@ public class ProductList<T> implements List<T> {
     public boolean removeAll(Collection c) {
         T[] col = (T[]) c.toArray(new Object[c.size()]);
         int newSize = size;
-            for (int j = 0; j < col.length; j++){
-                if(contains(col[j])){
-                    remove(col[j]);
-                }
+        for (int j = 0; j < col.length; j++){
+            if(contains(col[j])){
+                remove(col[j]);
             }
+        }
         return newSize != size;
     }
 
@@ -226,39 +227,39 @@ public class ProductList<T> implements List<T> {
     }
 
     class Iterate<T> implements Iterator<T>{
-            private int curentPosition = -1;
-            private int curentDelet = -1;
-            private int curentSize = size();
+        private int curentPosition = -1;
+        private int curentDelet = -1;
+        private int curentSize = size();
         Predicate<T> predicate;
         public Iterate(Predicate predicate) {
             this.predicate = predicate;
         }
 
         @Override
-            public boolean hasNext() {
-                if (curentSize != size()){
-                    throw new ConcurrentModificationException();
-                }
-                return nextIndex(curentPosition) < size;
+        public boolean hasNext() {
+            if (curentSize != size()){
+                throw new ConcurrentModificationException();
             }
-            private int nextIndex (int curent){
-                while (!predicate.test((T) products[curent + 1]) && curent < size - 1){
-                    curent++;
-                }
+            return nextIndex(curentPosition) < size;
+        }
+        private int nextIndex (int curent){
+            while (!predicate.test((T) products[curent + 1]) && curent < size - 1){
+                curent++;
+            }
             return curent + 1;
+        }
+        @Override
+        public T next() {
+            if (nextIndex(curentPosition) > size - 1){
+                throw new NoSuchElementException();
             }
-            @Override
-            public T next() {
-                if (nextIndex(curentPosition) > size - 1){
-                    throw new NoSuchElementException();
-                }
-                curentPosition = nextIndex(curentPosition);
-                curentDelet = curentPosition;
-                return (T) products[curentPosition];
-            }
+            curentPosition = nextIndex(curentPosition);
+            curentDelet = curentPosition;
+            return (T) products[curentPosition];
+        }
 
-            @Override
-            public void remove() {
+        @Override
+        public void remove() {
             if(curentDelet < 0){
                 throw new IllegalStateException();
             } else {
@@ -267,7 +268,7 @@ public class ProductList<T> implements List<T> {
                 curentSize--;
                 curentDelet = -1;
             }
-            }
+        }
 
     }
 }

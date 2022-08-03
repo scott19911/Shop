@@ -1,5 +1,6 @@
 package com.epam.verizhenko_andrii.electronicsStore.products;
 
+import java.util.Locale;
 
 public class Product {
     private String brand;
@@ -60,5 +61,26 @@ public class Product {
                 ", price=" + price +
                 '}';
     }
+    public boolean filtr(String param, String value){
 
+        if (param.toLowerCase(Locale.ROOT).equals("brand") && value == null && this.getBrand() == null){
+            return true;
+        }
+        if(getBrand() != null && param.toLowerCase(Locale.ROOT).equals("brand") && this.getBrand().equals(value)){
+            return true;
+        } else if (param.equalsIgnoreCase("power") || param.equalsIgnoreCase("price")){
+            try {
+                double val = Double.parseDouble(value);
+                if (param.toLowerCase(Locale.ROOT).equals("power") && this.getPower() == val) {
+                    return true;
+                }
+                if (param.toLowerCase(Locale.ROOT).equals("price") && this.getPrice() == val) {
+                    return true;
+                }
+            } catch (Exception e){
+                return false;
+            }
+        }
+        return false;
+    }
 }
