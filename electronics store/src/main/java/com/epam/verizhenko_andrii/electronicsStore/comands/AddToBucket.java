@@ -18,14 +18,14 @@ public class AddToBucket implements Commands {
         OrderHistoryService historyService = new OrderHistoryService(event.getHistory());
         Scanner sc = new Scanner(System.in);
         System.out.println("enter product brand: ");
-        String brand = sc.next();
+        String brand = sc.nextLine();
         System.out.println("enter quantity of products: ");
         int bayQuantity = sc.nextInt();
         CartService cart = new CartService(event.getCart());
         int avalaibleQuantity;
         ProductsService map = new ProductsService(event.getProductsMap());
         Product product = map.getProduct(brand);
-
+        System.out.println(brand);
         if (product.getBrand() == null) {
             throw new IllegalArgumentException("incorrect brand of goods");
         }
