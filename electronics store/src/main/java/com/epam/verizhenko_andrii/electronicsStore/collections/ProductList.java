@@ -1,11 +1,12 @@
 package com.epam.verizhenko_andrii.electronicsStore.collections;
 
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Predicate;
 
 
-public class ProductList<T> implements List<T> {
+public class ProductList<T> implements List<T>, Serializable {
     private static final int START_CAPACITY = 50;
     private T[] products = (T[]) new Object[START_CAPACITY];
     private int size = 0;
