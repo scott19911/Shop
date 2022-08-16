@@ -2,24 +2,30 @@ package com.epam.verizhenko_andrii.electronicsStore.controller;
 
 import com.epam.verizhenko_andrii.electronicsStore.DAO.*;
 import com.epam.verizhenko_andrii.electronicsStore.comands.*;
+import com.epam.verizhenko_andrii.electronicsStore.productBase.AddProducts;
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
+import com.epam.verizhenko_andrii.electronicsStore.serializeableProducts.ReadWriteProductsList;
 import com.epam.verizhenko_andrii.electronicsStore.service.Events;
 
 
+import java.io.File;
 import java.util.*;
 
 public class ShopMain {
     static Map<Product, Integer> productsMap;
     static ProductsDao products;
     static Events events;
+    private static final String PRODUCTS_FILE_NAME = "products.txt";
+    private static final Scanner SC = new Scanner(System.in);
+    private static File fileProducts;
+    private static ReadWriteProductsList readWriteProductsList = new ReadWriteProductsList();
 
     public static void main(String[] args) {
         List<Commands> commandsList = commandsList();
         init();
-        Scanner sc = new Scanner(System.in);
         int command;
         System.out.println(helpCommands());
-        while ((command = sc.nextInt()) < 9) {
+        while ((command = SC.nextInt()) < 9) {
             if (command == 8) {
                 System.out.println(helpCommands());
             } else {
@@ -27,7 +33,7 @@ public class ShopMain {
             }
             System.out.println("Enter command: ");
         }
-
+        readWriteProductsList.writeToFile(productsMap, PRODUCTS_FILE_NAME);
     }
 
     static String helpCommands() {
@@ -41,15 +47,21 @@ public class ShopMain {
 
     static void init() {
         products = new ProductsDaoImpl();
+        AddProducts addProducts = new AddProducts();
         events = new Events(new CartDaoImpl(), new ProductsDaoImpl(), new OrderHistoryDaoImpl(), new OrderDaoImpl() {
         });
-        Map<Product, Integer> productsMap = new HashMap<>();
-        Product product = new Product("samsung", 200, 125);
-        Product product1 = new Product("xiaomi", 100, 40);
-        Product product2 = new Product("lg", 150, 120);
-        productsMap.put(product, 25);
-        productsMap.put(product1, 40);
-        productsMap.put(product2, 20);
+        fileProducts = new File(PRODUCTS_FILE_NAME);
+
+        if (fileProducts.exists()) {
+            productsMap = readWriteProductsList.readProducts(PRODUCTS_FILE_NAME);
+            System.out.println("Add more products ? 0/1");
+            if (SC.nextInt() == 1){
+                productsMap.putAll(addProducts.addProducts());
+            }
+        } else {
+            System.out.println("Add products");
+            productsMap.putAll(addProducts.addProducts());
+        }
         products.setProducts(productsMap);
         events.setProductsMap(products);
     }
