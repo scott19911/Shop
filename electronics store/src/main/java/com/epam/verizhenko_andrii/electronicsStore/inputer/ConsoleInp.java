@@ -3,13 +3,14 @@ package com.epam.verizhenko_andrii.electronicsStore.inputer;
 import com.epam.verizhenko_andrii.electronicsStore.products.Mda;
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 import com.epam.verizhenko_andrii.electronicsStore.products.Refregerators;
+import com.epam.verizhenko_andrii.electronicsStore.reflectionInputer.Add;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-public class ConsoleInp<T extends Product> {
-    private Map<String, Product> productMap = new HashMap<>();
-    private Map<String, Inputer<T>> inputerMap = new HashMap<>();
+public class ConsoleInp<T extends Product> implements Add<T> {
+    private final Map<String, Product> productMap = new HashMap<>();
+    private final Map<String, Inputer<T>> inputerMap = new HashMap<>();
     T obj;
     public ConsoleInp(Object obj) {
         init();
@@ -21,6 +22,7 @@ public class ConsoleInp<T extends Product> {
      * @param pName - type product
      * @return - product
      */
+    @Override
     public T inpProd(String pName, Scanner sc) {
         Inputer<T> inp = inputerMap.get(pName);
         T prod = (T) productMap.get(pName);
