@@ -24,7 +24,7 @@ public class ProductsDaoImpl implements ProductsDao {
     }
     public Product getProduct(String brand){
         for (Map.Entry<Product, Integer> productIntegerEntry : productsMap.entrySet()) {
-            if (productIntegerEntry.getKey().getBrand().toLowerCase().equals(brand)) {
+            if (productIntegerEntry.getKey().getBrand().equalsIgnoreCase(brand)) {
                 return productIntegerEntry.getKey();
             }
         }
