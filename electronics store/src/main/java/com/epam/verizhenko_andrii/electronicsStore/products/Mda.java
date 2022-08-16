@@ -1,18 +1,15 @@
 package com.epam.verizhenko_andrii.electronicsStore.products;
 
 public class Mda extends Product {
+    @Reflectable(value = "height")
     private double height;
+    @Reflectable(value = "weight")
     private double weight;
-    private double whidth;
+    @Reflectable(value = "width")
+    private double width;
+
 
     public Mda() {
-    }
-
-    public Mda(String brand,  double power, double price, double height, double weight, double whidth) {
-        super(brand, power, price);
-        this.height = height;
-        this.weight = weight;
-        this.whidth = whidth;
     }
 
     public double getHeight() {
@@ -32,11 +29,11 @@ public class Mda extends Product {
     }
 
     public double getWhidth() {
-        return whidth;
+        return width;
     }
 
     public void setWhidth(double whidth) {
-        this.whidth = whidth;
+        this.width = whidth;
     }
 
     @Override
@@ -56,7 +53,7 @@ public class Mda extends Product {
         return "Mda{" +
                 "height=" + height +
                 ", weight=" + weight +
-                ", whidth=" + whidth +
+                ", whidth=" + width +
                 '}';
     }
 }

@@ -3,20 +3,16 @@ package com.epam.verizhenko_andrii.electronicsStore.products;
 import java.util.Objects;
 
 public class Refregerators extends Mda {
+    @Reflectable(value = "type")
     private String type;
+    @Reflectable(value = "freezer")
     private double freezerVolume;
+    @Reflectable(value = "refrigerator")
     private double refrigeratorVolume;
 
     public Refregerators() {
     }
 
-    public Refregerators(String brand, double power, double price, double height, double weight,
-                         double whidth, String type, double freezerVolume, double refrigeratorVolume) {
-        super(brand,  power, price, height, weight, whidth);
-        this.type = type;
-        this.freezerVolume = freezerVolume;
-        this.refrigeratorVolume = refrigeratorVolume;
-    }
 
     public String getType() {
         return type;

@@ -17,8 +17,7 @@ public class ShopMain {
     static Events events;
     private static final String PRODUCTS_FILE_NAME = "products.txt";
     private static final Scanner SC = new Scanner(System.in);
-    private static File fileProducts;
-    private static ReadWriteProductsList readWriteProductsList = new ReadWriteProductsList();
+    private final static ReadWriteProductsList READ_WRITE_PRODUCTS_LIST = new ReadWriteProductsList();
 
     public static void main(String[] args) {
         List<Commands> commandsList = commandsList();
@@ -33,7 +32,7 @@ public class ShopMain {
             }
             System.out.println("Enter command: ");
         }
-        readWriteProductsList.writeToFile(productsMap, PRODUCTS_FILE_NAME);
+        READ_WRITE_PRODUCTS_LIST.writeToFile(productsMap, PRODUCTS_FILE_NAME);
     }
 
     static String helpCommands() {
@@ -50,16 +49,17 @@ public class ShopMain {
         AddProducts addProducts = new AddProducts();
         events = new Events(new CartDaoImpl(), new ProductsDaoImpl(), new OrderHistoryDaoImpl(), new OrderDaoImpl() {
         });
-        fileProducts = new File(PRODUCTS_FILE_NAME);
+        File fileProducts = new File(PRODUCTS_FILE_NAME);
 
         if (fileProducts.exists()) {
-            productsMap = readWriteProductsList.readProducts(PRODUCTS_FILE_NAME);
+            productsMap = READ_WRITE_PRODUCTS_LIST.readProducts(PRODUCTS_FILE_NAME);
             System.out.println("Add more products ? 0/1");
             if (SC.nextInt() == 1){
                 productsMap.putAll(addProducts.addProducts());
             }
         } else {
             System.out.println("Add products");
+            productsMap = new HashMap<>();
             productsMap.putAll(addProducts.addProducts());
         }
         products.setProducts(productsMap);

@@ -1,11 +1,22 @@
 package com.epam.verizhenko_andrii.electronicsStore.products;
 
 import java.io.Serializable;
-import java.util.Locale;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 public class Product implements Serializable {
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.FIELD,ElementType.LOCAL_VARIABLE})
+    public @interface Reflectable {
+       String value();
+    }
+    @Reflectable(value = "brand")
     private String brand;
+    @Reflectable(value = "power")
     private double power;
+    @Reflectable(value = "price")
     private double price;
 
     public Product() {
