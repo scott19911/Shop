@@ -10,6 +10,12 @@ import java.util.*;
 
 public class AddAutogenerateRef implements Addable {
     private final Map<String, Product> productMap = new HashMap<>();
+
+    /**
+     * Allowed to add products
+     *
+     * @return - map of products
+     */
     @Override
     public Map<Product, Integer> add() {
         Map<Product, Integer> map = new HashMap<>();
@@ -25,6 +31,12 @@ public class AddAutogenerateRef implements Addable {
         return map;
     }
 
+    /**
+     * Creates new products with required fields
+     *
+     * @param pName - type product
+     * @return - new Product
+     */
     public Product inpProd(String pName) {
         init();
         Product prod = productMap.get(pName);
@@ -43,7 +55,6 @@ public class AddAutogenerateRef implements Addable {
 
         for (Field field : fields) {
             if (field.getAnnotation(Product.Reflectable.class) != null) {
-
                 field.setAccessible(true);
                 try {
                     field.set(prod, typeField(field.getType().getName()));
@@ -54,7 +65,8 @@ public class AddAutogenerateRef implements Addable {
             }
         }
     }
-    Object typeField(String st) {
+
+    private Object typeField(String st) {
         if (st.equals("double")) {
             return new Random().nextInt(Integer.MAX_VALUE);
         }
