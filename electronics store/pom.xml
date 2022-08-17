@@ -19,6 +19,9 @@
         </includes>
     </resource>
 </resources></build>
+    <modules>
+        <module>proxyTask</module>
+    </modules>
     <dependencies>
 
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
