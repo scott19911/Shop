@@ -8,9 +8,9 @@ import proxy.MapProxy;
 public class FabricProduct {
     public Product createProduct(ProductsType productsType) {
         switch (productsType) {
-            case UNMOD:
+            case UNMODIFIER:
                 return (Product) FabricProxy.newInstance(new ProductImpl());
-            case MAP:
+            case MAP_REALISATION:
                 return (Product) MapProxy.newInstance(new ProductImpl());
             case SIMPLE_PRODUCT:
                 return new ProductImpl();

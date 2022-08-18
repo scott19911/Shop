@@ -1,8 +1,8 @@
 package fabric;
 
 public enum ProductsType {
-    UNMOD,
-    MAP,
+    UNMODIFIER,
+    MAP_REALISATION,
     SIMPLE_PRODUCT
 
 }
