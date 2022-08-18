@@ -2,7 +2,7 @@ package com.epam.verizhenko_andrii.electronicsStore.products;
 
 import java.util.Objects;
 
-public class Refregerators extends Mda {
+public class Refregerators extends MediumDigitalAppliances {
     @Reflectable(value = "type")
     private String type;
     @Reflectable(value = "freezer")

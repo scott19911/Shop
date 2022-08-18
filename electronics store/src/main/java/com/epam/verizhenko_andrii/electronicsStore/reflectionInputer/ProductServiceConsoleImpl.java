@@ -1,28 +1,32 @@
 package com.epam.verizhenko_andrii.electronicsStore.reflectionInputer;
-import com.epam.verizhenko_andrii.electronicsStore.products.Mda;
+
+import com.epam.verizhenko_andrii.electronicsStore.products.MediumDigitalAppliances;
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 import com.epam.verizhenko_andrii.electronicsStore.products.Refregerators;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Scanner;
 
-public class ConReflection<T extends Product> implements Add<T> {
+public class ProductServiceConsoleImpl<T extends Product> implements ProductService<T> {
     private final Map<String, Product> productMap = new HashMap<>();
     T obj;
-    public ConReflection(T obj) {
+
+    public ProductServiceConsoleImpl(T obj) {
         this.obj = obj;
         init();
     }
+
     @Override
-    public T inpProd(String pName, Scanner sc) {
-
-        T prod = (T) productMap.get(pName);
-
+    public T inpProd(String productType, Scanner sc) {
+        T prod = (T) productMap.get(productType);
         Class<T> clazz = (Class<T>) prod.getClass();
-
         try {
-            while (!clazz.equals(Object.class)){
-                Field[] fields =  clazz.getDeclaredFields();
+            while (!clazz.equals(Object.class)) {
+                Field[] fields = clazz.getDeclaredFields();
                 setParam(sc, prod, fields);
                 clazz = (Class<T>) clazz.getSuperclass();
             }
@@ -39,15 +43,14 @@ public class ConReflection<T extends Product> implements Add<T> {
         System.out.println("Chose language en/ru");
         Locale locale;
         String lan = sc.next();
-        if (lan.equalsIgnoreCase("ru")){
-            locale =new Locale(lan);
+        if (lan.equalsIgnoreCase("ru")) {
+            locale = new Locale(lan);
         } else {
-            locale =new Locale("");
+            locale = new Locale("");
         }
         ResourceBundle rb = ResourceBundle.getBundle("res", locale);
-
-        for (int i = 0; i < fields.length; i++){
-            if(fields[i].getAnnotation(Product.Reflectable.class) != null) {
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i].getAnnotation(Product.Reflectable.class) != null) {
                 String key = fields[i].getAnnotation(Product.Reflectable.class).value();
                 System.out.println(rb.getString(key));
                 fields[i].setAccessible(true);
@@ -56,21 +59,22 @@ public class ConReflection<T extends Product> implements Add<T> {
         }
     }
 
-    Object scan(String st, Scanner sc){
-        if(st.equals("double")){
+    Object scan(String st, Scanner sc) {
+        if (st.equals("double")) {
             return sc.nextDouble();
-        } if(st.equals("int")){
+        }
+        if (st.equals("int")) {
             return sc.nextInt();
-        }else {
+        } else {
             sc.next();
-            return  sc.nextLine();
+            return sc.nextLine();
         }
     }
 
     public void init() {
-        productMap.put("prod",  new Product());
-        productMap.put("ref",  new Refregerators());
-        productMap.put("mda",  new Mda());
+        productMap.put("prod", new Product());
+        productMap.put("ref", new Refregerators());
+        productMap.put("mda", new MediumDigitalAppliances());
     }
 
 }

@@ -1,6 +1,6 @@
 package com.epam.verizhenko_andrii.electronicsStore.products;
 
-public class Mda extends Product {
+public class MediumDigitalAppliances extends Product {
     @Reflectable(value = "height")
     private double height;
     @Reflectable(value = "weight")
@@ -9,7 +9,7 @@ public class Mda extends Product {
     private double width;
 
 
-    public Mda() {
+    public MediumDigitalAppliances() {
     }
 
     public double getHeight() {
@@ -39,9 +39,9 @@ public class Mda extends Product {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Mda)) return false;
+        if (!(o instanceof MediumDigitalAppliances)) return false;
 
-        Mda mda = (Mda) o;
+        MediumDigitalAppliances mda = (MediumDigitalAppliances) o;
 
         if (Double.compare(mda.getHeight(), getHeight()) != 0) return false;
         if (Double.compare(mda.getWeight(), getWeight()) != 0) return false;

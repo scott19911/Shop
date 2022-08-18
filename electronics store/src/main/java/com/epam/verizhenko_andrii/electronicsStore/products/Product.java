@@ -7,18 +7,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 public class Product implements Serializable {
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.FIELD,ElementType.LOCAL_VARIABLE})
-    public @interface Reflectable {
-       String value();
-    }
     @Reflectable(value = "brand")
     private String brand;
     @Reflectable(value = "power")
     private double power;
     @Reflectable(value = "price")
     private double price;
-
     public Product() {
     }
 
@@ -52,7 +46,6 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,10 +61,16 @@ public class Product implements Serializable {
     @Override
     public String toString() {
         return "Product{" +
-                "brand=" + brand  +
+                "brand=" + brand +
                 ", power=" + power +
                 ", price=" + price +
                 '}';
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.FIELD, ElementType.LOCAL_VARIABLE})
+    public @interface Reflectable {
+        String value();
     }
 
 }

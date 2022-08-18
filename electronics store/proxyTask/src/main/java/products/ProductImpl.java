@@ -1,10 +1,8 @@
 package products;
 
-public class ProductImpl implements ProductAble{
-
+public class ProductImpl implements Product {
     private String brand;
     private double power;
-
     private double price;
 
     @Override

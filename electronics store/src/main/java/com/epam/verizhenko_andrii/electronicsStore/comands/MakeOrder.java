@@ -1,10 +1,10 @@
 package com.epam.verizhenko_andrii.electronicsStore.comands;
+
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 import com.epam.verizhenko_andrii.electronicsStore.service.CartService;
 import com.epam.verizhenko_andrii.electronicsStore.service.Events;
 import com.epam.verizhenko_andrii.electronicsStore.service.OrderService;
 import com.epam.verizhenko_andrii.electronicsStore.service.ProductsService;
-
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,7 +22,7 @@ public class MakeOrder implements Commands {
         Scanner sc = new Scanner(System.in);
         Map<Product, Integer> productsMap = new HashMap<>();
         System.out.println("enter date, format dd-MM-yyyy HH:mm:ss");
-        ProductsService products = new ProductsService( event.getProductsMap());
+        ProductsService products = new ProductsService(event.getProductsMap());
         String strinDate = sc.nextLine();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         LocalDateTime date = LocalDateTime.parse(strinDate, myFormatObj);

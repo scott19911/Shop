@@ -1,6 +1,6 @@
 package proxy;
 
-import products.ProductAble;
+import products.Product;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -9,30 +9,33 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MapProxy implements InvocationHandler {
-    private final ProductAble OBJ;
-    private final Map<String, Object> MAP = new HashMap<>();
+    private final Product product;
+    private static final int START_INDEX = 2;
+    private static final String SET = "set";
+    private static final String GET = "get";
+    private final Map<String, Object> stringObjectMap = new HashMap<>();
 
-    public static Object newInstance(ProductAble obj) {
+    public MapProxy(Product obj) {
+        this.product = obj;
+    }
+
+    public static Object newInstance(Product obj) {
         return Proxy.newProxyInstance(
                 obj.getClass().getClassLoader(),
                 obj.getClass().getInterfaces(),
                 new MapProxy(obj));
     }
 
-    public MapProxy(ProductAble obj) {
-        this.OBJ = obj;
-    }
-
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (method.getName().startsWith("get")) {
-            return MAP.get(method.getName().substring(2));
+        if (method.getName().startsWith(GET)) {
+            return stringObjectMap.get(method.getName().substring(START_INDEX));
         }
-        if (method.getName().startsWith("set")) {
-            method.invoke(OBJ,args);
-            MAP.put(method.getName().substring(2), args[0]);
+        if (method.getName().startsWith(SET)) {
+            method.invoke(product,args);
+            stringObjectMap.put(method.getName().substring(START_INDEX), args[0]);
         }
-        return method.invoke(OBJ,args);
+        return method.invoke(product,args);
     }
 
 }

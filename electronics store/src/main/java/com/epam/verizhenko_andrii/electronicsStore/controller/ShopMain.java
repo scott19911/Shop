@@ -1,31 +1,49 @@
 package com.epam.verizhenko_andrii.electronicsStore.controller;
 
-import com.epam.verizhenko_andrii.electronicsStore.DAO.*;
-import com.epam.verizhenko_andrii.electronicsStore.comands.*;
+import com.epam.verizhenko_andrii.electronicsStore.DAO.CartDaoImpl;
+import com.epam.verizhenko_andrii.electronicsStore.DAO.OrderDaoImpl;
+import com.epam.verizhenko_andrii.electronicsStore.DAO.OrderHistoryDaoImpl;
+import com.epam.verizhenko_andrii.electronicsStore.DAO.ProductsDao;
+import com.epam.verizhenko_andrii.electronicsStore.DAO.ProductsDaoImpl;
+import com.epam.verizhenko_andrii.electronicsStore.comands.AddToBucket;
+import com.epam.verizhenko_andrii.electronicsStore.comands.BayProductInBucket;
+import com.epam.verizhenko_andrii.electronicsStore.comands.Commands;
+import com.epam.verizhenko_andrii.electronicsStore.comands.InfoLastBayProduct;
+import com.epam.verizhenko_andrii.electronicsStore.comands.MakeOrder;
+import com.epam.verizhenko_andrii.electronicsStore.comands.ShowBucket;
+import com.epam.verizhenko_andrii.electronicsStore.comands.ShowOrderByDate;
+import com.epam.verizhenko_andrii.electronicsStore.comands.ShowOrderByPeriod;
+import com.epam.verizhenko_andrii.electronicsStore.comands.ShowProductList;
 import com.epam.verizhenko_andrii.electronicsStore.productBase.AddProducts;
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 import com.epam.verizhenko_andrii.electronicsStore.serializeableProducts.ReadWriteProductsList;
 import com.epam.verizhenko_andrii.electronicsStore.service.Events;
 
-
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 public class ShopMain {
+    private static final String PRODUCTS_FILE_NAME = "products.txt";
+    private static final int HELP = 8;
+    private static final int EXIT = 9;
+    private static final int ADD_TRUE = 1;
+    private final static ReadWriteProductsList READ_WRITE_PRODUCTS_LIST = new ReadWriteProductsList();
+    private static final Scanner sc = new Scanner(System.in);
     static Map<Product, Integer> productsMap;
     static ProductsDao products;
     static Events events;
-    private static final String PRODUCTS_FILE_NAME = "products.txt";
-    private static final Scanner SC = new Scanner(System.in);
-    private final static ReadWriteProductsList READ_WRITE_PRODUCTS_LIST = new ReadWriteProductsList();
 
     public static void main(String[] args) {
         List<Commands> commandsList = commandsList();
         init();
         int command;
         System.out.println(helpCommands());
-        while ((command = SC.nextInt()) < 9) {
-            if (command == 8) {
+        while ((command = sc.nextInt()) < EXIT) {
+            if (command == HELP) {
                 System.out.println(helpCommands());
             } else {
                 events = commandsList.get(command).execute(events);
@@ -36,12 +54,11 @@ public class ShopMain {
     }
 
     static String helpCommands() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Commands: \n").append("0 - show goods \n").append("1 - add product to bucket \n");
-        sb.append("2 - bay all products from bucket \n").append("3 - show bucket\n").append("4 - show last five added products\n");
-        sb.append("5 - make order\n").append("6 - show order by date\n").append("7 - show order by period\n");
-        sb.append("8 - show all commands\n").append("9 or more - exit\n").append("Enter command:");
-        return sb.toString();
+        String sb = "Commands: \n" + "0 - show goods \n" + "1 - add product to bucket \n" +
+                "2 - bay all products from bucket \n" + "3 - show bucket\n" + "4 - show last five added products\n" +
+                "5 - make order\n" + "6 - show order by date\n" + "7 - show order by period\n" +
+                "8 - show all commands\n" + "9 or more - exit\n" + "Enter command:";
+        return sb;
     }
 
     static void init() {
@@ -54,7 +71,7 @@ public class ShopMain {
         if (fileProducts.exists()) {
             productsMap = READ_WRITE_PRODUCTS_LIST.readProducts(PRODUCTS_FILE_NAME);
             System.out.println("Add more products ? 0/1");
-            if (SC.nextInt() == 1){
+            if (sc.nextInt() == ADD_TRUE) {
                 productsMap.putAll(addProducts.addProducts());
             }
         } else {
