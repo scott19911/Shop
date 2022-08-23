@@ -8,15 +8,14 @@ import java.util.Scanner;
 public class InputerMda<T extends MediumDigitalAppliances> extends InputerProducts<T> implements Inputer<T> {
 
 
-    @Override
-    public T inp(T obj, Scanner sc) {
+    public T input(T object, Scanner scanner) {
         System.out.println("Enter height");
-        obj.setHeight(sc.nextDouble());
+        object.setHeight(scanner.nextDouble());
         System.out.println("Enter width");
-        obj.setWhidth(sc.nextDouble());
+        object.setWhidth(scanner.nextDouble());
         System.out.println("Enter weight");
-        obj.setWeight(sc.nextDouble());
-        super.inp(obj, sc);
-        return obj;
+        object.setWeight(scanner.nextDouble());
+        super.input(object, scanner);
+        return object;
     }
 }
