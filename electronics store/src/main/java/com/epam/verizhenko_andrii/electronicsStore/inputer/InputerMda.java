@@ -1,22 +1,21 @@
 package com.epam.verizhenko_andrii.electronicsStore.inputer;
 
-import com.epam.verizhenko_andrii.electronicsStore.products.Mda;
+import com.epam.verizhenko_andrii.electronicsStore.products.MediumDigitalAppliances;
 
 import java.util.Scanner;
 
 
-public class InputerMda<T extends Mda> extends InputerProducts<T> implements Inputer<T> {
+public class InputerMda<T extends MediumDigitalAppliances> extends InputerProducts<T> implements Inputer<T> {
 
 
-    @Override
-    public T inp(T t, Scanner sc) {
+    public T input(T object, Scanner scanner) {
         System.out.println("Enter height");
-        t.setHeight(sc.nextDouble());
+        object.setHeight(scanner.nextDouble());
         System.out.println("Enter width");
-        t.setWhidth(sc.nextDouble());
+        object.setWhidth(scanner.nextDouble());
         System.out.println("Enter weight");
-        t.setWeight(sc.nextDouble());
-        super.inp(t,sc);
-        return t;
+        object.setWeight(scanner.nextDouble());
+        super.input(object, scanner);
+        return object;
     }
 }

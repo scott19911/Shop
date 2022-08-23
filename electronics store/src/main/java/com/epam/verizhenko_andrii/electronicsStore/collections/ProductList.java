@@ -2,7 +2,13 @@ package com.epam.verizhenko_andrii.electronicsStore.collections;
 
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
 
@@ -11,7 +17,7 @@ public class ProductList<T> implements List<T>, Serializable {
     private T[] products = (T[]) new Object[START_CAPACITY];
     private int size = 0;
 
-    public T[] getProducts(){
+    public T[] getProducts() {
         return products;
     }
 
@@ -36,14 +42,16 @@ public class ProductList<T> implements List<T>, Serializable {
     }
 
 
-    public Iterator<T> iterator(Predicate<T> predicate){
+    public Iterator<T> iterator(Predicate<T> predicate) {
         return new Iterate<>(predicate);
     }
+
     @Override
     public Iterator<T> iterator() {
-        Predicate<T> predicate = t-> true;
+        Predicate<T> predicate = t -> true;
         return new Iterate<>(predicate);
     }
+
     @Override
     public T[] toArray() {
         return Arrays.copyOf(products, size);
@@ -57,25 +65,27 @@ public class ProductList<T> implements List<T>, Serializable {
         size++;
         return curentSize == size - 1;
     }
-    private void addCapacity(int numberInput){
+
+    private void addCapacity(int numberInput) {
         if (size + numberInput >= products.length) {
             int newSize;
             if (products.length * 2 + 1 > 0) {
                 newSize = products.length * 2 + 1;
-            } else if (products.length + numberInput > 0){
+            } else if (products.length + numberInput > 0) {
                 newSize = products.length + numberInput;
             } else {
-                throw new IllegalArgumentException ("The value is larger than Integer.MAX_VALUE! ");
+                throw new IllegalArgumentException("The value is larger than Integer.MAX_VALUE! ");
             }
             T[] tempArr = (T[]) new Object[newSize];
             System.arraycopy(products, 0, tempArr, 0, products.length);
             products = tempArr;
         }
     }
+
     @Override
     public boolean remove(Object o) {
         int index = indexOf(o);
-        if (index < 0){
+        if (index < 0) {
             return false;
         }
         remove(index);
@@ -88,7 +98,7 @@ public class ProductList<T> implements List<T>, Serializable {
 
         int newSize = size + product.length;
         addCapacity(product.length);
-        System.arraycopy(product,0,products,size,product.length);
+        System.arraycopy(product, 0, products, size, product.length);
         size += product.length;
 
         return newSize == size();
@@ -97,10 +107,10 @@ public class ProductList<T> implements List<T>, Serializable {
     @Override
     public boolean addAll(int index, Collection c) {
         T[] col = (T[]) c.toArray();
-        T[] temp = (T[]) new Object[products.length+ col.length];
+        T[] temp = (T[]) new Object[products.length + col.length];
         System.arraycopy(products, 0, temp, 0, index);
         System.arraycopy(col, 0, temp, index, col.length);
-        System.arraycopy(products,  index, temp, col.length + index, products.length - index);
+        System.arraycopy(products, index, temp, col.length + index, products.length - index);
         size += col.length;
         products = temp;
         return true;
@@ -114,7 +124,7 @@ public class ProductList<T> implements List<T>, Serializable {
 
     @Override
     public T get(int index) {
-        if (index >= size){
+        if (index >= size) {
             throw new IndexOutOfBoundsException();
         }
         return products[index];
@@ -128,32 +138,34 @@ public class ProductList<T> implements List<T>, Serializable {
     @Override
     public void add(int index, T element) {
         indexOutBounds(index);
-        if(size + 1 >= products.length){
+        if (size + 1 >= products.length) {
             addCapacity(1);
         }
         System.arraycopy(products, 0, products, 0, index);
-        System.arraycopy(products,  index, products,  index + 1, products.length - index - 1);
+        System.arraycopy(products, index, products, index + 1, products.length - index - 1);
         products[index] = element;
         size++;
     }
-    public void indexOutBounds(int index){
-        if (index < 0 || index >= size){
+
+    public void indexOutBounds(int index) {
+        if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
     }
+
     @Override
     public T remove(int index) {
-        T removeProduct = products [index];
+        T removeProduct = products[index];
         indexOutBounds(index);
         int tail = size - index - 1;
-        System.arraycopy(products,  index + 1, products,  index, tail);
+        System.arraycopy(products, index + 1, products, index, tail);
         size--;
         return removeProduct;
     }
 
     @Override
     public int indexOf(Object o) {
-        if (Arrays.asList(products).indexOf(o) < size()){
+        if (Arrays.asList(products).indexOf(o) < size()) {
             return Arrays.asList(products).indexOf(o);
         }
         return -1;
@@ -183,15 +195,15 @@ public class ProductList<T> implements List<T>, Serializable {
     public boolean retainAll(Collection c) {
         T[] col = (T[]) c.toArray(new Object[c.size()]);
         int newSize = 0;
-        T [] temp = (T[]) new Object[products.length];
-        for (int i = 0; i < col.length; i++){
-            if(contains(col[i])) {
+        T[] temp = (T[]) new Object[products.length];
+        for (int i = 0; i < col.length; i++) {
+            if (contains(col[i])) {
                 temp[i] = col[i];
                 newSize++;
             }
 
         }
-        if(newSize != size){
+        if (newSize != size) {
             products = temp;
             size = newSize;
             return true;
@@ -203,8 +215,8 @@ public class ProductList<T> implements List<T>, Serializable {
     public boolean removeAll(Collection c) {
         T[] col = (T[]) c.toArray(new Object[c.size()]);
         int newSize = size;
-        for (int j = 0; j < col.length; j++){
-            if(contains(col[j])){
+        for (int j = 0; j < col.length; j++) {
+            if (contains(col[j])) {
                 remove(col[j]);
             }
         }
@@ -224,34 +236,37 @@ public class ProductList<T> implements List<T>, Serializable {
 
     @Override
     public T[] toArray(Object[] a) {
-        return  Arrays.copyOf(products, size);
+        return Arrays.copyOf(products, size);
     }
 
-    class Iterate<T> implements Iterator<T>{
+    class Iterate<T> implements Iterator<T> {
+        Predicate<T> predicate;
         private int curentPosition = -1;
         private int curentDelet = -1;
         private int curentSize = size();
-        Predicate<T> predicate;
+
         public Iterate(Predicate predicate) {
             this.predicate = predicate;
         }
 
         @Override
         public boolean hasNext() {
-            if (curentSize != size()){
+            if (curentSize != size()) {
                 throw new ConcurrentModificationException();
             }
             return nextIndex(curentPosition) < size;
         }
-        private int nextIndex (int curent){
-            while (!predicate.test((T) products[curent + 1]) && curent < size - 1){
+
+        private int nextIndex(int curent) {
+            while (!predicate.test((T) products[curent + 1]) && curent < size - 1) {
                 curent++;
             }
             return curent + 1;
         }
+
         @Override
         public T next() {
-            if (nextIndex(curentPosition) > size - 1){
+            if (nextIndex(curentPosition) > size - 1) {
                 throw new NoSuchElementException();
             }
             curentPosition = nextIndex(curentPosition);
@@ -261,7 +276,7 @@ public class ProductList<T> implements List<T>, Serializable {
 
         @Override
         public void remove() {
-            if(curentDelet < 0){
+            if (curentDelet < 0) {
                 throw new IllegalStateException();
             } else {
                 ProductList.this.remove(curentDelet);

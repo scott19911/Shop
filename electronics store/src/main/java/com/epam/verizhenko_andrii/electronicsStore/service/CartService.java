@@ -10,6 +10,7 @@ public class CartService {
     public CartService(CartDao cartDao) {
         this.cartDao = cartDao;
     }
+
     public Hashtable<String, Integer> getCart() {
         return cartDao.getCart();
     }
@@ -17,11 +18,16 @@ public class CartService {
     public void clearCart() {
         cartDao.clearCart();
     }
+
     public void addToCart(String brand, Integer quantity) {
-        cartDao.addToCart(brand,quantity);
+        cartDao.addToCart(brand, quantity);
     }
-    public CartDao getCartDao(){
+
+    public CartDao getCartDao() {
         return cartDao;
     }
-    public int alreadyAddBrand(String brand) { return cartDao.alreadyAddBrand(brand);}
+
+    public int alreadyAddBrand(String brand) {
+        return cartDao.alreadyAddBrand(brand);
+    }
 }

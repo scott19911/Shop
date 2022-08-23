@@ -1,6 +1,7 @@
-package com.epam.verizhenko_andrii.electronicsStore.serializeableProducts;
+package java.com.epam.verizhenko_andrii.electronicsStore.serializeableProducts;
 
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
+import com.epam.verizhenko_andrii.electronicsStore.serializeableProducts.ReadWriteProductsList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,10 +9,11 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ReadWriteProductsListTest {
-    Map<Product,Integer> list;
+    Map<Product, Integer> list;
     Product p1;
     Product p2;
     String fileName;
@@ -22,12 +24,11 @@ class ReadWriteProductsListTest {
         list = new HashMap<>();
         p1 = new Product("Samsung", 230, 10000);
         p2 = new Product("Lg", 230, 15000);
-        list.put(p1,2);
-        list.put(p2,3);
+        list.put(p1, 2);
+        list.put(p2, 3);
         fileName = "test.txt";
         fileName2 = "test2.txt";
     }
-
 
     @Test
     void writeToFile() {
@@ -42,8 +43,8 @@ class ReadWriteProductsListTest {
     void writeNTimeToFile() {
         ReadWriteProductsList read = new ReadWriteProductsList();
         read.writeToFile(list, fileName);
-        read.writeNTimeToFile(list, fileName2,20);
-        read.compressGzipFile(fileName2,fileName2 + ".gz");
+        read.writeNTimeToFile(list, fileName2, 20);
+        read.compressGzipFile(fileName2, fileName2 + ".gz");
         File wr = new File(fileName);
         File wr2 = new File(fileName2);
         File wrGz = new File(fileName2 + ".gz");
@@ -58,12 +59,9 @@ class ReadWriteProductsListTest {
     @Test
     void readProducts() {
         ReadWriteProductsList read = new ReadWriteProductsList();
-        read.writeToFile(list,fileName);
-        Map<Product,Integer> act = read.readProducts(fileName);
-        for (Map.Entry<Product, Integer> entry : act.entrySet()) {
-            assertTrue(entry.getKey().equals(p1) || entry.getKey().equals(p2));
-
-        }
+        Map<Product, Integer> act = read.readProducts(fileName);
+        assertEquals(list.get(p1), act.get(p1));
+        assertEquals(list.get(p2), act.get(p2));
         assertEquals(list.size(), act.size());
     }
 }

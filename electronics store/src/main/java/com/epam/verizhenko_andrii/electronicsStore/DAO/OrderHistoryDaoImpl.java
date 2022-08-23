@@ -6,10 +6,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class OrderHistoryDaoImpl implements OrderHistoryDao {
-    private LinkedHashMap<Integer, Product> history;
+    private final LinkedHashMap<Integer, Product> history;
 
     public OrderHistoryDaoImpl() {
-       history = new LinkedHashMap(){
+        history = new LinkedHashMap() {
             @Override
             protected boolean removeEldestEntry(Map.Entry eldest) {
                 return size() > 5;
@@ -22,7 +22,7 @@ public class OrderHistoryDaoImpl implements OrderHistoryDao {
         return history;
     }
 
-    public void addToHistory(int key, Product product){
-        history.put(key,product);
+    public void addToHistory(int key, Product product) {
+        history.put(key, product);
     }
 }

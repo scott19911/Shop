@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AddConsoleImplTest {
     private static final InputStream STD_IN = System.in;
@@ -29,12 +29,12 @@ class AddConsoleImplTest {
         ByteArrayInputStream in = new ByteArrayInputStream(data.getBytes());
         System.setIn(in);
         AddConsoleImpl addConsole = new AddConsoleImpl();
-        Map<Product,Integer> act = addConsole.add();
+        Map<Product, Integer> act = addConsole.add();
         Integer expQuantity = 2;
         System.setIn(STD_IN);
-        for (Map.Entry<Product, Integer> entry : act.entrySet()){
+        for (Map.Entry<Product, Integer> entry : act.entrySet()) {
             assertEquals(product, entry.getKey());
-            assertEquals(expQuantity,entry.getValue());
+            assertEquals(expQuantity, entry.getValue());
         }
         assertEquals(1, act.size());
 
