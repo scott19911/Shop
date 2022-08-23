@@ -1,6 +1,10 @@
 package com.epam.verizhenko_andrii.electronicsStore.collections;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 
 public class CastomList implements List<Object> {
@@ -9,13 +13,14 @@ public class CastomList implements List<Object> {
      * The unmodifiable part of the list always comes at the beginning
      * and does not support any operations that can change it.
      * like this:
+     *
      * @see CastomList#add(Object)  - add new element to modify part
      * @see CastomList#set(int, Object) - set element by index
      * @see CastomList#remove(Object)  - remove object from modify part
      * @see CastomList#clear()  - clear modify part
      */
-    private List unmodList;
-    private List modList;
+    private final List unmodList;
+    private final List modList;
 
     public CastomList(List modList, List unmodList) {
         this.modList = modList;
@@ -39,8 +44,8 @@ public class CastomList implements List<Object> {
 
     /**
      * Iterate over the list and support remove in modify part
-     * @throws UnsupportedOperationException - when trying to remove unmodified part
      *
+     * @throws UnsupportedOperationException - when trying to remove unmodified part
      */
     @Override
     public Iterator<Object> iterator() {
@@ -48,28 +53,29 @@ public class CastomList implements List<Object> {
             int index = -1;
             int chekDelete = -1;
             int curentSize = size();
+
             @Override
             public boolean hasNext() {
-                if(curentSize != size()){
-                   throw new ConcurrentModificationException();
+                if (curentSize != size()) {
+                    throw new ConcurrentModificationException();
                 }
                 return index < modList.size() + unmodList.size() - 1;
             }
 
             @Override
             public Object next() {
-               index++;
-               chekDelete = 1;
-                if (index < unmodList.size()){
+                index++;
+                chekDelete = 1;
+                if (index < unmodList.size()) {
                     return unmodList.get(index);
                 } else {
-                   return modList.get(index - unmodList.size());
+                    return modList.get(index - unmodList.size());
                 }
             }
 
             @Override
             public void remove() {
-                if(index < modList.size() - 1 && chekDelete > 0){
+                if (index < modList.size() - 1 && chekDelete > 0) {
                     chekDelete = -1;
                     curentSize--;
                     modList.remove(index);
@@ -85,15 +91,15 @@ public class CastomList implements List<Object> {
     @Override
     public Object[] toArray() {
         Object[] array = new Object[size()];
-        System.arraycopy(unmodList.toArray(), 0,array, 0, unmodList.size());
-        System.arraycopy(modList.toArray(), 0,array, unmodList.size(), modList.size());
+        System.arraycopy(unmodList.toArray(), 0, array, 0, unmodList.size());
+        System.arraycopy(modList.toArray(), 0, array, unmodList.size(), modList.size());
         return array;
     }
 
     @Override
     public <T> T[] toArray(T[] a) {
-        System.arraycopy(unmodList.toArray(), 0,a, 0, unmodList.size());
-        System.arraycopy(modList.toArray(), 0,a, unmodList.size(), modList.size());
+        System.arraycopy(unmodList.toArray(), 0, a, 0, unmodList.size());
+        System.arraycopy(modList.toArray(), 0, a, unmodList.size(), modList.size());
         return a;
     }
 
@@ -104,18 +110,18 @@ public class CastomList implements List<Object> {
     @Override
     public boolean add(Object o) {
 
-       return modList.add(o);
+        return modList.add(o);
     }
 
     @Override
     public boolean remove(Object o) {
-      return modList.remove(o);
+        return modList.remove(o);
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        for (Object o: c) {
-            if(!modList.contains(o) && !unmodList.contains(o)){
+        for (Object o : c) {
+            if (!modList.contains(o) && !unmodList.contains(o)) {
                 return false;
             }
         }
@@ -130,12 +136,13 @@ public class CastomList implements List<Object> {
 
     @Override
     public boolean addAll(int index, Collection<?> c) {
-      checkPosition(index);
-        return modList.addAll(index - unmodList.size(),c);
+        checkPosition(index);
+        return modList.addAll(index - unmodList.size(), c);
 
     }
-    private void checkPosition(int index){
-        if (index < unmodList.size()){
+
+    private void checkPosition(int index) {
+        if (index < unmodList.size()) {
             throw new UnsupportedOperationException();
         }
     }
@@ -147,19 +154,20 @@ public class CastomList implements List<Object> {
 
     @Override
     public boolean retainAll(Collection<?> c) {
-       return modList.retainAll(c);
+        return modList.retainAll(c);
 
     }
+
     @Override
     public void clear() {
-    modList.clear();
+        modList.clear();
     }
 
     @Override
     public Object get(int index) {
-        if(index < unmodList.size()){
+        if (index < unmodList.size()) {
             return unmodList.get(index);
-        } else if( index < unmodList.size() + modList.size()){
+        } else if (index < unmodList.size() + modList.size()) {
             return modList.get(index - unmodList.size());
         } else {
             throw new IndexOutOfBoundsException();
@@ -168,20 +176,21 @@ public class CastomList implements List<Object> {
 
     /**
      * Setting elements only in modify part
-     * @param index index of the element to replace
+     *
+     * @param index   index of the element to replace
      * @param element element to be stored at the specified position
      */
     @Override
     public Object set(int index, Object element) {
         checkPosition(index);
-        modList.set(index - unmodList.size(),element);
+        modList.set(index - unmodList.size(), element);
         return modList.get(index - unmodList.size());
     }
 
     @Override
     public void add(int index, Object element) {
         checkPosition(index);
-        modList.add(index - unmodList.size(),element);
+        modList.add(index - unmodList.size(), element);
     }
 
     @Override
@@ -192,9 +201,9 @@ public class CastomList implements List<Object> {
 
     @Override
     public int indexOf(Object o) {
-        if(unmodList.contains(o)){
+        if (unmodList.contains(o)) {
             return unmodList.indexOf(o);
-        } else if (modList.contains(o)){
+        } else if (modList.contains(o)) {
             return modList.indexOf(o) + unmodList.size();
         }
         return -1;
@@ -202,7 +211,7 @@ public class CastomList implements List<Object> {
 
     @Override
     public int lastIndexOf(Object o) {
-        if(modList.contains(o)){
+        if (modList.contains(o)) {
             return modList.lastIndexOf(o) + unmodList.size();
         }
         return unmodList.lastIndexOf(o);

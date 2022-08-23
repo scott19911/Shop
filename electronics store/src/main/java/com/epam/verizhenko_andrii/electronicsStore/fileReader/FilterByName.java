@@ -15,7 +15,6 @@ public class FilterByName extends FilteredFiles {
 
 
     /**
-     *
      * @param file - filtered file
      * @return - List<Path> that filtered by period time
      */

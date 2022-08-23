@@ -1,12 +1,13 @@
 package com.epam.verizhenko_andrii.electronicsStore.fileReader;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.Scanner;
 
 public class ReadTextFileByLine implements Iterable<String> {
-    private Scanner sc;
     private final File file;
+    private Scanner sc;
 
     public ReadTextFileByLine(String fileName) {
         file = new File(fileName);

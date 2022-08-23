@@ -42,11 +42,11 @@ public class Events {
         this.history = history;
     }
 
-    public void setOrder(OrderDao order) {
-        this.order = order;
-    }
-
     public OrderDao getOrder() {
         return order;
+    }
+
+    public void setOrder(OrderDao order) {
+        this.order = order;
     }
 }

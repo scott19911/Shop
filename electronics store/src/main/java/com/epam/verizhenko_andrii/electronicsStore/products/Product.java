@@ -1,13 +1,24 @@
 package com.epam.verizhenko_andrii.electronicsStore.products;
 
 import java.io.Serializable;
-import java.util.Locale;
-
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+/**
+ *
+ *representation of the base class product
+ *
+ * @author Verizhenko
+ * @since 08-01-2022
+ */
 public class Product implements Serializable {
+    @Reflectable(value = "brand")
     private String brand;
+    @Reflectable(value = "power")
     private double power;
+    @Reflectable(value = "price")
     private double price;
-
     public Product() {
     }
 
@@ -41,7 +52,6 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -57,10 +67,16 @@ public class Product implements Serializable {
     @Override
     public String toString() {
         return "Product{" +
-                "brand=" + brand  +
+                "brand=" + brand +
                 ", power=" + power +
                 ", price=" + price +
                 '}';
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.FIELD, ElementType.LOCAL_VARIABLE})
+    public @interface Reflectable {
+        String value();
     }
 
 }

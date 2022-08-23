@@ -2,18 +2,22 @@ package com.epam.verizhenko_andrii.electronicsStore.serializeableProducts;
 
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
 /**
- *
- The class allows you to serialize and deserialize ProductList
+ * The class allows you to serialize and deserialize ProductList
  */
 
 public class ReadWriteProductsList {
-    public void writeToFile(Map<Product,Integer> productList, String fileName) {
+    public void writeToFile(Map<Product, Integer> productList, String fileName) {
         try {
             FileOutputStream f = new FileOutputStream(fileName);
             ObjectOutputStream o = new ObjectOutputStream(f);
@@ -29,11 +33,12 @@ public class ReadWriteProductsList {
 
     /**
      * Overwrites file n times
+     *
      * @param productList - save list
-     * @param fileName - file name
-     * @param n - overwrites times
+     * @param fileName    - file name
+     * @param n           - overwrites times
      */
-    public void writeNTimeToFile(Map<Product,Integer> productList, String fileName, int n) {
+    public void writeNTimeToFile(Map<Product, Integer> productList, String fileName, int n) {
         try {
             FileOutputStream f = new FileOutputStream(fileName);
             ObjectOutputStream o = new ObjectOutputStream(f);
@@ -51,7 +56,8 @@ public class ReadWriteProductsList {
 
     /**
      * Compress file to GZip
-     * @param file - compressed file
+     *
+     * @param file     - compressed file
      * @param gzipFile - output file name
      */
     public void compressGzipFile(String file, String gzipFile) {
@@ -61,7 +67,7 @@ public class ReadWriteProductsList {
             GZIPOutputStream gzipOS = new GZIPOutputStream(fos);
             byte[] buffer = new byte[1024];
             int len;
-            while((len=fis.read(buffer)) != -1){
+            while ((len = fis.read(buffer)) != -1) {
                 gzipOS.write(buffer, 0, len);
             }
             gzipOS.close();
@@ -74,12 +80,13 @@ public class ReadWriteProductsList {
     }
 
     /**
-     *  deserialize file
+     * deserialize file
+     *
      * @param fileName - input file name
      * @return - product list
      */
-    public Map<Product,Integer> readProducts(String fileName) {
-        Map<Product,Integer> list = new HashMap<>();
+    public Map<Product, Integer> readProducts(String fileName) {
+        Map<Product, Integer> list = new HashMap<>();
         try {
             FileInputStream fi = new FileInputStream(fileName);
             ObjectInputStream oi = new ObjectInputStream(fi);

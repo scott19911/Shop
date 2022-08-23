@@ -4,7 +4,7 @@ import java.util.Hashtable;
 
 
 public class CartDaoImpl implements CartDao {
-    private Hashtable<String,Integer> cart;
+    private Hashtable<String, Integer> cart;
 
     public CartDaoImpl() {
         cart = new Hashtable<>();
@@ -12,6 +12,7 @@ public class CartDaoImpl implements CartDao {
 
     /**
      * Allows you to get a table of orders
+     *
      * @return Hashtable<String, Integer>
      */
     @Override
@@ -20,7 +21,8 @@ public class CartDaoImpl implements CartDao {
     }
 
     /**
-     *Allows you to set the order table
+     * Allows you to set the order table
+     *
      * @param cart - hashtable of brands products and quantity
      */
     public void setCart(Hashtable<String, Integer> cart) {
@@ -34,12 +36,13 @@ public class CartDaoImpl implements CartDao {
 
     /**
      * Returns the number of goods, if no light is returned -1
+     *
      * @param brand - products brand
      * @return - quantity products
      */
     @Override
     public int alreadyAddBrand(String brand) {
-        if(cart.get(brand) == null ){
+        if (cart.get(brand) == null) {
             return -1;
         }
         return cart.get(brand);
@@ -47,6 +50,6 @@ public class CartDaoImpl implements CartDao {
 
     @Override
     public void addToCart(String brand, Integer quantity) {
-        cart.put(brand,quantity);
+        cart.put(brand, quantity);
     }
 }

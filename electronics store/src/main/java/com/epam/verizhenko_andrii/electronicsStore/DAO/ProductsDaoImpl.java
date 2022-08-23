@@ -19,10 +19,12 @@ public class ProductsDaoImpl implements ProductsDao {
     public void setProducts(Map<Product, Integer> productsMap) {
         this.productsMap = productsMap;
     }
-    public void updateProducts(Product product, int quantity){
-        productsMap.put(product,quantity);
+
+    public void updateProducts(Product product, int quantity) {
+        productsMap.put(product, quantity);
     }
-    public Product getProduct(String brand){
+
+    public Product getProduct(String brand) {
         for (Map.Entry<Product, Integer> productIntegerEntry : productsMap.entrySet()) {
             if (productIntegerEntry.getKey().getBrand().equalsIgnoreCase(brand)) {
                 return productIntegerEntry.getKey();

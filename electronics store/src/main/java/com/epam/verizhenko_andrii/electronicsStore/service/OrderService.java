@@ -13,16 +13,20 @@ public class OrderService {
     public OrderService(OrderDao orderDao) {
         this.orderDao = orderDao;
     }
+
     public void addOrder(LocalDateTime date, Map<Product, Integer> ord) {
-        orderDao.addOrder(date,ord);
+        orderDao.addOrder(date, ord);
     }
-    public  Map<Product, Integer> getOrderByDate(LocalDateTime date) {
+
+    public Map<Product, Integer> getOrderByDate(LocalDateTime date) {
         return orderDao.getOrderByDate(date);
     }
+
     public SortedMap<LocalDateTime, Map<Product, Integer>> getOrderByPeriod(LocalDateTime from, LocalDateTime to) {
-        return  orderDao.getOrderByPeriod(from,to);
+        return orderDao.getOrderByPeriod(from, to);
     }
-    public OrderDao getOrderDao(){
+
+    public OrderDao getOrderDao() {
         return orderDao;
     }
 }

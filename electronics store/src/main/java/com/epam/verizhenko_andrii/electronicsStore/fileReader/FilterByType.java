@@ -2,7 +2,7 @@ package com.epam.verizhenko_andrii.electronicsStore.fileReader;
 
 import java.io.File;
 
-public class FilterByType extends FilteredFiles{
+public class FilterByType extends FilteredFiles {
     String type;
 
     public FilterByType(String type) {

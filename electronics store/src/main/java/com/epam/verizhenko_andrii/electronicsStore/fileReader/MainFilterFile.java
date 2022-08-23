@@ -9,7 +9,7 @@ public class MainFilterFile {
 
     public static FilteredFiles next;
     private static File dir;
-    private static List<File> fileList = new ArrayList<>();
+    private static final List<File> fileList = new ArrayList<>();
 
     public static void main(String[] args) {
         init();

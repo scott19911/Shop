@@ -1,22 +1,24 @@
 package com.epam.verizhenko_andrii.electronicsStore.products;
 
 import java.util.Objects;
-
-public class Refregerators extends Mda {
+/**
+ *
+ *representation of the heir to the class of large household appliances
+ *
+ * @author Verizhenko
+ * @since 08-01-2022
+ */
+public class Refregerators extends MediumDigitalAppliances {
+    @Reflectable(value = "type")
     private String type;
+    @Reflectable(value = "freezer")
     private double freezerVolume;
+    @Reflectable(value = "refrigerator")
     private double refrigeratorVolume;
 
     public Refregerators() {
     }
 
-    public Refregerators(String brand, double power, double price, double height, double weight,
-                         double whidth, String type, double freezerVolume, double refrigeratorVolume) {
-        super(brand,  power, price, height, weight, whidth);
-        this.type = type;
-        this.freezerVolume = freezerVolume;
-        this.refrigeratorVolume = refrigeratorVolume;
-    }
 
     public String getType() {
         return type;

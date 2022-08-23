@@ -17,8 +17,8 @@ public class OrderHistoryService {
         return orderHistory.getHistory();
     }
 
-    public void addToHistory(Product product){
-        orderHistory.addToHistory(key,product);
+    public void addToHistory(Product product) {
+        orderHistory.addToHistory(key, product);
         key++;
     }
 
