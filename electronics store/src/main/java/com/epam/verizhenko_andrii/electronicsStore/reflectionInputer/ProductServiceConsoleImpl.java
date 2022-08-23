@@ -10,9 +10,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
-
+/**
+ *  creates a  product with fields filled
+ *  based on reflection
+ */
 public class ProductServiceConsoleImpl<T extends Product> implements ProductService<T> {
     private final Map<String, Product> productMap = new HashMap<>();
+    private static final String RESOURCE_BUNDLE = "res";
+    private static final String RU_LANGUAGE = "ru";
     T obj;
 
     public ProductServiceConsoleImpl(T obj) {
@@ -21,60 +26,58 @@ public class ProductServiceConsoleImpl<T extends Product> implements ProductServ
     }
 
     @Override
-    public T inpProd(String productType, Scanner sc) {
-        T prod = (T) productMap.get(productType);
-        Class<T> clazz = (Class<T>) prod.getClass();
+    public T inputProduct(String productType, Scanner scanner) {
+        T product = (T) productMap.get(productType);
+        Class<T> clazz = (Class<T>) product.getClass();
         try {
             while (!clazz.equals(Object.class)) {
                 Field[] fields = clazz.getDeclaredFields();
-                setParam(sc, prod, fields);
+                setParameter(scanner, product, fields);
                 clazz = (Class<T>) clazz.getSuperclass();
             }
             System.out.println("Enter quantity");
-            return prod;
-
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            return product;
+        } catch (IllegalAccessException ex) {
+            throw new RuntimeException(ex);
         }
-
     }
 
-    private void setParam(Scanner sc, T prod, Field[] fields) throws IllegalAccessException {
+    private void setParameter(Scanner scanner, T product, Field[] fields) throws IllegalAccessException {
         System.out.println("Chose language en/ru");
         Locale locale;
-        String lan = sc.next();
-        if (lan.equalsIgnoreCase("ru")) {
-            locale = new Locale(lan);
+        String language = scanner.next();
+        if (language.equalsIgnoreCase(RU_LANGUAGE)) {
+            locale = new Locale(language);
         } else {
             locale = new Locale("");
         }
-        ResourceBundle rb = ResourceBundle.getBundle("res", locale);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE, locale);
         for (int i = 0; i < fields.length; i++) {
             if (fields[i].getAnnotation(Product.Reflectable.class) != null) {
                 String key = fields[i].getAnnotation(Product.Reflectable.class).value();
-                System.out.println(rb.getString(key));
+                System.out.println(resourceBundle.getString(key));
                 fields[i].setAccessible(true);
-                fields[i].set(prod, scan(fields[i].getType().getName(), sc));
+                fields[i].set(product, returnScannerType(fields[i].getType().getName(), scanner));
             }
         }
     }
 
-    Object scan(String st, Scanner sc) {
-        if (st.equals("double")) {
-            return sc.nextDouble();
+    Object returnScannerType(String typeFields, Scanner scanner) {
+        if (typeFields.equals(ProductServiceAutoGenImpl.DOUBLE)) {
+            return scanner.nextDouble();
         }
-        if (st.equals("int")) {
-            return sc.nextInt();
+        if (typeFields.equals(ProductServiceAutoGenImpl.INT)) {
+            return scanner.nextInt();
         } else {
-            sc.next();
-            return sc.nextLine();
+            scanner.nextLine();
+            return scanner.nextLine();
         }
     }
 
     public void init() {
-        productMap.put("prod", new Product());
-        productMap.put("ref", new Refregerators());
-        productMap.put("mda", new MediumDigitalAppliances());
+        productMap.put(ProductServiceAutoGenImpl.PRODUCT, new Product());
+        productMap.put(ProductServiceAutoGenImpl.REFREGIRATION, new Refregerators());
+        productMap.put(ProductServiceAutoGenImpl.MEDIUM_DIGITAL_APPLIANCE, new MediumDigitalAppliances());
     }
 
 }

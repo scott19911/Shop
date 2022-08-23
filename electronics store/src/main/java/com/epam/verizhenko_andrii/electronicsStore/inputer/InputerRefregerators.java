@@ -5,13 +5,12 @@ import com.epam.verizhenko_andrii.electronicsStore.products.Refregerators;
 import java.util.Scanner;
 
 public class InputerRefregerators<T extends Refregerators> extends InputerMda<T> implements Inputer<T> {
-    @Override
-    public T inp(T obj, Scanner sc) {
+    public T input(T object, Scanner scanner) {
         System.out.println("Enter FreezerVolume");
-        obj.setFreezerVolume(sc.nextDouble());
+        object.setFreezerVolume(scanner.nextDouble());
         System.out.println("Enter RefrigeratorVolume");
-        obj.setRefrigeratorVolume(sc.nextDouble());
-        super.inp(obj, sc);
-        return obj;
+        object.setRefrigeratorVolume(scanner.nextDouble());
+        super.input(object, scanner);
+        return object;
     }
 }

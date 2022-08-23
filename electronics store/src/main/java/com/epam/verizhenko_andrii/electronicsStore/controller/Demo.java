@@ -14,7 +14,7 @@ import com.epam.verizhenko_andrii.electronicsStore.comands.ShowBucket;
 import com.epam.verizhenko_andrii.electronicsStore.comands.ShowOrderByDate;
 import com.epam.verizhenko_andrii.electronicsStore.comands.ShowOrderByPeriod;
 import com.epam.verizhenko_andrii.electronicsStore.comands.ShowProductList;
-import com.epam.verizhenko_andrii.electronicsStore.productBase.AddProducts;
+import com.epam.verizhenko_andrii.electronicsStore.productBase.AddProductsImpl;
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 import com.epam.verizhenko_andrii.electronicsStore.serializeableProducts.ReadWriteProductsList;
 import com.epam.verizhenko_andrii.electronicsStore.service.Events;
@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class ShopMain {
+public class Demo {
     private static final String PRODUCTS_FILE_NAME = "products.txt";
     private static final int HELP = 8;
     private static final int EXIT = 9;
@@ -54,16 +54,15 @@ public class ShopMain {
     }
 
     static String helpCommands() {
-        String sb = "Commands: \n" + "0 - show goods \n" + "1 - add product to bucket \n" +
+        return "Commands: \n" + "0 - show goods \n" + "1 - add product to bucket \n" +
                 "2 - bay all products from bucket \n" + "3 - show bucket\n" + "4 - show last five added products\n" +
                 "5 - make order\n" + "6 - show order by date\n" + "7 - show order by period\n" +
                 "8 - show all commands\n" + "9 or more - exit\n" + "Enter command:";
-        return sb;
     }
 
     static void init() {
         products = new ProductsDaoImpl();
-        AddProducts addProducts = new AddProducts();
+        AddProductsImpl addProducts = new AddProductsImpl();
         events = new Events(new CartDaoImpl(), new ProductsDaoImpl(), new OrderHistoryDaoImpl(), new OrderDaoImpl() {
         });
         File fileProducts = new File(PRODUCTS_FILE_NAME);

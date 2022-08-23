@@ -5,7 +5,13 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
+/**
+ *
+ *representation of the base class product
+ *
+ * @author Verizhenko
+ * @since 08-01-2022
+ */
 public class Product implements Serializable {
     @Reflectable(value = "brand")
     private String brand;

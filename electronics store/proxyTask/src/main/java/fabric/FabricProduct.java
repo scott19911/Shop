@@ -6,6 +6,11 @@ import proxy.FabricProxy;
 import proxy.MapProxy;
 
 public class FabricProduct {
+    /**
+     *  creates a product based on an input parameter
+     * @param productsType - enum of products
+     * @return - instance product
+     */
     public Product createProduct(ProductsType productsType) {
         switch (productsType) {
             case UNMODIFIER:

@@ -7,7 +7,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * creates a product object proxy
+ * with conversion of get/set methods to put/get map methods
+ */
 public class MapProxy implements InvocationHandler {
     private final Product product;
     private static final int START_INDEX = 2;

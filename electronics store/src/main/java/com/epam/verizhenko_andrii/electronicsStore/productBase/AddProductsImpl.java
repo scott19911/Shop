@@ -6,34 +6,33 @@ import com.epam.verizhenko_andrii.electronicsStore.reflectionInputer.ProductServ
 import java.util.Map;
 import java.util.Scanner;
 
-public class AddProducts {
+public class AddProductsImpl {
     private static final String CONSOLE = "c";
     private static final String AUTOGENERATION = "a";
     private static final String AUTOGENERATION_REFLECTION = "ar";
 
     public Map<Product, Integer> addProducts() {
-        final Addable addProd;
-        Scanner sc = new Scanner(System.in);
+        final AddProduct addProduct;
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter type of add: c,a,ar");
-        String type = sc.next();
+        String type = scanner.next();
         switch (type.toLowerCase()) {
             case CONSOLE:
-                addProd = new AddConsoleImpl();
+                addProduct = new AddConsoleImpl();
                 break;
             case AUTOGENERATION:
-                addProd = new AddAutogenerateImpl();
+                addProduct = new AddAutogenerateImpl();
                 break;
             case AUTOGENERATION_REFLECTION:
-                addProd = new ProductServiceAutoGenImpl();
+                addProduct = new ProductServiceAutoGenImpl();
                 break;
             default:
-                addProd = null;
+                addProduct = null;
         }
-
-        if (addProd == null) {
+        if (addProduct == null) {
             System.out.println("unsupported command");
             return null;
         }
-        return addProd.add();
+        return addProduct.add();
     }
 }

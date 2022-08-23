@@ -4,17 +4,18 @@ import com.epam.verizhenko_andrii.electronicsStore.products.MediumDigitalApplian
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 import com.epam.verizhenko_andrii.electronicsStore.products.Refregerators;
 import com.epam.verizhenko_andrii.electronicsStore.reflectionInputer.ProductService;
+import com.epam.verizhenko_andrii.electronicsStore.reflectionInputer.ProductServiceAutoGenImpl;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class ConsoleInp<T extends Product> implements ProductService<T> {
+public class ConsoleInput<T extends Product> implements ProductService<T> {
     private final Map<String, Product> productMap = new HashMap<>();
     private final Map<String, Inputer<T>> inputerMap = new HashMap<>();
     T obj;
 
-    public ConsoleInp(Object obj) {
+    public ConsoleInput(Object obj) {
         init();
         this.obj = (T) obj;
     }
@@ -26,32 +27,31 @@ public class ConsoleInp<T extends Product> implements ProductService<T> {
      * @return - product
      */
     @Override
-    public T inpProd(String productType, Scanner sc) {
-        Inputer<T> inp = inputerMap.get(productType);
-        T prod = (T) productMap.get(productType);
-
-        if (!obj.getClass().isAssignableFrom(prod.getClass())) {
+    public T inputProduct(String productType, Scanner scanner) {
+        Inputer<T> inputer = inputerMap.get(productType);
+        T product = (T) productMap.get(productType);
+        if (!obj.getClass().isAssignableFrom(product.getClass())) {
             throw new IllegalArgumentException("Product type mismatch");
         }
-        return inp.inp(prod, sc);
+        return inputer.input(product, scanner);
     }
 
     /**
      * Set available products
      *
      * @param key     - product name for access
-     * @param inp     - inputer
+     * @param inputer - inputer
      * @param product - product class
      */
-    public void mapProducts(String key, Inputer<T> inp, Product product) {
-        inputerMap.put(key, inp);
+    public void mapProducts(String key, Inputer<T> inputer, Product product) {
+        inputerMap.put(key, inputer);
         productMap.put(key, product);
     }
 
     public void init() {
-        mapProducts("prod", new InputerProducts(), new Product());
-        mapProducts("ref", new InputerRefregerators(), new Refregerators());
-        mapProducts("mda", new InputerMda(), new MediumDigitalAppliances());
+        mapProducts(ProductServiceAutoGenImpl.PRODUCT, new InputerProducts<>(), new Product());
+        mapProducts(ProductServiceAutoGenImpl.REFREGIRATION, new InputerRefregerators(), new Refregerators());
+        mapProducts(ProductServiceAutoGenImpl.MEDIUM_DIGITAL_APPLIANCE, new InputerMda(), new MediumDigitalAppliances());
     }
 
 }

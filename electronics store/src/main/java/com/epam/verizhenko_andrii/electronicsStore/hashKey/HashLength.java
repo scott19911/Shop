@@ -1,4 +1,5 @@
 package com.epam.verizhenko_andrii.electronicsStore.hashKey;
+
 import java.util.Objects;
 
 public class HashLength {

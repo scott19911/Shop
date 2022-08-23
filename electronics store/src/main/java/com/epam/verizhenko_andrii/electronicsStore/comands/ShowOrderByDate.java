@@ -3,13 +3,12 @@ package com.epam.verizhenko_andrii.electronicsStore.comands;
 import com.epam.verizhenko_andrii.electronicsStore.service.Events;
 import com.epam.verizhenko_andrii.electronicsStore.service.OrderService;
 
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 /**
- *The class displays all orders on the specified date and time to the console.
+ * The class displays all orders on the specified date and time to the console.
  */
 public class ShowOrderByDate implements Commands {
     @Override

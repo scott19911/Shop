@@ -6,18 +6,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class FilterByModifiedDate extends FilteredFiles{
+public class FilterByModifiedDate extends FilteredFiles {
     private final long fromDate;
     private final long toDate;
 
-    public FilterByModifiedDate(String fromDate,String toDate) {
-        this.fromDate =  timeMilliseconds(fromDate);
+    public FilterByModifiedDate(String fromDate, String toDate) {
+        this.fromDate = timeMilliseconds(fromDate);
         this.toDate = timeMilliseconds(toDate);
     }
 
 
     /**
-     *
      * @param file - filtered file
      * @return - boolean that filtered by period time
      */
@@ -27,11 +26,12 @@ public class FilterByModifiedDate extends FilteredFiles{
     }
 
     /**
-     *parses the given string, returning the milliseconds elapsed since the epoch
+     * parses the given string, returning the milliseconds elapsed since the epoch
+     *
      * @param myDate - date in the format yyyy/MM/dd HH:mm:ss
      * @return - milliseconds elapsed since the epoch
      */
-    private long timeMilliseconds(String myDate){
+    private long timeMilliseconds(String myDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date;
         try {

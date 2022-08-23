@@ -6,16 +6,15 @@ import java.util.Scanner;
 
 public class InputerProducts<T extends Product> implements Inputer<T> {
 
-    @Override
-    public T inp(T t, Scanner sc) {
+    public T input(T object, Scanner scanner) {
         System.out.println("Enter price");
-        t.setPrice(sc.nextDouble());
+        object.setPrice(scanner.nextDouble());
         System.out.println("Enter brand");
-        sc.nextLine();
-        t.setBrand(sc.nextLine());
+        scanner.nextLine();
+        object.setBrand(scanner.nextLine());
         System.out.println("Enter power");
-        t.setPower(sc.nextDouble());
+        object.setPower(scanner.nextDouble());
         System.out.println("Enter quantity");
-        return t;
+        return object;
     }
 }

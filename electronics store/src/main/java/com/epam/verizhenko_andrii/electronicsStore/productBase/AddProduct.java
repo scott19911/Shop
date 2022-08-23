@@ -4,6 +4,7 @@ import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 
 import java.util.Map;
 
-public interface Addable {
+public interface AddProduct {
     Map<Product, Integer> add();
+
 }

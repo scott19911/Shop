@@ -8,7 +8,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class OrderDaoImpl implements OrderDao {
-    TreeMap<LocalDateTime,Map<Product, Integer>> order;
+    TreeMap<LocalDateTime, Map<Product, Integer>> order;
 
     public OrderDaoImpl() {
         order = new TreeMap<>();
@@ -16,29 +16,34 @@ public class OrderDaoImpl implements OrderDao {
 
     /**
      * Adds a new order
+     *
      * @param date - order creation date
-     * @param ord - map products quantity
+     * @param ord  - map products quantity
      */
     @Override
     public void addOrder(LocalDateTime date, Map<Product, Integer> ord) {
-        order.put(date,ord);
+        order.put(date, ord);
     }
+
     /**
      * return order by date
+     *
      * @param date - order creation date
      */
     @Override
-    public  Map<Product, Integer> getOrderByDate(LocalDateTime date) {
+    public Map<Product, Integer> getOrderByDate(LocalDateTime date) {
         return order.get(date);
     }
+
     /**
      * return order by periode
+     *
      * @param from - date from
-     * @param to - date to
+     * @param to   - date to
      */
     @Override
     public SortedMap<LocalDateTime, Map<Product, Integer>> getOrderByPeriod(LocalDateTime from, LocalDateTime to) {
-        return  order.subMap(from,to);
+        return order.subMap(from, to);
     }
 
     @Override

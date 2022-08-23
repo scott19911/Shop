@@ -6,6 +6,14 @@ import java.io.File;
 public abstract class FilteredFiles {
     private FilteredFiles next;
 
+    public static FilteredFiles nextFilter(FilteredFiles filteredFiles) {
+        FilteredFiles next = filteredFiles;
+        while (next.getNext() != null) {
+            next = next.getNext();
+        }
+        return next;
+    }
+
     public FilteredFiles getNext() {
         return next;
     }
@@ -15,7 +23,7 @@ public abstract class FilteredFiles {
     }
 
     public File filter(File file) {
-        if (!doFilter(file)){
+        if (!doFilter(file)) {
             return null;
         }
 
@@ -26,15 +34,6 @@ public abstract class FilteredFiles {
     }
 
     public abstract boolean doFilter(File file);
-
-
-    public static FilteredFiles nextFilter(FilteredFiles filteredFiles) {
-        FilteredFiles next = filteredFiles;
-        while (next.getNext() != null) {
-            next = next.getNext();
-        }
-        return next;
-    }
 
 
 }

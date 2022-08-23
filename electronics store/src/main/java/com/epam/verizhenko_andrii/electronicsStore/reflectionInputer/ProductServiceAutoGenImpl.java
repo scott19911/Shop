@@ -1,6 +1,6 @@
 package com.epam.verizhenko_andrii.electronicsStore.reflectionInputer;
 
-import com.epam.verizhenko_andrii.electronicsStore.productBase.Addable;
+import com.epam.verizhenko_andrii.electronicsStore.productBase.AddProduct;
 import com.epam.verizhenko_andrii.electronicsStore.products.MediumDigitalAppliances;
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 import com.epam.verizhenko_andrii.electronicsStore.products.Refregerators;
@@ -10,13 +10,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class ProductServiceAutoGenImpl implements Addable {
+/**
+ * automatically creates a random product with fields filled with randomly generated data
+ */
+public class ProductServiceAutoGenImpl implements AddProduct {
     private final Map<String, Product> productMap = new HashMap<>();
     public static final String PRODUCT = "prod";
     public static final String MEDIUM_DIGITAL_APPLIANCE = "mda";
     public static final String REFREGIRATION = "ref";
-    private static final String DOUBLE = "double";
-    private static final String INT = "int";
+    public static final String DOUBLE = "double";
+    public static final String INT = "int";
     private final int NUMBER_OF_PRODUCTS = 3;
 
     /**
@@ -30,7 +33,7 @@ public class ProductServiceAutoGenImpl implements Addable {
         int addProducts = 1;
         while (addProducts > 0) {
             String productType = randomProduct(new Random().nextInt(NUMBER_OF_PRODUCTS));
-            productIntegerHashMap.put(inpProd(productType), new Random().nextInt(Integer.MAX_VALUE));
+            productIntegerHashMap.put(inputProduct(productType), new Random().nextInt(Integer.MAX_VALUE));
             addProducts = new Random().nextInt(NUMBER_OF_PRODUCTS);
         }
         return productIntegerHashMap;
@@ -54,19 +57,19 @@ public class ProductServiceAutoGenImpl implements Addable {
      * @param productType - type product
      * @return - new Product
      */
-    public Product inpProd(String productType) {
+    public Product inputProduct(String productType) {
         init();
         Product prod = productMap.get(productType);
         Class<Product> clazz = (Class<Product>) prod.getClass();
         while (!clazz.equals(Object.class)) {
             Field[] fields = clazz.getDeclaredFields();
-            setParam(prod, fields);
+            setParameter(prod, fields);
             clazz = (Class<Product>) clazz.getSuperclass();
         }
         return prod;
     }
 
-    private void setParam(Product prod, Field[] fields) {
+    private void setParameter(Product prod, Field[] fields) {
 
         for (Field field : fields) {
             if (field.getAnnotation(Product.Reflectable.class) != null) {

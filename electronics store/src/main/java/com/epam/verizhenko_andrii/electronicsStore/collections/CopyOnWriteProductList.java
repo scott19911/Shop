@@ -1,5 +1,9 @@
 package com.epam.verizhenko_andrii.electronicsStore.collections;
-import java.util.*;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CopyOnWriteProductList<T> extends ProductList<T> {
@@ -27,12 +31,13 @@ public class CopyOnWriteProductList<T> extends ProductList<T> {
 
     @Override
     public boolean remove(Object o) {
-    if (indexOf(o) < 0) {
-        return false;
+        if (indexOf(o) < 0) {
+            return false;
+        }
+        remove(indexOf(o));
+        return true;
     }
-     remove(indexOf(o));
-     return  true;
-    }
+
     @Override
     public boolean addAll(Collection c) {
         final ReentrantLock lock = this.lock;
@@ -63,7 +68,7 @@ public class CopyOnWriteProductList<T> extends ProductList<T> {
             T[] col = (T[]) c.toArray();
             System.arraycopy(elements, 0, newElements, 0, index);
             System.arraycopy(col, 0, newElements, index, col.length);
-            System.arraycopy(elements,  index, newElements, col.length + index, elements.length - index);
+            System.arraycopy(elements, index, newElements, col.length + index, elements.length - index);
             setProducts(newElements);
             return true;
         } finally {
@@ -104,7 +109,7 @@ public class CopyOnWriteProductList<T> extends ProductList<T> {
     public void add(int index, T element) {
         final ReentrantLock lock = this.lock;
         lock.lock();
-        if (size() > 0){
+        if (size() > 0) {
             indexOutBounds(index);
         }
         try {
@@ -112,7 +117,7 @@ public class CopyOnWriteProductList<T> extends ProductList<T> {
             int len = size();
             T[] newElements = Arrays.copyOf(elements, len + 1);
             System.arraycopy(elements, 0, newElements, 0, index);
-            System.arraycopy(elements,  index, newElements,  index + 1, elements.length - index);
+            System.arraycopy(elements, index, newElements, index + 1, elements.length - index);
             newElements[index] = element;
             setProducts(newElements);
         } finally {
@@ -128,9 +133,9 @@ public class CopyOnWriteProductList<T> extends ProductList<T> {
         try {
             T[] elements = getProducts();
             T[] newElements = (T[]) new Object[size() - 1];
-            T removeProduct = elements [index];
+            T removeProduct = elements[index];
             int tail = size() - index - 1;
-            System.arraycopy(elements,  index + 1, newElements,  index, tail);
+            System.arraycopy(elements, index + 1, newElements, index, tail);
             setProducts(newElements);
             return removeProduct;
         } finally {
@@ -143,9 +148,11 @@ public class CopyOnWriteProductList<T> extends ProductList<T> {
         return new supIterator();
     }
 
-    private class  supIterator implements Iterator<T> {
+    private class supIterator implements Iterator<T> {
         private final Object[] snapshot;
-        /** Index of element to be returned by subsequent call to next.  */
+        /**
+         * Index of element to be returned by subsequent call to next.
+         */
         private int cursor = 0;
 
         public supIterator() {
@@ -157,7 +164,7 @@ public class CopyOnWriteProductList<T> extends ProductList<T> {
         }
 
         public T next() {
-            if (! hasNext()) {
+            if (!hasNext()) {
                 throw new NoSuchElementException();
             }
             return (T) snapshot[cursor++];
@@ -165,12 +172,13 @@ public class CopyOnWriteProductList<T> extends ProductList<T> {
 
         /**
          * Not supported. Always throws UnsupportedOperationException.
+         *
          * @throws UnsupportedOperationException always;
-         *         is not supported by this iterator.
+         *                                       is not supported by this iterator.
          */
         public void remove() {
             throw new UnsupportedOperationException();
         }
 
-}
+    }
 }
