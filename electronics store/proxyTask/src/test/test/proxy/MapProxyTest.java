@@ -2,7 +2,7 @@ package proxy;
 
 import org.junit.jupiter.api.Test;
 import products.Product;
-import products.ProductImpl;
+import products.ProductImplementation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -11,7 +11,7 @@ public class MapProxyTest {
     public void shouldChangeBrandTo_sam_whenSet_sam() {
         String expBrand = "lg";
         String expBrand1 = "sam";
-        Product productAble = (Product) MapProxy.newInstance(new ProductImpl());
+        Product productAble = (Product) MapProxy.newInstance(new ProductImplementation());
         productAble.setBrand(expBrand);
         assertEquals(expBrand, productAble.getBrand());
         productAble.setBrand(expBrand1);

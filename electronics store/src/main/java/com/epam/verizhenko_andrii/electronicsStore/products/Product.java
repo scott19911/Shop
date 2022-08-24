@@ -19,6 +19,7 @@ public class Product implements Serializable {
     private double power;
     @Reflectable(value = "price")
     private double price;
+
     public Product() {
     }
 
