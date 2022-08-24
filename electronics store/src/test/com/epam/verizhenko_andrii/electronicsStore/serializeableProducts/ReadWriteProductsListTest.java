@@ -1,7 +1,6 @@
-package java.com.epam.verizhenko_andrii.electronicsStore.serializeableProducts;
+package com.epam.verizhenko_andrii.electronicsStore.serializeableProducts;
 
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
-import com.epam.verizhenko_andrii.electronicsStore.serializeableProducts.ReadWriteProductsList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +19,7 @@ class ReadWriteProductsListTest {
     String fileName2;
 
     @BeforeEach
-    void init() {
+    public void init() {
         list = new HashMap<>();
         p1 = new Product("Samsung", 230, 10000);
         p2 = new Product("Lg", 230, 15000);
@@ -31,7 +30,7 @@ class ReadWriteProductsListTest {
     }
 
     @Test
-    void writeToFile() {
+    public void writeToFile() {
         ReadWriteProductsList read = new ReadWriteProductsList();
         read.writeToFile(list, fileName);
         File wr = new File(fileName);
@@ -40,7 +39,7 @@ class ReadWriteProductsListTest {
     }
 
     @Test
-    void writeNTimeToFile() {
+    public void writeNTimeToFile() {
         ReadWriteProductsList read = new ReadWriteProductsList();
         read.writeToFile(list, fileName);
         read.writeNTimeToFile(list, fileName2, 20);
@@ -57,7 +56,7 @@ class ReadWriteProductsListTest {
 
 
     @Test
-    void readProducts() {
+    public void readProducts() {
         ReadWriteProductsList read = new ReadWriteProductsList();
         Map<Product, Integer> act = read.readProducts(fileName);
         assertEquals(list.get(p1), act.get(p1));

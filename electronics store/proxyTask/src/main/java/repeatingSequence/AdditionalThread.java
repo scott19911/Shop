@@ -6,13 +6,13 @@ import java.util.concurrent.Semaphore;
  * Searches for the longest byte sequence, and its start and end index
  */
 public class AdditionalThread implements Runnable {
-    byte[] finalBytesArray;
     public static final int SEQUANCY_LENGTH = 0;
     public static final int SEQUANCY_FIRST_INDEX = 1;
     public static final int SEQUANCY_LAST_INDEX = 2;
-    int[] result = new int[3];
     static int curentSequancy;
     public Semaphore semaphore;
+    byte[] finalBytesArray;
+    int[] result = new int[3];
 
     public AdditionalThread(byte[] finalBytesArray, Semaphore semaphore) {
         this.semaphore = semaphore;
@@ -27,6 +27,12 @@ public class AdditionalThread implements Runnable {
         return result;
     }
 
+    /**
+     * Searches for the longest byte sequence, and its start and end index
+     *
+     * @param bytesArray - searching array
+     * @return - result saved in int array
+     */
     public int[] repeatingSequancyLength(byte[] bytesArray) {
         curentSequancy = 1;
         int saveResult = 1;
@@ -54,11 +60,6 @@ public class AdditionalThread implements Runnable {
         }
         return resultArr;
     }
-
-    /**
-     * Performs a sequence search on an available semaphore
-     * And writes data to the result
-     */
     @Override
     public void run() {
         try {

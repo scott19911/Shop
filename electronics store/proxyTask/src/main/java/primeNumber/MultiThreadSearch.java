@@ -7,14 +7,16 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * search for primes in a multi-threaded
  */
 public class MultiThreadSearch {
     /**
-     *Writing by all threads to one collection
-     * @param from - start number
-     * @param to - end search number
+     * Writing by all threads to one collection
+     *
+     * @param from         - start number
+     * @param to           - end search number
      * @param numberThread - quantity threads
      * @return - list of primes number
      */
@@ -47,10 +49,12 @@ public class MultiThreadSearch {
             throw new RuntimeException(ex);
         }
     }
+
     /**
      * Writing by all threads to different collection and then save to one
-     * @param from - start number
-     * @param to - end search number
+     *
+     * @param from         - start number
+     * @param to           - end search number
      * @param numberThread - quantity threads
      * @return - list of primes
      */

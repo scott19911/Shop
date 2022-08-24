@@ -3,8 +3,8 @@ package com.epam.verizhenko_andrii.electronicsStore.DAO;
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 
 import java.util.LinkedHashMap;
+
 /**
- *
  * A.java
  * Interface class that has the following methods.
  *

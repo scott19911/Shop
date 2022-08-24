@@ -12,7 +12,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ConsoleReflectionTest {
+public class ConsoleReflectionTest {
     private static final InputStream STD_IN = System.in;
     private static final PrintStream STD_OUT = System.out;
 
@@ -24,7 +24,7 @@ class ConsoleReflectionTest {
 
 
     @Test
-    void whenAddProduct_expectedSuccses() {
+    public void whenAddProduct_expectedSuccses() {
         Product product = new Product("samsung", 200, 125);
         String data = "prod\nr\nen\nsamsung\n200\n125\n2\n0";
         ByteArrayInputStream in = new ByteArrayInputStream(data.getBytes());

@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class AddConsoleImplTest {
+public class AddConsoleImplTest {
     private static final InputStream STD_IN = System.in;
     private static final PrintStream STD_OUT = System.out;
 
@@ -23,7 +23,7 @@ class AddConsoleImplTest {
 
 
     @Test
-    void add() {
+    public void add() {
         Product product = new Product("samsung", 200, 125);
         String data = "prod\n125\nsamsung\n200\n2\n0";
         ByteArrayInputStream in = new ByteArrayInputStream(data.getBytes());

@@ -10,14 +10,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
+
 /**
- *  creates a  product with fields filled
- *  based on reflection
+ * creates a  product with fields filled
+ * based on reflection
  */
 public class ProductServiceConsoleImpl<T extends Product> implements ProductService<T> {
-    private final Map<String, Product> productMap = new HashMap<>();
     private static final String RESOURCE_BUNDLE = "res";
     private static final String RU_LANGUAGE = "ru";
+    private final Map<String, Product> productMap = new HashMap<>();
     T obj;
 
     public ProductServiceConsoleImpl(T obj) {
@@ -42,6 +43,13 @@ public class ProductServiceConsoleImpl<T extends Product> implements ProductServ
         }
     }
 
+    /**
+     * Fills product fields based on reflection
+     * @param scanner - input system
+     * @param product - type of product for setting parameters
+     * @param fields - fields for setting
+     * @throws IllegalAccessException - when cannot set fields
+     */
     private void setParameter(Scanner scanner, T product, Field[] fields) throws IllegalAccessException {
         System.out.println("Chose language en/ru");
         Locale locale;
@@ -62,7 +70,13 @@ public class ProductServiceConsoleImpl<T extends Product> implements ProductServ
         }
     }
 
-    Object returnScannerType(String typeFields, Scanner scanner) {
+    /**
+     * Determines the field type and returns a scanner of the corresponding type
+     * @param typeFields - type field
+     * @param scanner - input system
+     * @return - require scanner object
+     */
+    private Object returnScannerType(String typeFields, Scanner scanner) {
         if (typeFields.equals(ProductServiceAutoGenImpl.DOUBLE)) {
             return scanner.nextDouble();
         }

@@ -14,7 +14,7 @@ import com.epam.verizhenko_andrii.electronicsStore.comands.ShowBucket;
 import com.epam.verizhenko_andrii.electronicsStore.comands.ShowOrderByDate;
 import com.epam.verizhenko_andrii.electronicsStore.comands.ShowOrderByPeriod;
 import com.epam.verizhenko_andrii.electronicsStore.comands.ShowProductList;
-import com.epam.verizhenko_andrii.electronicsStore.productBase.AddProductsImpl;
+import com.epam.verizhenko_andrii.electronicsStore.productBase.SelectAddProductsType;
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 import com.epam.verizhenko_andrii.electronicsStore.serializeableProducts.ReadWriteProductsList;
 import com.epam.verizhenko_andrii.electronicsStore.service.Events;
@@ -62,7 +62,7 @@ public class Demo {
 
     static void init() {
         products = new ProductsDaoImpl();
-        AddProductsImpl addProducts = new AddProductsImpl();
+        SelectAddProductsType addProducts = new SelectAddProductsType();
         events = new Events(new CartDaoImpl(), new ProductsDaoImpl(), new OrderHistoryDaoImpl(), new OrderDaoImpl() {
         });
         File fileProducts = new File(PRODUCTS_FILE_NAME);

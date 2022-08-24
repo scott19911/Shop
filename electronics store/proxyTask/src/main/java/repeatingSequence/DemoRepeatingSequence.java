@@ -7,9 +7,12 @@ import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 
 /**
- *Creates an additional stream to search for a sequence of bytes in a file and output the information to the console
+ * Creates an additional stream to search for a sequence of bytes in a file and output the information to the console
  */
 public class DemoRepeatingSequence {
+    /**
+     *Synchronizes the main thread with the additional one, allowing only one to work at a time
+     */
     public static final Semaphore SEMAPHORE = new Semaphore(1, true);
     public static final Scanner scanner = new Scanner(System.in);
 
@@ -32,7 +35,7 @@ public class DemoRepeatingSequence {
                 System.out.println(i);
             }
             System.out.println("Exit 0/1");
-            if(scanner.nextInt() > 0){
+            if (scanner.nextInt() > 0) {
                 return;
             }
             System.out.println("Enter file path");
@@ -42,6 +45,7 @@ public class DemoRepeatingSequence {
 
     /**
      * Reads a sequence of bytes from a file
+     *
      * @return - bytes sequence
      */
     public static byte[] getFile() {
