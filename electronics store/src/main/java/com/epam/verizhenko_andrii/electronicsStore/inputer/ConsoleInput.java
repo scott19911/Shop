@@ -13,9 +13,7 @@ import java.util.Scanner;
 public class ConsoleInput<T extends Product> implements ProductService<T> {
     public final Map<String, Product> productMap = new HashMap<>();
     public final Map<String, Inputer<T>> inputerMap = new HashMap<>();
-
     T obj;
-
     public ConsoleInput(Object obj) {
         init();
         this.obj = (T) obj;
