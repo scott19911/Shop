@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class SearchPrimeNumberTest {
 
     @Test
-    public void shouldReturn2_3_5_7WhenInputRange2_10() {
+    public void shouldReturn2_3_5_7_whenInputRange2_10() {
         SearchPrimeImpl search = new SearchPrimeImpl();
         List<Integer> expected = new ArrayList<>(Arrays.asList(2, 3, 5, 7));
         assertEquals(expected, search.searchPrimeNumber(2, 10, new ArrayList<>()));
