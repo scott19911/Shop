@@ -15,10 +15,26 @@ import java.util.SortedMap;
  */
 
 public interface OrderDao {
+    /**
+     * add new order
+     * @param date - order date
+     * @param ord - products map
+     */
     void addOrder(LocalDateTime date, Map<Product, Integer> ord);
 
+    /**
+     * allows you to get a map of products by order date
+     * @param date - order date
+     * @return - products list
+     */
     Map<Product, Integer> getOrderByDate(LocalDateTime date);
 
+    /**
+     * allows you to get a map of products by order date range
+     * @param from - start date
+     * @param to - end date
+     * @return - products list
+     */
     SortedMap<LocalDateTime, Map<Product, Integer>> getOrderByPeriod(LocalDateTime from, LocalDateTime to);
 
 }

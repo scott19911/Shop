@@ -1,5 +1,7 @@
-package com.epam.verizhenko_andrii.electronicsStore.server.http;
+package server.http;
 
+import com.epam.verizhenko_andrii.electronicsStore.server.http.GetCountCommand;
+import com.epam.verizhenko_andrii.electronicsStore.server.http.HttpHandler;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -16,7 +18,7 @@ import static org.mockito.Mockito.when;
 public class HttpHandlerTest {
 
     @Test
-    public void shouldSocketWrite_WhenGetRequestCount() throws IOException {
+    public void shouldSocketWrite_whenGetRequestCount() throws IOException {
         Socket socket = mock(Socket.class);
         String request = "GET /shop/count HTTP/1.1\r\n" +
                 "Host: reqbin.com\r\n" +

@@ -6,6 +6,9 @@ import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Implements get element command
+ */
 public class GetItemCommand implements Commands {
     private final Map<Product, Integer> productsMaps;
     private final String item;

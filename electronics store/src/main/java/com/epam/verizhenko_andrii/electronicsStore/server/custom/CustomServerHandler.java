@@ -6,26 +6,29 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * handles client requests from sockets
+ * handles custom client requests from sockets
+ * if request unsupported return error message*
  */
 public class CustomServerHandler extends Thread {
     private final Socket clientSocket;
-    private final ObjectInputStream in;
-    private final ObjectOutputStream out;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
 
     /**
      * Based on the client socket, we get the input and output stream
-     *
-     * @param clientSocket - socket
      */
-    public CustomServerHandler(Socket clientSocket) {
-        this.clientSocket = clientSocket;
+    private void init(){
         try {
             in = new ObjectInputStream(clientSocket.getInputStream());
             out = new ObjectOutputStream(clientSocket.getOutputStream());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
         }
+
+    }
+    public CustomServerHandler(Socket clientSocket) {
+        this.clientSocket = clientSocket;
+        init();
         start();
     }
 

@@ -14,15 +14,28 @@ public class AdditionalThread implements Runnable {
     byte[] finalBytesArray;
     int[] result = new int[3];
 
+    /**
+     * initializes start values for lookup with semaphore setup
+     * @param finalBytesArray - search array
+     * @param semaphore - a mechanism for organizing the interaction of processes
+     */
     public AdditionalThread(byte[] finalBytesArray, Semaphore semaphore) {
         this.semaphore = semaphore;
         this.finalBytesArray = finalBytesArray;
     }
 
+    /**
+     *the current value of the sequence length
+     * @return - value of length
+     */
     public int getCurentSequancy() {
         return curentSequancy;
     }
 
+    /**
+     * search results
+     * @return - array of search results
+     */
     public int[] getResult() {
         return result;
     }
@@ -60,6 +73,7 @@ public class AdditionalThread implements Runnable {
         }
         return resultArr;
     }
+
     @Override
     public void run() {
         try {

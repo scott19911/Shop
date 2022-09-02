@@ -17,6 +17,8 @@ import com.epam.verizhenko_andrii.electronicsStore.comands.ShowProductList;
 import com.epam.verizhenko_andrii.electronicsStore.productBase.SelectAddProductsType;
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 import com.epam.verizhenko_andrii.electronicsStore.serializeableProducts.ReadWriteProductsList;
+import com.epam.verizhenko_andrii.electronicsStore.server.custom.CustomServer;
+import com.epam.verizhenko_andrii.electronicsStore.server.http.HttpServer;
 import com.epam.verizhenko_andrii.electronicsStore.service.Events;
 
 import java.io.File;
@@ -29,50 +31,54 @@ import java.util.Scanner;
 public class Demo {
     private static final String PRODUCTS_FILE_NAME = "products.txt";
     private static final int HELP = 8;
-    private static final int EXIT = 9;
-    private static final int ADD_TRUE = 1;
+    private static final int EXIT = 10;
     private final static ReadWriteProductsList READ_WRITE_PRODUCTS_LIST = new ReadWriteProductsList();
-    private static final Scanner scanner = new Scanner(System.in);
-    static Map<Product, Integer> productsMap;
-    static ProductsDao products;
-    static Events events;
+    private static final Scanner sc = new Scanner(System.in);
+    public static Map<Product, Integer> productsMap;
+    public static ProductsDao products;
+    public static Events events;
+    public static HttpServer httpServer = new HttpServer();
+    public static SelectAddProductsType addProducts = new SelectAddProductsType();
+    static CustomServer customServer = new CustomServer();
 
     public static void main(String[] args) {
         List<Commands> commandsList = commandsList();
         init();
+        new Thread(customServer).start();
+        new Thread(httpServer).start();
         int command;
         System.out.println(helpCommands());
-        while ((command = scanner.nextInt()) < EXIT) {
-            if (command == HELP) {
+        while ((command = sc.nextInt()) < EXIT) {
+            if (command == 9) {
+                System.out.println("Add products");
+                productsMap.putAll(addProducts.addProducts());
+            } else if (command == HELP) {
                 System.out.println(helpCommands());
             } else {
                 events = commandsList.get(command).execute(events);
             }
             System.out.println("Enter command: ");
         }
+        CustomServer.closeServer();
+        HttpServer.closeServer();
         READ_WRITE_PRODUCTS_LIST.writeToFile(productsMap, PRODUCTS_FILE_NAME);
     }
 
     static String helpCommands() {
-        return "Commands: \n" + "0 - show goods \n" + "1 - add product to bucket \n" +
+        return "Commands: \n" + "0 - show goods \n" + "1 - add product to cart \n" +
                 "2 - bay all products from bucket \n" + "3 - show bucket\n" + "4 - show last five added products\n" +
                 "5 - make order\n" + "6 - show order by date\n" + "7 - show order by period\n" +
-                "8 - show all commands\n" + "9 or more - exit\n" + "Enter command:";
+                "8 - show all commands\n" + "9 - add new product to shop\n" + "10 or more - exit\n" + "Enter command:";
     }
 
     static void init() {
         products = new ProductsDaoImpl();
-        SelectAddProductsType addProducts = new SelectAddProductsType();
         events = new Events(new CartDaoImpl(), new ProductsDaoImpl(), new OrderHistoryDaoImpl(), new OrderDaoImpl() {
         });
         File fileProducts = new File(PRODUCTS_FILE_NAME);
 
         if (fileProducts.exists()) {
             productsMap = READ_WRITE_PRODUCTS_LIST.readProducts(PRODUCTS_FILE_NAME);
-            System.out.println("Add more products ? 0/1");
-            if (scanner.nextInt() == ADD_TRUE) {
-                productsMap.putAll(addProducts.addProducts());
-            }
         } else {
             System.out.println("Add products");
             productsMap = new HashMap<>();
@@ -101,5 +107,9 @@ public class Demo {
         commandsList.add(showOrderByDate);
         commandsList.add(showOrderByPeriod);
         return commandsList;
+    }
+
+    public static Map<Product, Integer> getProductsMap() {
+        return productsMap;
     }
 }

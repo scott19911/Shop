@@ -1,7 +1,8 @@
-package com.epam.verizhenko_andrii.electronicsStore.server.http;
+package server.http;
 
 import com.epam.verizhenko_andrii.electronicsStore.controller.Demo;
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
+import com.epam.verizhenko_andrii.electronicsStore.server.http.GetItemCommand;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
@@ -11,8 +12,11 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mockStatic;
 
+
+
+
 public class GetItemCommandTest {
-    static MockedStatic<Demo> mocked;
+    public static MockedStatic<Demo> mocked;
     @Test
     public void shouldReturnCount5_WhenProductSize5(){
         mocked = mockStatic(Demo.class);

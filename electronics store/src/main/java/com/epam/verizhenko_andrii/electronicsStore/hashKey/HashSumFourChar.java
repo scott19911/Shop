@@ -1,7 +1,9 @@
 package com.epam.verizhenko_andrii.electronicsStore.hashKey;
 
 import java.util.Objects;
-
+/**
+ * Implementing a hash function based on first four char
+ */
 public class HashSumFourChar {
     private final String key;
 

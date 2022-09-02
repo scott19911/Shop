@@ -1,7 +1,7 @@
 package fabric;
 
 import products.Product;
-import products.ProductImplementation;
+import products.ProductImpl;
 import proxy.FabricProxy;
 import proxy.MapProxy;
 
@@ -15,13 +15,11 @@ public class FabricProduct {
     public Product createProduct(ProductsType productsType) {
         switch (productsType) {
             case UNMODIFIER:
-                return (Product) FabricProxy.newInstance(new ProductImplementation());
+                return (Product) FabricProxy.newInstance(new ProductImpl());
             case MAP_REALISATION:
-                return (Product) MapProxy.newInstance(new ProductImplementation());
-            case SIMPLE_PRODUCT:
-                return new ProductImplementation();
+                return (Product) MapProxy.newInstance(new ProductImpl());
             default:
-                return null;
+                return new ProductImpl();
         }
     }
 }

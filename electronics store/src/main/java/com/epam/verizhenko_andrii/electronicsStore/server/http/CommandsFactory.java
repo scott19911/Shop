@@ -1,5 +1,8 @@
 package com.epam.verizhenko_andrii.electronicsStore.server.http;
 
+/**
+ *Returns the required command handler based
+ */
 public class CommandsFactory {
     private final String path;
     private String[] requestParameter;

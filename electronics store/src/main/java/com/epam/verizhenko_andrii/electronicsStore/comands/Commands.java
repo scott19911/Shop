@@ -1,7 +1,9 @@
 package com.epam.verizhenko_andrii.electronicsStore.comands;
 
 import com.epam.verizhenko_andrii.electronicsStore.service.Events;
-
+/**
+ *Basic interface for all commands
+ */
 public interface Commands {
     /**
      * command execution method

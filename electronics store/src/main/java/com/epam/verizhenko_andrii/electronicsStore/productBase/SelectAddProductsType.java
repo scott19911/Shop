@@ -6,13 +6,20 @@ import com.epam.verizhenko_andrii.electronicsStore.reflectionInputer.ProductServ
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ *Allows you to select the method of adding the product
+ */
 public class SelectAddProductsType {
     private static final String CONSOLE = "c";
     private static final String AUTOGENERATION = "a";
     private static final String AUTOGENERATION_REFLECTION = "ar";
 
+    /**
+     *Creates a new product and adds it to the map
+     * @return - product map
+     */
     public Map<Product, Integer> addProducts() {
-        final AddProduct addProduct;
+        AddProduct addProduct = null;
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter type of add: c,a,ar");
         String type = scanner.next();
@@ -26,8 +33,6 @@ public class SelectAddProductsType {
             case AUTOGENERATION_REFLECTION:
                 addProduct = new ProductServiceAutoGenImpl();
                 break;
-            default:
-                addProduct = null;
         }
         if (addProduct == null) {
             System.out.println("unsupported command");

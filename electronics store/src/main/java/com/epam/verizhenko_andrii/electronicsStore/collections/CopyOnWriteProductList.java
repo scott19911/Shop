@@ -6,6 +6,10 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ *  Implementing a thread-safe version ProductList
+ * @param <T> - products
+ */
 public class CopyOnWriteProductList<T> extends ProductList<T> {
     ReentrantLock lock = new ReentrantLock();
 

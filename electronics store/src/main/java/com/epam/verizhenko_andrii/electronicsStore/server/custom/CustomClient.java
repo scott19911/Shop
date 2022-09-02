@@ -12,8 +12,11 @@ import java.net.Socket;
  * Client application with single line command entry
  */
 public class CustomClient extends JFrame implements Runnable {
+    /**
+     * address for server connection
+     */
     static private final String address = "127.0.0.1";
-    static private final int port = 3000;
+    static private final int PORT = 3000;
     static private Socket clientSocket;
     static private ObjectOutputStream output;
     static private ObjectInputStream input;
@@ -65,7 +68,7 @@ public class CustomClient extends JFrame implements Runnable {
     public void run() {
         try {
             while (true) {
-                clientSocket = new Socket(InetAddress.getByName(address), port);
+                clientSocket = new Socket(InetAddress.getByName(address), PORT);
                 output = new ObjectOutputStream(clientSocket.getOutputStream());
                 input = new ObjectInputStream(clientSocket.getInputStream());
                 JOptionPane.showMessageDialog(null, input.readObject());

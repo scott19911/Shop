@@ -8,6 +8,9 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class OrderDaoImpl implements OrderDao {
+    /**
+     * stores products by order time
+     */
     TreeMap<LocalDateTime, Map<Product, Integer>> order;
 
     public OrderDaoImpl() {

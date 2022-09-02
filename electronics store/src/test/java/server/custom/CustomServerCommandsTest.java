@@ -1,7 +1,8 @@
-package com.epam.verizhenko_andrii.electronicsStore.server.custom;
+package server.custom;
 
 import com.epam.verizhenko_andrii.electronicsStore.controller.Demo;
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
+import com.epam.verizhenko_andrii.electronicsStore.server.custom.CustomServerCommands;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
@@ -12,33 +13,36 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mockStatic;
 
 
+
 public class CustomServerCommandsTest {
-    static MockedStatic<Demo> mocked;
+    public static MockedStatic<Demo> mocked;
+
     @Test
-    public void getCountTest_shouldReturn5_WhenProductSize5() {
+    public void shouldReturn5_whenProductSize5() {
         mocked = mockStatic(Demo.class);
-        Map<Product,Integer> expected = new HashMap<>();
-        expected.put(new Product(),1);
-        expected.put(new Product(),1);
-        expected.put(new Product(),1);
-        expected.put(new Product(),1);
-        expected.put(new Product(),1);
+        Map<Product, Integer> expected = new HashMap<>();
+        expected.put(new Product(), 1);
+        expected.put(new Product(), 1);
+        expected.put(new Product(), 1);
+        expected.put(new Product(), 1);
+        expected.put(new Product(), 1);
         mocked.when(Demo::getProductsMap).thenReturn(expected);
         CustomServerCommands commands = new CustomServerCommands();
         assertEquals(5, commands.getCount());
         mocked.close();
     }
+
     @Test
-    public void getItemTest_shouldReturn_lg45_WhenItemLg() {
+    public void shouldReturn_lg45_whenItemLg() {
         mocked = mockStatic(Demo.class);
-        Map<Product,Integer> expected = new HashMap<>();
+        Map<Product, Integer> expected = new HashMap<>();
         Product product = new Product();
         product.setBrand("lg");
         product.setPrice(45);
-        expected.put(new Product(),1);
-        expected.put(new Product(),1);
-        expected.put(product,1);
-        expected.put(new Product(),1);
+        expected.put(new Product(), 1);
+        expected.put(new Product(), 1);
+        expected.put(product, 1);
+        expected.put(new Product(), 1);
         expected.put(new Product(),1);
         mocked.when(Demo::getProductsMap).thenReturn(expected);
         CustomServerCommands commands = new CustomServerCommands();

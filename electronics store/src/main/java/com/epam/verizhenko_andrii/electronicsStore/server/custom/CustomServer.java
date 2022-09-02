@@ -7,6 +7,10 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Еhe class is waiting for a client socket connection on port 3000
+ *then passes to the command handler
+ */
 public class CustomServer implements Runnable {
     public static LinkedList<CustomServerHandler> serverList = new LinkedList<>();
     private static ServerSocket server;

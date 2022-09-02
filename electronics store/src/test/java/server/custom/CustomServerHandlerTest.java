@@ -1,5 +1,7 @@
-package com.epam.verizhenko_andrii.electronicsStore.server.custom;
+package server.custom;
 
+import com.epam.verizhenko_andrii.electronicsStore.server.custom.CustomServer;
+import com.epam.verizhenko_andrii.electronicsStore.server.custom.CustomServerCommands;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,16 +18,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class CustomServerHandlerTest {
-    CustomServerCommands commands = mock(CustomServerCommands.class);
-
+    private CustomServerCommands commands = mock(CustomServerCommands.class);
     @BeforeEach
     void init() {
-
         when(commands.getCount()).thenReturn(5);
     }
 
     @Test
-    public void shouldSocketWrite_WhenGetRequestCount() throws IOException, ClassNotFoundException {
+    public void shouldSocketWrite_whenGetRequestCount() throws IOException, ClassNotFoundException {
 
         CustomServer customServer = new CustomServer();
         Thread thread = new Thread(customServer);
@@ -41,8 +41,8 @@ class CustomServerHandlerTest {
         CustomServer.closeServer();
         try {
             Thread.sleep(1);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (InterruptedException ex) {
+            throw new RuntimeException(ex);
         }
         assertFalse(thread.isAlive());
     }

@@ -1,6 +1,6 @@
 package products;
 
-public class ProductImplementation implements Product {
+public class ProductImpl implements Product {
     private String brand;
     private double power;
     private double price;

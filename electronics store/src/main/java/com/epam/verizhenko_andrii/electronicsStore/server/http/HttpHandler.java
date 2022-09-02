@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 
+/**
+ * http request handler class
+ */
 public class HttpHandler extends Thread {
     private final Socket clientSocket;
     private final InputStream inputStream;
@@ -55,7 +58,7 @@ public class HttpHandler extends Thread {
                     outputStream.close();
                 }
             } catch (IOException ex) {
-                ex.printStackTrace();
+                throw new RuntimeException(ex);
             }
         }
     }

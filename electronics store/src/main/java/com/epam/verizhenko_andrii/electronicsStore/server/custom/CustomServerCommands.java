@@ -6,6 +6,9 @@ import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Class for implementing user commands from a custom client
+ */
 public class CustomServerCommands {
     Map<Product, Integer> productsMaps;
 

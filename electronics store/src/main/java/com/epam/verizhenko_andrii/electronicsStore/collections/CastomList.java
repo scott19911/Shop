@@ -141,6 +141,10 @@ public class CastomList implements List<Object> {
 
     }
 
+    /**
+     * Checks the given index is within the range of the non-modifiable part of the collection
+     * @param index - check index
+     */
     private void checkPosition(int index) {
         if (index < unmodList.size()) {
             throw new UnsupportedOperationException();
