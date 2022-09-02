@@ -11,8 +11,9 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class ConsoleInput<T extends Product> implements ProductService<T> {
-    private final Map<String, Product> productMap = new HashMap<>();
-    private final Map<String, Inputer<T>> inputerMap = new HashMap<>();
+    public final Map<String, Product> productMap = new HashMap<>();
+    public final Map<String, Inputer<T>> inputerMap = new HashMap<>();
+
     T obj;
 
     public ConsoleInput(Object obj) {
@@ -51,7 +52,7 @@ public class ConsoleInput<T extends Product> implements ProductService<T> {
     public void init() {
         mapProducts(ProductServiceAutoGenImpl.PRODUCT, new InputerProducts<>(), new Product());
         mapProducts(ProductServiceAutoGenImpl.REFREGIRATION, new InputerRefregerators(), new Refregerators());
-        mapProducts(ProductServiceAutoGenImpl.MEDIUM_DIGITAL_APPLIANCE, new InputerMda(), new MediumDigitalAppliances());
+        mapProducts(ProductServiceAutoGenImpl.MEDIUM_DIGITAL_APPLIANCE, new InputerMediumDigitalAppliances(), new MediumDigitalAppliances());
     }
 
 }

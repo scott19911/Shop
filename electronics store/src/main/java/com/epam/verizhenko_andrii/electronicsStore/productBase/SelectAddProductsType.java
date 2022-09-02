@@ -6,7 +6,7 @@ import com.epam.verizhenko_andrii.electronicsStore.reflectionInputer.ProductServ
 import java.util.Map;
 import java.util.Scanner;
 
-public class AddProductsImpl {
+public class SelectAddProductsType {
     private static final String CONSOLE = "c";
     private static final String AUTOGENERATION = "a";
     private static final String AUTOGENERATION_REFLECTION = "ar";

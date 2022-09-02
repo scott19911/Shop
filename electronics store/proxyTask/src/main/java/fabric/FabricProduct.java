@@ -7,7 +7,8 @@ import proxy.MapProxy;
 
 public class FabricProduct {
     /**
-     *  creates a product based on an input parameter
+     * creates a product based on an input parameter
+     *
      * @param productsType - enum of products
      * @return - instance product
      */

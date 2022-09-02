@@ -1,5 +1,6 @@
-package com.epam.verizhenko_andrii.electronicsStore.productBase;
+package com.epam.verizhenko_andrii.electronicsStore.reflectionInputer;
 
+import com.epam.verizhenko_andrii.electronicsStore.productBase.AddConsoleImpl;
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 import org.junit.After;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class AddConsoleImplTest {
+class ConReflectionTest {
     private static final InputStream STD_IN = System.in;
     private static final PrintStream STD_OUT = System.out;
 
@@ -23,9 +24,9 @@ class AddConsoleImplTest {
 
 
     @Test
-    void add() {
+    void shouldReturnSize1_whenAddOneProduct() {
         Product product = new Product("samsung", 200, 125);
-        String data = "prod\n125\nsamsung\n200\n2\n0";
+        String data = "prod\nr\nen\nsamsung\n200\n125\n2\n0";
         ByteArrayInputStream in = new ByteArrayInputStream(data.getBytes());
         System.setIn(in);
         AddConsoleImpl addConsole = new AddConsoleImpl();

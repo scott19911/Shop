@@ -16,9 +16,9 @@ import java.util.Scanner;
  * Creating a selected product by entering parameters from the console
  */
 public class AddConsoleImpl implements AddProduct {
-    private final String productType;
     private static final String CONSOLE_INPUT = "c";
     private static final String REFLECTION_INPUT = "r";
+    private final String productType;
     private final Map<String, Product> productMap = new HashMap<>();
     Map<Product, Integer> productIntegerMap = new HashMap<>();
 

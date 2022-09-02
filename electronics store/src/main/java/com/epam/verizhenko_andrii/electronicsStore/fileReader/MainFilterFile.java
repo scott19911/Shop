@@ -7,9 +7,9 @@ import java.util.Scanner;
 
 public class MainFilterFile {
 
+    private static final List<File> fileList = new ArrayList<>();
     public static FilteredFiles next;
     private static File dir;
-    private static final List<File> fileList = new ArrayList<>();
 
     public static void main(String[] args) {
         init();

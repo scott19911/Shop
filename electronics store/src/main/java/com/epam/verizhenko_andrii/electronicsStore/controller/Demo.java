@@ -14,7 +14,7 @@ import com.epam.verizhenko_andrii.electronicsStore.comands.ShowBucket;
 import com.epam.verizhenko_andrii.electronicsStore.comands.ShowOrderByDate;
 import com.epam.verizhenko_andrii.electronicsStore.comands.ShowOrderByPeriod;
 import com.epam.verizhenko_andrii.electronicsStore.comands.ShowProductList;
-import com.epam.verizhenko_andrii.electronicsStore.productBase.AddProductsImpl;
+import com.epam.verizhenko_andrii.electronicsStore.productBase.SelectAddProductsType;
 import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 import com.epam.verizhenko_andrii.electronicsStore.serializeableProducts.ReadWriteProductsList;
 import com.epam.verizhenko_andrii.electronicsStore.service.Events;
@@ -32,7 +32,7 @@ public class Demo {
     private static final int EXIT = 9;
     private static final int ADD_TRUE = 1;
     private final static ReadWriteProductsList READ_WRITE_PRODUCTS_LIST = new ReadWriteProductsList();
-    private static final Scanner sc = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
     static Map<Product, Integer> productsMap;
     static ProductsDao products;
     static Events events;
@@ -42,7 +42,7 @@ public class Demo {
         init();
         int command;
         System.out.println(helpCommands());
-        while ((command = sc.nextInt()) < EXIT) {
+        while ((command = scanner.nextInt()) < EXIT) {
             if (command == HELP) {
                 System.out.println(helpCommands());
             } else {
@@ -62,7 +62,7 @@ public class Demo {
 
     static void init() {
         products = new ProductsDaoImpl();
-        AddProductsImpl addProducts = new AddProductsImpl();
+        SelectAddProductsType addProducts = new SelectAddProductsType();
         events = new Events(new CartDaoImpl(), new ProductsDaoImpl(), new OrderHistoryDaoImpl(), new OrderDaoImpl() {
         });
         File fileProducts = new File(PRODUCTS_FILE_NAME);
@@ -70,7 +70,7 @@ public class Demo {
         if (fileProducts.exists()) {
             productsMap = READ_WRITE_PRODUCTS_LIST.readProducts(PRODUCTS_FILE_NAME);
             System.out.println("Add more products ? 0/1");
-            if (sc.nextInt() == ADD_TRUE) {
+            if (scanner.nextInt() == ADD_TRUE) {
                 productsMap.putAll(addProducts.addProducts());
             }
         } else {

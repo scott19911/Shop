@@ -5,8 +5,8 @@ import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.SortedMap;
+
 /**
- *
  * A.java
  * Interface class that has the following methods.
  *

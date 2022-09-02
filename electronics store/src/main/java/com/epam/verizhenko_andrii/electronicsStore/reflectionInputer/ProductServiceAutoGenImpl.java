@@ -14,19 +14,14 @@ import java.util.Random;
  * automatically creates a random product with fields filled with randomly generated data
  */
 public class ProductServiceAutoGenImpl implements AddProduct {
-    private final Map<String, Product> productMap = new HashMap<>();
     public static final String PRODUCT = "prod";
     public static final String MEDIUM_DIGITAL_APPLIANCE = "mda";
     public static final String REFREGIRATION = "ref";
     public static final String DOUBLE = "double";
     public static final String INT = "int";
+    private final Map<String, Product> productMap = new HashMap<>();
     private final int NUMBER_OF_PRODUCTS = 3;
 
-    /**
-     * Allowed to add products
-     *
-     * @return - map of products
-     */
     @Override
     public Map<Product, Integer> add() {
         Map<Product, Integer> productIntegerHashMap = new HashMap<>();
@@ -39,6 +34,11 @@ public class ProductServiceAutoGenImpl implements AddProduct {
         return productIntegerHashMap;
     }
 
+    /**
+     * returns a product string based on the received number
+     * @param number - random number
+     * @return - product name string
+     */
     private String randomProduct(int number) {
         switch (number) {
             case 0:
@@ -69,13 +69,13 @@ public class ProductServiceAutoGenImpl implements AddProduct {
         return prod;
     }
 
-    private void setParameter(Product prod, Field[] fields) {
+    private void setParameter(Product prproduct, Field[] fields) {
 
         for (Field field : fields) {
             if (field.getAnnotation(Product.Reflectable.class) != null) {
                 field.setAccessible(true);
                 try {
-                    field.set(prod, typeField(field.getType().getName()));
+                    field.set(prproduct, typeField(field.getType().getName()));
                 } catch (IllegalAccessException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -83,6 +83,11 @@ public class ProductServiceAutoGenImpl implements AddProduct {
         }
     }
 
+    /**
+     *based on the parameter type string, returns a random value of the desired type
+     * @param typeField - string of type field
+     * @return - random object required type
+     */
     private Object typeField(String typeField) {
         if (typeField.equals(DOUBLE)) {
             return new Random().nextInt(Integer.MAX_VALUE);

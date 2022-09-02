@@ -5,9 +5,9 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
 /**
- *
- *representation of the base class product
+ * representation of the base class product
  *
  * @author Verizhenko
  * @since 08-01-2022
@@ -19,6 +19,7 @@ public class Product implements Serializable {
     private double power;
     @Reflectable(value = "price")
     private double price;
+
     public Product() {
     }
 
@@ -28,6 +29,10 @@ public class Product implements Serializable {
         this.price = price;
     }
 
+    /**
+     * Getter for brand of product
+     * @return - string value
+     */
     public String getBrand() {
         return brand;
     }
@@ -35,7 +40,10 @@ public class Product implements Serializable {
     public void setBrand(String brand) {
         this.brand = brand;
     }
-
+    /**
+     * Getter for power of product
+     * @return - double value
+     */
     public double getPower() {
         return power;
     }
@@ -43,7 +51,10 @@ public class Product implements Serializable {
     public void setPower(double power) {
         this.power = power;
     }
-
+    /**
+     * Getter for price of product
+     * @return - double value
+     */
     public double getPrice() {
         return price;
     }
