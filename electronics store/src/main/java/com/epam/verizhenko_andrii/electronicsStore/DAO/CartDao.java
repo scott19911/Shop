@@ -1,8 +1,8 @@
 package com.epam.verizhenko_andrii.electronicsStore.DAO;
 
 import java.util.Hashtable;
+
 /**
- *
  * A.java
  * Interface class that has the following methods.
  *

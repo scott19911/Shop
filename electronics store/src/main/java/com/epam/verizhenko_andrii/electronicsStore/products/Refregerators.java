@@ -1,9 +1,9 @@
 package com.epam.verizhenko_andrii.electronicsStore.products;
 
 import java.util.Objects;
+
 /**
- *
- *representation of the heir to the class of large household appliances
+ * representation of the heir to the class of large household appliances
  *
  * @author Verizhenko
  * @since 08-01-2022
