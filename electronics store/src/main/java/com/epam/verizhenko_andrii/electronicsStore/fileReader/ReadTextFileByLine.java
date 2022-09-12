@@ -5,10 +5,17 @@ import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.Scanner;
 
+/**
+ * File rider line by line
+ */
 public class ReadTextFileByLine implements Iterable<String> {
     private final File file;
     private Scanner sc;
 
+    /**
+     * Initializes a file at the given path
+     * @param fileName - file path
+     */
     public ReadTextFileByLine(String fileName) {
         file = new File(fileName);
     }

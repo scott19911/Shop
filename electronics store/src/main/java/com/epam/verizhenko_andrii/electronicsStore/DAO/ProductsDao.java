@@ -24,13 +24,19 @@ public interface ProductsDao {
      */
     void setProducts(Map<Product, Integer> productsMap);
     /**
-     * Change pruduct quantity
+     * Change product quantity
      * @param product - variable product
      * @param quantity - new quantity
      */
     void updateProducts(Product product, int quantity);
-
+    /**
+     *Getter products by brand
+     * @return - product
+     */
     Product getProduct(String brand);
-
+    /**
+     *Getter quantity products
+     * @return - quantity
+     */
     int getQuantity(Product product);
 }

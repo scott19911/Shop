@@ -12,7 +12,16 @@ import java.util.LinkedHashMap;
  * @since 08-14-2022
  */
 public interface OrderHistoryDao {
+    /**
+     * Allows you to get the history of five items added to the cart
+     * @return - LinkedHashMap<Integer, Product>
+     */
     LinkedHashMap<Integer, Product> getHistory();
 
+    /**
+     * add item to history
+     * @param key - key to get the value
+     * @param product - added item
+     */
     void addToHistory(int key, Product product);
 }

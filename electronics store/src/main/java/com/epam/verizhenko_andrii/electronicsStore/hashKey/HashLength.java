@@ -2,6 +2,9 @@ package com.epam.verizhenko_andrii.electronicsStore.hashKey;
 
 import java.util.Objects;
 
+/**
+ * Implementing a hash function based on string length
+ */
 public class HashLength {
     public String key;
 

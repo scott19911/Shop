@@ -15,7 +15,6 @@ public class FabricProxy implements InvocationHandler {
     private final Product productAble;
 
     private FabricProxy(Product obj) {
-
         this.productAble = obj;
     }
 

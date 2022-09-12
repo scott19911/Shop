@@ -2,10 +2,18 @@ package com.epam.verizhenko_andrii.electronicsStore.fileReader;
 
 import java.io.File;
 
-
+/**
+ *
+ * filters files by given parameters
+ */
 public abstract class FilteredFiles {
     private FilteredFiles next;
 
+    /**
+     *setting the next filter
+     * @param filteredFiles - next filter
+     * @return - filter
+     */
     public static FilteredFiles nextFilter(FilteredFiles filteredFiles) {
         FilteredFiles next = filteredFiles;
         while (next.getNext() != null) {
@@ -14,6 +22,10 @@ public abstract class FilteredFiles {
         return next;
     }
 
+    /**
+     * get next filter
+     * @return - filter
+     */
     public FilteredFiles getNext() {
         return next;
     }
@@ -22,6 +34,11 @@ public abstract class FilteredFiles {
         this.next = next;
     }
 
+    /**
+     *  filters files
+     * @param file - check file
+     * @return - filtered files
+     */
     public File filter(File file) {
         if (!doFilter(file)) {
             return null;

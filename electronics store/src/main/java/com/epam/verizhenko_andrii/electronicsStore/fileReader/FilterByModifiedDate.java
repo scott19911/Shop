@@ -5,7 +5,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
+/**
+ *filters files by modified date range
+ */
 public class FilterByModifiedDate extends FilteredFiles {
     private final long fromDate;
     private final long toDate;

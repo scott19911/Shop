@@ -18,10 +18,8 @@ public class FabricProduct {
                 return (Product) FabricProxy.newInstance(new ProductImpl());
             case MAP_REALISATION:
                 return (Product) MapProxy.newInstance(new ProductImpl());
-            case SIMPLE_PRODUCT:
-                return new ProductImpl();
             default:
-                return null;
+                return new ProductImpl();
         }
     }
 }

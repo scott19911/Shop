@@ -20,6 +20,11 @@ public class CustomSet<T> extends ArrayList<T> {
         return super.set(index, element);
     }
 
+    /**
+     * add new object to collections
+     * @param t element whose presence in this collection is to be ensured
+     * @return - true when successes add
+     */
     public boolean add(T t) {
         if (contains(t)) {
             return false;

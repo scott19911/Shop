@@ -4,6 +4,10 @@ import com.epam.verizhenko_andrii.electronicsStore.products.Product;
 
 import java.util.Scanner;
 
+/**
+ * Input product parameters
+ * @param <T> - product type
+ */
 public class InputerProducts<T extends Product> implements Inputer<T> {
 
     public T input(T object, Scanner scanner) {
