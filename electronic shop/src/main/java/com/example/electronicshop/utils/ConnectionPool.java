@@ -16,8 +16,9 @@ public class ConnectionPool {
     }
 
     public static ConnectionPool getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new ConnectionPool();
+        }
         return instance;
     }
 
@@ -29,7 +30,7 @@ public class ConnectionPool {
             DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/mydatabase");
             connection = ds.getConnection();
         } catch (NamingException | SQLException ex) {
-            throw new IllegalStateException("not initializade ds ", ex);
+            throw new IllegalStateException("not initialized ds ", ex);
         }
         return connection;
     }

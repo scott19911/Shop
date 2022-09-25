@@ -2,12 +2,12 @@ package com.example.electronicshop.dao;
 
 import com.example.electronicshop.users.LoginUser;
 import com.example.electronicshop.users.User;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MySqlUserDao implements UserDao {
@@ -28,26 +28,16 @@ public class MySqlUserDao implements UserDao {
             "password,salt,mailings,avatar) VALUES (?,?,?,?,?,?,?);";
     private static final String UPDATE_USER_AVATAR = "UPDATE USERS SET AVATAR=? WHERE ID=?;";
     private static final String SELECT_LOGIN_INFORMATION_BY_EMAIL = "SELECT id, password, salt, avatar, first_name FROM users WHERE email=?";
+    public ConverterResultSet converterResultSet = new ConverterResultSet();
 
     @Override
     public List<User> getAllUser(Connection connection) {
-        List<User> list = new ArrayList<>();
         try (Statement stm = connection.createStatement()) {
             ResultSet rs = stm.executeQuery(SELECT_ALL_USERS);
-            while (rs.next()) {
-                User user = new User();
-                user.setId(rs.getInt(USER_ID));
-                user.setMailing(rs.getBoolean(RECEIVE_MAILING));
-                user.setEmail(rs.getString(EMAIL));
-                user.setLastName(rs.getString(LAST_NAME));
-                user.setFirstName(rs.getString(FIRST_NAME));
-                user.setAvatarUdl(rs.getString(AVATAR_URL));
-                list.add(user);
-            }
+            return converterResultSet.getListUser(rs);
         } catch (SQLException ex) {
             throw new RuntimeException("Sorry, cannot load list of users");
         }
-        return list;
     }
 
     @Override
@@ -135,25 +125,13 @@ public class MySqlUserDao implements UserDao {
 
     @Override
     public User selectUserById(Connection con, int userId) {
-        User user = new User();
         try (PreparedStatement stm = con.prepareStatement(SELECT_USER_BY_ID)) {
             stm.setInt(1, userId);
             stm.executeQuery();
             ResultSet resultSet = stm.getResultSet();
-            if (resultSet.next()) {
-                user.setPassword(resultSet.getString(PASSWORD));
-                user.setSalt(resultSet.getString(SALT));
-                user.setEmail(resultSet.getString(EMAIL));
-                user.setLastName(resultSet.getString(LAST_NAME));
-                user.setFirstName(resultSet.getString(FIRST_NAME));
-                user.setId(resultSet.getInt(USER_ID));
-                user.setMailing(resultSet.getBoolean(RECEIVE_MAILING));
-                user.setAvatarUdl(resultSet.getString(AVATAR_URL));
-                return user;
-            }
+            return converterResultSet.getUser(resultSet);
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
-        return null;
     }
 }
