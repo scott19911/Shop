@@ -1,5 +1,6 @@
-package com.example.electronicshop.registration;
+package com.example.electronicshop.servlets;
 
+import com.example.electronicshop.registration.RegistrationDTO;
 import com.example.electronicshop.service.RegistrationServiceImpl;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 
+import static com.example.electronicshop.constants.Pages.REGISTRATION_PAGE;
 import static com.example.electronicshop.registration.DrawCaptcha.CAPTCHA_ID;
 import static com.example.electronicshop.registration.DrawCaptcha.CAPTCHA_STORE_TYPE;
 import static com.example.electronicshop.validate.ValidateFactory.FIELDS;
@@ -29,13 +31,13 @@ public class Registration extends HttpServlet {
     public static final String REGISTRATION_ERROR = "com.example.electronicshop.registration.error";
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         RegistrationServiceImpl registrationService = new RegistrationServiceImpl();
         registrationService.registration(req, resp);
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
         RegistrationDTO registrationBean = (RegistrationDTO) session
                 .getAttribute(REGISTRATION_DTO);
@@ -48,7 +50,7 @@ public class Registration extends HttpServlet {
         if (getServletContext().getInitParameter(CAPTCHA_STORE_TYPE).equals(FIELDS)) {
             req.setAttribute(CAPTCHA_ID, id++);
         }
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/registration.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher(REGISTRATION_PAGE);
         try {
             dispatcher.forward(req, resp);
         } catch (ServletException | IOException ex) {

@@ -1,8 +1,9 @@
 package com.example.electronicshop.dao;
 
-import com.example.electronicshop.users.AuthorizationUser;
+import com.example.electronicshop.users.LoginUser;
 import com.example.electronicshop.users.User;
 
+import java.sql.Connection;
 import java.util.List;
 
 public interface UserDao {
@@ -11,28 +12,35 @@ public interface UserDao {
      *
      * @return - list of all users
      */
-    List<User> getAllUser();
+    List<User> getAllUser(Connection connection);
+
+    /**
+     * Get user by id
+     * @param userId - searching user id
+     * @return - user
+     */
+    User selectUserById(Connection connection, int userId);
 
     /**
      * Allows you to update the user profile
      *
      * @param newUser - new user data
      */
-    void updateUser(User newUser, String salt);
+    boolean updateUser(Connection connection,User newUser);
 
     /**
      * Removes a user from the list
      *
      * @param id - user ID
      */
-    void deleteUser(int id);
+    boolean deleteUser(Connection connection,int id);
 
     /**
      * add new user
      *
      * @param user - user data
      */
-    int addUser(User user, String salt);
+    int addUser(Connection connection,User user);
 
     /**
      * * allows set avatar
@@ -40,7 +48,7 @@ public interface UserDao {
      * @param id   - user id
      * @param path - to avatar
      */
-    void addAvatar(int id, String path);
+    boolean addAvatar(Connection connection,int id, String path);
 
     /**
      * Returns data for user authorization
@@ -48,6 +56,7 @@ public interface UserDao {
      * @param email - user email
      * @return - data for user authorization
      */
-    AuthorizationUser loginUser(String email);
+    LoginUser loginUser(Connection connection,String email);
+
 
 }

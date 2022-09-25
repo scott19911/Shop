@@ -7,19 +7,20 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="customTag" tagdir="/WEB-INF/tags" %>
 <html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Registration</title>
-    <%@ taglib prefix="customTag" tagdir="/WEB-INF/tags" %>
     <!-- Google Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
           type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel="stylesheet" href="/css/avatarReg.css">
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
@@ -45,20 +46,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <div class="user-menu">
-                    <ul>
-                        <li><a href="#"><i class="fa fa-user"></i> My Account</a></li>
-                        <li><a href="#"><i class="fa fa-heart"></i> Wishlist</a></li>
-                        <li><a href="cart.html"><i class="fa fa-user"></i> My Cart</a></li>
-                        <li><a href="checkout.html"><i class="fa fa-user"></i> Checkout</a></li>
-                        <li><a href="#"><i class="fa fa-user"></i> Login</a></li>
-                    </ul>
-                </div>
+                <customTag:login></customTag:login>
             </div>
-
             <div class="col-md-4">
                 <div class="header-right">
                     <ul class="list-unstyled list-inline">
+                        <a href="/reg">Sign up</a>
                         <li class="dropdown dropdown-small">
                             <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span
                                     class="key">currency :</span><span class="value">USD </span><b
@@ -145,18 +138,20 @@
             <div class="col-md-8">
                 <div class="product-content-right">
                     <div class="woocommerce">
-                        <form  action="/reg" class="checkout" method="post" name="checkout" onsubmit="return validateForm()">
-                            <div id="customer_details" class="col2-set">
-                                <div class="col-1">
-                                    <div class="woocommerce-billing-fields">
 
+                        <div id="customer_details" class="col2-set">
+                            <div class="col-1">
+                                <div class="woocommerce-billing-fields">
+                                    <form action="/reg" class="checkout" method="post" name="checkout"
+                                          onsubmit="return validateForm()">
                                         <div class="create-account">
                                             <p>Create an account by entering the information below. If you are a
                                                 returning customer please login at the top of the page.</p>
                                             <p id="billing_first_name_field"
                                                class="form-row form-row-first validate-required">
-                                                <label class="" for="billing_first_name">First Name <abbr title="required"
-                                                                                                          class="required">*</abbr>
+                                                <label class="" for="billing_first_name">First Name <abbr
+                                                        title="required"
+                                                        class="required">*</abbr>
                                                 </label>
                                                 <input type="text" value="${requestScope.get('com.example.electronicshop.registration.bean').getFirstName()}" placeholder="" id="billing_first_name"
                                                        name="billing_first_name" class="input-text ">
@@ -196,7 +191,7 @@
                                             <p id="demo7" style="color: red;"></p>
                                             <p id="errorMassage" style="color:red"> ${requestScope.get("com.example.electronicshop.registration.error").get("account_password")}
                                             </p>
-                                            <customTag:captcha role="adm"/>
+                                            <customTag:captcha/>
                                             <p id="account_password_field" class="form-row validate-required">
                                                 <label class="" for="captcha">Test code <abbr
                                                         title="required" class="required">*</abbr>
@@ -211,7 +206,7 @@
                                             <label class="switch">
                                                 <input type="checkbox" name="notifications" value="true">
                                                 <span class="slider round"></span>
-                                             </label>
+                                            </label>
                                             </div>
                                             <div class="form-row place-order">
                                                 <input type="submit" data-value="Place order" value="Place order"
@@ -220,10 +215,27 @@
                                             </div>
                                             <div class="clear"></div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
+
                             </div>
-                        </form>
+                            <div class="col-2">
+                                <form method="post" action="${pageContext.request.contextPath}/uploadFile"
+                                      enctype="multipart/form-data" class="avatarLoading">
+                                    Select avatar:
+                                    <br/>
+                                    <input type="file" name="file"/>
+                                    <br/>
+                                    <input type="submit" value="Upload"/>
+                                </form>
+                                <p>
+                                <div class="avatar">
+                                    <img src="/drawAvatar" class="avatar__image">
+                                </div>
+                                </p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

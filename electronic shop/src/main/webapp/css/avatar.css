@@ -1,0 +1,38 @@
+
+/*
+ * MAIN CONTENT
+ */
+.avatar1 {
+  border: 5px solid #FFFFFF;
+  box-sizing: border-box;
+  height: 70px;
+  border-radius: 50%;
+  position: relative;
+  width: 70px;
+}
+.avatar__image1 {
+  position: center;
+  width: 60px;
+  height: 67px;
+  object-fit: inherit;
+  border-radius: 50%;
+}
+.avatar1::before, .avatar1::after {
+  border: 5px solid transparent;
+  border-radius: 50%;
+  border-top: 5px solid #00BCD4;
+  content: "";
+  display: block;
+  height: calc(100% + 10px);
+  left: 50%;
+  width: calc(100% + 10px);
+  position: absolute;
+}
+.avatar1::before {
+  top: -10px;
+  transform: translateX(-50%);
+}
+.avatar1::after {
+  bottom: -10px;
+  transform: translateX(-50%) rotate(180deg);
+}

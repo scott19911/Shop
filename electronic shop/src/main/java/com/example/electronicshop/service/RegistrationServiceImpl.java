@@ -1,7 +1,7 @@
 package com.example.electronicshop.service;
 
-import com.example.electronicshop.dao.UserDaoFactory;
 import com.example.electronicshop.registration.RegistrationDTO;
+import com.example.electronicshop.users.SpecificUser;
 import com.example.electronicshop.users.User;
 import com.example.electronicshop.validate.ValidateFactory;
 import com.example.electronicshop.validate.ValidatesRegistrationForm;
@@ -12,16 +12,21 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 
+import static com.example.electronicshop.constants.Pages.SHOP_PAGE;
+import static com.example.electronicshop.constants.ServletsName.REGISTRATION_SERVLET;
 import static com.example.electronicshop.registration.DrawCaptcha.CAPTCHA_STORE_TYPE;
-import static com.example.electronicshop.registration.Registration.DB_TYPE;
-import static com.example.electronicshop.registration.Registration.EMAIL;
-import static com.example.electronicshop.registration.Registration.REGISTRATION_DTO;
-import static com.example.electronicshop.registration.Registration.REGISTRATION_ERROR;
+import static com.example.electronicshop.service.UploadAvatar.SPECIFIC_USER;
+import static com.example.electronicshop.servlets.Registration.DB_TYPE;
+import static com.example.electronicshop.servlets.Registration.EMAIL;
+import static com.example.electronicshop.servlets.Registration.REGISTRATION_DTO;
+import static com.example.electronicshop.servlets.Registration.REGISTRATION_ERROR;
+
 
 /**
  * Responsible for registering a new user
  */
 public class RegistrationServiceImpl implements RegistrationService {
+
     @Override
     public void registration(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
@@ -33,22 +38,36 @@ public class RegistrationServiceImpl implements RegistrationService {
         if (error.isEmpty()) {
             user = registrationBean.getUser();
             try {
-                UserDaoFactory userDaoFactory = new UserDaoFactory();
-                UserServiceMapStore userService = new UserServiceMapStore(
-                        userDaoFactory.getUserDao(session.getServletContext().getInitParameter(DB_TYPE)));
-                userService.createUser(user);
+                SpecificUser specificUser;
+                UserServiceFactory userServiceFactory = new UserServiceFactory();
+                UserService userService = userServiceFactory.getService
+                        (session.getServletContext().getInitParameter(DB_TYPE));
+                if (session.getAttribute(SPECIFIC_USER) == null) {
+                    specificUser = new SpecificUser();
+                } else {
+                    specificUser = (SpecificUser) session.getAttribute(SPECIFIC_USER);
+                    user.setAvatarUdl(specificUser.getAvatarUrl());
+                }
+                int userId = userService.createUser(user);
+                if (userId > 0) {
+                    specificUser.setFirstName(user.getFirstName());
+                    specificUser.setUserId(userId);
+                    session.setAttribute(SPECIFIC_USER, specificUser);
+                } else {
+                    error.put(EMAIL, "Already register email");
+                }
             } catch (RuntimeException exception) {
                 error.put(EMAIL, exception.getMessage());
             }
         }
         if (error.isEmpty()) {
-            resp.sendRedirect("/shop.html");
+            resp.sendRedirect(SHOP_PAGE);
         } else {
             registrationBean.setPassword("");
             registrationBean.setCaptcha("");
             session.setAttribute(REGISTRATION_DTO, registrationBean);
             session.setAttribute(REGISTRATION_ERROR, error);
-            resp.sendRedirect("/reg");
+            resp.sendRedirect(REGISTRATION_SERVLET);
         }
     }
 }

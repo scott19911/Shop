@@ -1,6 +1,7 @@
 package com.example.electronicshop.registration;
 
 import com.example.electronicshop.captchaStoreMode.CaptchaFieldStorage;
+import com.example.electronicshop.servlets.Registration;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 import static com.example.electronicshop.registration.DrawCaptcha.CAPTCHA_ID;
 import static com.example.electronicshop.registration.DrawCaptcha.CAPTCHA_STORE_TYPE;
-import static com.example.electronicshop.registration.Registration.DB_TYPE;
+import static com.example.electronicshop.servlets.Registration.DB_TYPE;
 import static com.example.electronicshop.validate.ValidateSession.CAPTCHA;
 import static com.example.electronicshop.validate.ValidateSession.EMAIL;
 import static com.example.electronicshop.validate.ValidateSession.FIRST_NAME;
