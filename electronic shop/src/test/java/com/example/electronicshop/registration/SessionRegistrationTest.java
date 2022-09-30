@@ -1,6 +1,6 @@
 package com.example.electronicshop.registration;
 
-import com.example.electronicshop.servlets.Registration;
+import com.example.electronicshop.servlets.RegistrationServlets;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -49,7 +49,7 @@ class SessionRegistrationTest {
         error.put(FIRST_NAME, "First Name is missing or incorrect");
         error.put(LAST_NAME, "Last Name is missing or incorrect");
 
-        Registration registration = new Registration();
+        RegistrationServlets registration = new RegistrationServlets();
         registration.doPost(request, response);
 
         verify(session, atLeastOnce()).setAttribute(eq("com.example.electronicshop.registration.bean"), any());
@@ -74,7 +74,7 @@ class SessionRegistrationTest {
         error.put(EMAIL, "Email is missing or incorrect");
         error.put(PASSWORD, "Password length must be great then 3 and lower 10 symbols");
 
-        Registration registration = new Registration();
+        RegistrationServlets registration = new RegistrationServlets();
         registration.doPost(request, response);
 
         verify(session, atLeastOnce()).setAttribute(eq("com.example.electronicshop.registration.bean"), any());
@@ -98,7 +98,7 @@ class SessionRegistrationTest {
         Map<String, String> error = new HashMap<>();
         error.put(EMAIL, "Already register");
 
-        Registration registration = new Registration();
+        RegistrationServlets registration = new RegistrationServlets();
         registration.doPost(request, response);
 
         verify(session, atLeastOnce()).setAttribute(eq("com.example.electronicshop.registration.bean"), any());
@@ -120,7 +120,7 @@ class SessionRegistrationTest {
         when(servletContext.getInitParameter(anyString())).thenReturn("session");
         when(session.getAttribute(CAPTCHA)).thenReturn(captchaStore);
 
-        Registration registration = new Registration();
+        RegistrationServlets registration = new RegistrationServlets();
         registration.doPost(request, response);
 
         verify(response, atLeastOnce()).sendRedirect("/shop.html");

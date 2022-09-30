@@ -15,7 +15,7 @@ import static com.example.electronicshop.service.ImageServiceImpl.PRODUCT_IMG;
  * Renders the user's avatar on the jsp page
  */
 @WebServlet("/drawAvatar")
-public class DrawImage extends HttpServlet {
+public class DrawImageServlets extends HttpServlet {
     public static final String IMAGE_STORAGE_PATH = "ImageStorage";
     public static final String IMAGE_SERVICE = "ImageService";
 

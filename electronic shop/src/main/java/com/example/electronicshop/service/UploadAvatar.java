@@ -16,8 +16,8 @@ import java.nio.file.Paths;
 
 
 import static com.example.electronicshop.constants.ServletsName.REGISTRATION_SERVLET;
-import static com.example.electronicshop.servlets.DrawImage.IMAGE_STORAGE_PATH;
-import static com.example.electronicshop.servlets.Registration.DB_TYPE;
+import static com.example.electronicshop.servlets.DrawImageServlets.IMAGE_STORAGE_PATH;
+import static com.example.electronicshop.servlets.RegistrationServlets.DB_TYPE;
 
 public class UploadAvatar implements UploadService {
     public static final String SAVE_DIRECTORY = "uploadDir";

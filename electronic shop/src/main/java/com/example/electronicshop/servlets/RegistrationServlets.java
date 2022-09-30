@@ -22,7 +22,7 @@ import static com.example.electronicshop.validate.ValidateFactory.FIELDS;
  * Responsible for validation and registration of user data
  */
 @WebServlet("/reg")
-public class Registration extends HttpServlet {
+public class RegistrationServlets extends HttpServlet {
 
     public static final String EMAIL = "billing_email";
     private int id = 0;

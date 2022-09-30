@@ -6,5 +6,6 @@ public class ServletsName {
     public static final String EXIT_SERVLET = "/logOff";
     public static final String DRAW_AVATAR_SERVLET = "/drawAvatar";
     public static final String UPLOAD_AVATAR_SERVLET = "/uploadFile";
+    public static final String SHOP_SERVLET = "/shop";
 
 }

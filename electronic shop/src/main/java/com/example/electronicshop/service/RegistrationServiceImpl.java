@@ -12,14 +12,15 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.example.electronicshop.constants.Pages.SHOP_PAGE;
+
 import static com.example.electronicshop.constants.ServletsName.REGISTRATION_SERVLET;
+import static com.example.electronicshop.constants.ServletsName.SHOP_SERVLET;
 import static com.example.electronicshop.registration.DrawCaptcha.CAPTCHA_STORE_TYPE;
 import static com.example.electronicshop.service.UploadAvatar.SPECIFIC_USER;
-import static com.example.electronicshop.servlets.Registration.DB_TYPE;
-import static com.example.electronicshop.servlets.Registration.EMAIL;
-import static com.example.electronicshop.servlets.Registration.REGISTRATION_DTO;
-import static com.example.electronicshop.servlets.Registration.REGISTRATION_ERROR;
+import static com.example.electronicshop.servlets.RegistrationServlets.DB_TYPE;
+import static com.example.electronicshop.servlets.RegistrationServlets.EMAIL;
+import static com.example.electronicshop.servlets.RegistrationServlets.REGISTRATION_DTO;
+import static com.example.electronicshop.servlets.RegistrationServlets.REGISTRATION_ERROR;
 
 
 /**
@@ -60,7 +61,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             }
         }
         if (error.isEmpty()) {
-            resp.sendRedirect(SHOP_PAGE);
+            resp.sendRedirect(SHOP_SERVLET);
         } else {
             registrationBean.setPassword("");
             registrationBean.setCaptcha("");

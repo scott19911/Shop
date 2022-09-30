@@ -1,7 +1,7 @@
 package com.example.electronicshop.registration;
 
 import com.example.electronicshop.captchaStoreMode.CaptchaFieldStorage;
-import com.example.electronicshop.servlets.Registration;
+import com.example.electronicshop.servlets.RegistrationServlets;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,7 +17,7 @@ import java.util.Map;
 
 import static com.example.electronicshop.registration.DrawCaptcha.CAPTCHA_ID;
 import static com.example.electronicshop.registration.DrawCaptcha.CAPTCHA_STORE_TYPE;
-import static com.example.electronicshop.servlets.Registration.DB_TYPE;
+import static com.example.electronicshop.servlets.RegistrationServlets.DB_TYPE;
 import static com.example.electronicshop.validate.ValidateSession.CAPTCHA;
 import static com.example.electronicshop.validate.ValidateSession.EMAIL;
 import static com.example.electronicshop.validate.ValidateSession.FIRST_NAME;
@@ -61,7 +61,7 @@ public class HiddenFieldRegistrationTest {
         error.put(FIRST_NAME, "First Name is missing or incorrect");
         error.put(LAST_NAME, "Last Name is missing or incorrect");
 
-        Registration registration = new Registration();
+        RegistrationServlets registration = new RegistrationServlets();
         registration.doPost(request, response);
 
         verify(session, atLeastOnce()).setAttribute(eq("com.example.electronicshop.registration.bean"), any());
@@ -87,7 +87,7 @@ public class HiddenFieldRegistrationTest {
         error.put(EMAIL, "Email is missing or incorrect");
         error.put(PASSWORD, "Password length must be great then 3 and lower 10 symbols");
 
-        Registration registration = new Registration();
+        RegistrationServlets registration = new RegistrationServlets();
         registration.doPost(request, response);
 
         verify(session, atLeastOnce()).setAttribute(eq("com.example.electronicshop.registration.bean"), any());
@@ -113,7 +113,7 @@ public class HiddenFieldRegistrationTest {
         Map<String, String> error = new HashMap<>();
         error.put(EMAIL, "Already register");
 
-        Registration registration = new Registration();
+        RegistrationServlets registration = new RegistrationServlets();
         registration.doPost(request, response);
 
         verify(session, atLeastOnce()).setAttribute(eq("com.example.electronicshop.registration.bean"), any());
@@ -137,7 +137,7 @@ public class HiddenFieldRegistrationTest {
         when(servletContext.getInitParameter(DB_TYPE)).thenReturn("map");
         when(session.getAttribute(CAPTCHA)).thenReturn(captchaStore);
 
-        Registration registration = new Registration();
+        RegistrationServlets registration = new RegistrationServlets();
         registration.doPost(request, response);
 
         verify(response, atLeastOnce()).sendRedirect("/shop.html");

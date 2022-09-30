@@ -1,5 +1,6 @@
 package com.example.electronicshop.dao;
 
+import com.example.electronicshop.products.CategoryDTO;
 import com.example.electronicshop.products.Product;
 import com.example.electronicshop.users.User;
 
@@ -16,13 +17,7 @@ import static com.example.electronicshop.dao.MySqlUserDao.PASSWORD;
 import static com.example.electronicshop.dao.MySqlUserDao.RECEIVE_MAILING;
 import static com.example.electronicshop.dao.MySqlUserDao.SALT;
 import static com.example.electronicshop.dao.MySqlUserDao.USER_ID;
-import static com.example.electronicshop.dao.ProductRepository.PRODUCT_BRAND;
-import static com.example.electronicshop.dao.ProductRepository.PRODUCT_CATEGORY;
-import static com.example.electronicshop.dao.ProductRepository.PRODUCT_DESCRIPTION;
-import static com.example.electronicshop.dao.ProductRepository.PRODUCT_ID;
-import static com.example.electronicshop.dao.ProductRepository.PRODUCT_IMAGE;
-import static com.example.electronicshop.dao.ProductRepository.PRODUCT_NAME;
-import static com.example.electronicshop.dao.ProductRepository.PRODUCT_PRICE;
+
 
 /**
  * The class allows you to retrieve the user from ResultSet
@@ -79,23 +74,5 @@ public class ConverterResultSet {
         return null;
     }
 
-    public List<Product> getAllProduct(ResultSet resultSet) {
-        List<Product> productList = new ArrayList<>();
-        try {
-            while (resultSet.next()) {
-                Product product = new Product();
-                product.setProductId(resultSet.getInt(PRODUCT_ID));
-                product.setName(resultSet.getString(PRODUCT_NAME));
-                product.setBrand(resultSet.getString(PRODUCT_BRAND));
-                product.setCategory(resultSet.getInt(PRODUCT_CATEGORY));
-                product.setPrice(resultSet.getInt(PRODUCT_PRICE));
-                product.setDescription(resultSet.getString(PRODUCT_DESCRIPTION));
-                product.setImgUrl(resultSet.getString(PRODUCT_IMAGE));
-                productList.add(product);
-            }
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-        return productList;
-    }
+
 }

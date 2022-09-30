@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import static com.example.electronicshop.service.UploadAvatar.SPECIFIC_USER;
-import static com.example.electronicshop.servlets.DrawImage.IMAGE_STORAGE_PATH;
+import static com.example.electronicshop.servlets.DrawImageServlets.IMAGE_STORAGE_PATH;
 
 public class ImageServiceImpl implements ImageService {
     public static final String UNKNOWN_AVATAR_URL = "uploadDir/4/unknown.jpg";

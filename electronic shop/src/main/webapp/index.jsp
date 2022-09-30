@@ -79,7 +79,7 @@
     <div class="row">
       <div class="col-sm-6">
         <div class="logo">
-          <h1><a href="index.html">e<span>Electronics</span></a></h1>
+          <h1><a href="index.jsp">e<span>Electronics</span></a></h1>
         </div>
       </div>
 
@@ -105,12 +105,11 @@
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="index.html">Home</a></li>
-          <li><a href="shop.html">Shop page</a></li>
+          <li class="active"><a href="index.jsp">Home</a></li>
+          <li><a href="${pageContext.request.contextPath}/shop">Shop page</a></li>
           <li><a href="single-product.html">Single product</a></li>
           <li><a href="cart.html">Cart</a></li>
           <li><a href="checkout.html">Checkout</a></li>
-          <li><a href="#">Category</a></li>
           <li><a href="#">Others</a></li>
           <li><a href="#">Contact</a></li>
         </ul>
