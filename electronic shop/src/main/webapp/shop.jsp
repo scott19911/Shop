@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="customTag" tagdir="/WEB-INF/tags" %>
 <html><head>
   <meta charset="utf-8">
@@ -133,188 +134,38 @@
 
 <div class="single-product-area">
   <div class="zigzag-bottom"></div>
+  <div class="col-md-2 col-sm-2">
+    <form action="/shop" class="checkout" method="get" name="checkout">
+      <div class="form-row place-order">
+        <input type="submit" data-value="Place order" value="Place order"
+               id="place_order" name="woocommerce_checkout_place_order"
+               class="button alt">
+      </div>
+    </form>
+  </div>
   <div class="container">
     <div class="row">
-      <div class="col-md-3 col-sm-6">
-        <div class="single-shop-product">
-          <div class="product-upper">
-            <img src="img/product-2.jpg" alt="">
-          </div>
-          <h2><a href="">Apple new mac book 2015 March :P</a></h2>
-          <div class="product-carousel-price">
-            <ins>$899.00</ins> <del>$999.00</del>
-          </div>
+      <c:forEach items="${product}" var="product">
+        <div class="col-md-offset-3 col-sm-3">
+          <div class="single-shop-product">
+            <div class="product-upper">
+              <img src="${pageContext.request.contextPath}/drawAvatar?productImg=${product.imgUrl}" alt="">
+            </div>
+            <h2> ${product.brand}</h2>
+            <h2><a href="">${ product.name}</a></h2>
+            <p>${product.description}</p>
+            <h2><div class="product-carousel-price">
+              <ins>₴${product.price}</ins>
+              <del>₴${product.price + (product.price * 0.2)}</del>
+            </div></h2>
 
-          <div class="product-option-shop">
-            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/canvas/shop/?add-to-cart=70">Add to cart</a>
+            <div class="product-option-shop">
+              <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow"
+                 href="/addCart=${product.productId}">Add to cart</a>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="single-shop-product">
-          <div class="product-upper">
-            <img src="img/product-1.jpg" alt="">
-          </div>
-          <h2><a href="">Apple new mac book 2015 March :P</a></h2>
-          <div class="product-carousel-price">
-            <ins>$899.00</ins> <del>$999.00</del>
-          </div>
-
-          <div class="product-option-shop">
-            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/canvas/shop/?add-to-cart=70">Add to cart</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="single-shop-product">
-          <div class="product-upper">
-            <img src="img/product-3.jpg" alt="">
-          </div>
-          <h2><a href="">Apple new mac book 2015 March :P</a></h2>
-          <div class="product-carousel-price">
-            <ins>$899.00</ins> <del>$999.00</del>
-          </div>
-
-          <div class="product-option-shop">
-            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/canvas/shop/?add-to-cart=70">Add to cart</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="single-shop-product">
-          <div class="product-upper">
-            <img src="img/product-4.jpg" alt="">
-          </div>
-          <h2><a href="">Apple new mac book 2015 March :P</a></h2>
-          <div class="product-carousel-price">
-            <ins>$899.00</ins> <del>$999.00</del>
-          </div>
-
-          <div class="product-option-shop">
-            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/canvas/shop/?add-to-cart=70">Add to cart</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="single-shop-product">
-          <div class="product-upper">
-            <img src="img/product-2.jpg" alt="">
-          </div>
-          <h2><a href="">Apple new mac book 2015 March :P</a></h2>
-          <div class="product-carousel-price">
-            <ins>$899.00</ins> <del>$999.00</del>
-          </div>
-
-          <div class="product-option-shop">
-            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/canvas/shop/?add-to-cart=70">Add to cart</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="single-shop-product">
-          <div class="product-upper">
-            <img src="img/product-1.jpg" alt="">
-          </div>
-          <h2><a href="">Apple new mac book 2015 March :P</a></h2>
-          <div class="product-carousel-price">
-            <ins>$899.00</ins> <del>$999.00</del>
-          </div>
-
-          <div class="product-option-shop">
-            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/canvas/shop/?add-to-cart=70">Add to cart</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="single-shop-product">
-          <div class="product-upper">
-            <img src="img/product-3.jpg" alt="">
-          </div>
-          <h2><a href="">Apple new mac book 2015 March :P</a></h2>
-          <div class="product-carousel-price">
-            <ins>$899.00</ins> <del>$999.00</del>
-          </div>
-
-          <div class="product-option-shop">
-            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/canvas/shop/?add-to-cart=70">Add to cart</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="single-shop-product">
-          <div class="product-upper">
-            <img src="img/product-4.jpg" alt="">
-          </div>
-          <h2><a href="">Apple new mac book 2015 March :P</a></h2>
-          <div class="product-carousel-price">
-            <ins>$899.00</ins> <del>$999.00</del>
-          </div>
-
-          <div class="product-option-shop">
-            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/canvas/shop/?add-to-cart=70">Add to cart</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="single-shop-product">
-          <div class="product-upper">
-            <img src="img/product-2.jpg" alt="">
-          </div>
-          <h2><a href="">Apple new mac book 2015 March :P</a></h2>
-          <div class="product-carousel-price">
-            <ins>$899.00</ins> <del>$999.00</del>
-          </div>
-
-          <div class="product-option-shop">
-            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/canvas/shop/?add-to-cart=70">Add to cart</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="single-shop-product">
-          <div class="product-upper">
-            <img src="img/product-1.jpg" alt="">
-          </div>
-          <h2><a href="">Apple new mac book 2015 March :P</a></h2>
-          <div class="product-carousel-price">
-            <ins>$899.00</ins> <del>$999.00</del>
-          </div>
-
-          <div class="product-option-shop">
-            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/canvas/shop/?add-to-cart=70">Add to cart</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="single-shop-product">
-          <div class="product-upper">
-            <img src="img/product-3.jpg" alt="">
-          </div>
-          <h2><a href="">Apple new mac book 2015 March :P</a></h2>
-          <div class="product-carousel-price">
-            <ins>$899.00</ins> <del>$999.00</del>
-          </div>
-
-          <div class="product-option-shop">
-            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/canvas/shop/?add-to-cart=70">Add to cart</a>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="single-shop-product">
-          <div class="product-upper">
-            <img src="img/product-4.jpg" alt="">
-          </div>
-          <h2><a href="">Apple new mac book 2015 March :P</a></h2>
-          <div class="product-carousel-price">
-            <ins>$899.00</ins> <del>$999.00</del>
-          </div>
-
-          <div class="product-option-shop">
-            <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/canvas/shop/?add-to-cart=70">Add to cart</a>
-          </div>
-        </div>
-      </div>
+      </c:forEach>
     </div>
 
     <div class="row">

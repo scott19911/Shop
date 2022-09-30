@@ -1,9 +1,6 @@
 package com.example.electronicshop.servlets;
 
-import com.example.electronicshop.dao.UserDao;
-import com.example.electronicshop.dao.UserDaoFactory;
 import com.example.electronicshop.service.LoginService;
-import com.example.electronicshop.service.LoginUserService;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,11 +14,11 @@ import java.util.Map;
 
 import static com.example.electronicshop.constants.Pages.INDEX_PAGE;
 import static com.example.electronicshop.service.LoginUserService.LOGIN_ERROR;
-import static com.example.electronicshop.servlets.Registration.DB_TYPE;
+
 
 @WebServlet("/login")
 public class UserAuthorization extends HttpServlet {
-
+    public static final String LOGIN_SERVICE = "LoginService";
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
@@ -38,10 +35,7 @@ public class UserAuthorization extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        HttpSession session = req.getSession();
-        UserDaoFactory userDaoFactory = new UserDaoFactory();
-        UserDao userDao = userDaoFactory.getUserDao(session.getServletContext().getInitParameter(DB_TYPE));
-        LoginService loginService = new LoginUserService(userDao);
+        LoginService loginService = (LoginService) req.getServletContext().getAttribute(LOGIN_SERVICE);
         loginService.login(req, resp);
     }
 }

@@ -10,6 +10,9 @@
         <servlet-name>CaptchaServlet</servlet-name>
         <servlet-class>com.example.electronicshop.registration.CaptchaServlet</servlet-class>
     </servlet>
+    <listener>
+        <listener-class>com.example.electronicshop.utils.ContextListener</listener-class>
+    </listener>
     <context-param>
         <param-name>storeType</param-name>
         <!-->Possible value's

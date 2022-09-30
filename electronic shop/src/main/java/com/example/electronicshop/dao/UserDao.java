@@ -3,7 +3,6 @@ package com.example.electronicshop.dao;
 import com.example.electronicshop.users.LoginUser;
 import com.example.electronicshop.users.User;
 
-import java.sql.Connection;
 import java.util.List;
 
 public interface UserDao {
@@ -12,35 +11,36 @@ public interface UserDao {
      *
      * @return - list of all users
      */
-    List<User> getAllUser(Connection connection);
+    List<User> getAllUser();
 
     /**
      * Get user by id
+     *
      * @param userId - searching user id
      * @return - user
      */
-    User selectUserById(Connection connection, int userId);
+    User selectUserById(int userId);
 
     /**
      * Allows you to update the user profile
      *
      * @param newUser - new user data
      */
-    boolean updateUser(Connection connection,User newUser);
+    boolean updateUser(User newUser);
 
     /**
      * Removes a user from the list
      *
      * @param id - user ID
      */
-    boolean deleteUser(Connection connection,int id);
+    boolean deleteUser(int id);
 
     /**
      * add new user
      *
      * @param user - user data
      */
-    int addUser(Connection connection,User user);
+    int addUser(User user);
 
     /**
      * * allows set avatar
@@ -48,7 +48,7 @@ public interface UserDao {
      * @param id   - user id
      * @param path - to avatar
      */
-    boolean addAvatar(Connection connection,int id, String path);
+    boolean addAvatar(int id, String path);
 
     /**
      * Returns data for user authorization
@@ -56,7 +56,7 @@ public interface UserDao {
      * @param email - user email
      * @return - data for user authorization
      */
-    LoginUser loginUser(Connection connection,String email);
+    LoginUser loginUser(String email);
 
 
 }

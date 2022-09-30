@@ -2,6 +2,7 @@ package com.example.electronicshop.dao;
 
 import com.example.electronicshop.users.LoginUser;
 import com.example.electronicshop.users.User;
+import com.example.electronicshop.utils.ConnectionPool;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,10 +29,17 @@ public class MySqlUserDao implements UserDao {
             "password,salt,mailings,avatar) VALUES (?,?,?,?,?,?,?);";
     private static final String UPDATE_USER_AVATAR = "UPDATE USERS SET AVATAR=? WHERE ID=?;";
     private static final String SELECT_LOGIN_INFORMATION_BY_EMAIL = "SELECT id, password, salt, avatar, first_name FROM users WHERE email=?";
-    public ConverterResultSet converterResultSet = new ConverterResultSet();
+    public ConverterResultSet converterResultSet;
+    public ConnectionPool pool;
+
+    public MySqlUserDao(ConverterResultSet converterResultSet, ConnectionPool pool) {
+        this.converterResultSet = converterResultSet;
+        this.pool = pool;
+    }
 
     @Override
-    public List<User> getAllUser(Connection connection) {
+    public List<User> getAllUser() {
+        Connection connection = pool.getConnection();
         try (Statement stm = connection.createStatement()) {
             ResultSet rs = stm.executeQuery(SELECT_ALL_USERS);
             return converterResultSet.getListUser(rs);
@@ -41,7 +49,8 @@ public class MySqlUserDao implements UserDao {
     }
 
     @Override
-    public boolean updateUser(Connection con, User newUser) {
+    public boolean updateUser(User newUser) {
+        Connection con = pool.getConnection();
         try (PreparedStatement stm = con.prepareStatement(UPDATE_USER)) {
             stm.setString(1, newUser.getFirstName());
             stm.setString(2, newUser.getLastName());
@@ -58,7 +67,8 @@ public class MySqlUserDao implements UserDao {
     }
 
     @Override
-    public boolean deleteUser(Connection con, int id) {
+    public boolean deleteUser(int id) {
+        Connection con = pool.getConnection();
         try (PreparedStatement stm = con.prepareStatement(DELETE_USER_BY_ID)) {
             stm.setInt(1, id);
             stm.executeUpdate();
@@ -69,8 +79,9 @@ public class MySqlUserDao implements UserDao {
     }
 
     @Override
-    public int addUser(Connection con, User user) {
-        try (PreparedStatement stm = con.prepareStatement(INSERT_USER,Statement.RETURN_GENERATED_KEYS)) {
+    public int addUser( User user) {
+        Connection con = pool.getConnection();
+        try (PreparedStatement stm = con.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
             stm.setString(1, user.getFirstName());
             stm.setString(2, user.getLastName());
             stm.setString(3, user.getEmail());
@@ -90,7 +101,8 @@ public class MySqlUserDao implements UserDao {
     }
 
     @Override
-    public boolean addAvatar(Connection con, int id, String path) {
+    public boolean addAvatar( int id, String path) {
+        Connection con = pool.getConnection();
         try (PreparedStatement stm = con.prepareStatement(UPDATE_USER_AVATAR)) {
             stm.setString(1, path);
             stm.setInt(2, id);
@@ -102,8 +114,9 @@ public class MySqlUserDao implements UserDao {
     }
 
     @Override
-    public LoginUser loginUser(Connection con,String email) {
+    public LoginUser loginUser(String email) {
         LoginUser authorizationUser = new LoginUser();
+        Connection con = pool.getConnection();
         try (PreparedStatement stm = con.prepareStatement(SELECT_LOGIN_INFORMATION_BY_EMAIL)) {
             stm.setString(1, email);
             stm.executeQuery();
@@ -124,7 +137,8 @@ public class MySqlUserDao implements UserDao {
     }
 
     @Override
-    public User selectUserById(Connection con, int userId) {
+    public User selectUserById( int userId) {
+        Connection con = pool.getConnection();
         try (PreparedStatement stm = con.prepareStatement(SELECT_USER_BY_ID)) {
             stm.setInt(1, userId);
             stm.executeQuery();

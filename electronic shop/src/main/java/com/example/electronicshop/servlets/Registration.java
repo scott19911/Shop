@@ -1,7 +1,7 @@
 package com.example.electronicshop.servlets;
 
 import com.example.electronicshop.registration.RegistrationDTO;
-import com.example.electronicshop.service.RegistrationServiceImpl;
+import com.example.electronicshop.service.RegistrationService;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -29,10 +29,11 @@ public class Registration extends HttpServlet {
     public static final String DB_TYPE = "dbType";
     public static final String REGISTRATION_DTO = "com.example.electronicshop.registration.bean";
     public static final String REGISTRATION_ERROR = "com.example.electronicshop.registration.error";
+    public static final String REGISTRATION_SERVICE = "RegService";
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        RegistrationServiceImpl registrationService = new RegistrationServiceImpl();
+        RegistrationService registrationService = (RegistrationService) req.getServletContext().getAttribute(REGISTRATION_SERVICE);
         registrationService.registration(req, resp);
     }
 

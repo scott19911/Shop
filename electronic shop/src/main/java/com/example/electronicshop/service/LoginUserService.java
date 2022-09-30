@@ -6,7 +6,6 @@ import com.example.electronicshop.users.LoginUser;
 import com.example.electronicshop.users.SpecificUser;
 import com.example.electronicshop.utils.SecurityPassword;
 import com.example.electronicshop.validate.ValidateLoginForm;
-import com.example.electronicshop.validate.ValidateLoginFormImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -22,20 +21,22 @@ import static com.example.electronicshop.service.UploadAvatar.SPECIFIC_USER;
 
 public class LoginUserService implements LoginService{
     public static final String LOGIN_ERROR = "com.example.electronicshop.login.error";
-    UserDao userDao;
-    public LoginUserService(UserDao userDao){
+    private final UserDao userDao;
+    private final TransactionManager transactionManager;
+    private final ValidateLoginForm validateLoginForm;
+    public LoginUserService(UserDao userDao, TransactionManager transactionManager,ValidateLoginForm validateLoginForm){
      this.userDao = userDao;
+     this.transactionManager = transactionManager;
+     this.validateLoginForm = validateLoginForm;
     }
 
     @Override
     public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        TransactionManager transactionManager = new TransactionManager();
-        ValidateLoginForm validateLoginForm = new ValidateLoginFormImpl();
         HttpSession session = request.getSession();
         LoginUser loginUser = validateLoginForm.readRequest(request);
         Map<String,String> error = validateLoginForm.validate(loginUser);
         if (error.isEmpty()){
-          LoginUser dbUser = (LoginUser) transactionManager.doWithoutTransaction(connection -> userDao.loginUser(connection,loginUser.getEmail()));
+          LoginUser dbUser = transactionManager.doWithoutTransaction(() -> userDao.loginUser(loginUser.getEmail()));
           if(dbUser != null) {
               SecurityPassword securityPassword = new SecurityPassword();
               String password = securityPassword.getHashPassword(loginUser.getPassword() + dbUser.getSalt());

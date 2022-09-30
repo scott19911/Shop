@@ -1,14 +1,16 @@
 package com.example.electronicshop.service;
 
+import com.example.electronicshop.dao.ConverterResultSet;
 import com.example.electronicshop.dao.MySqlUserDao;
+import com.example.electronicshop.dao.TransactionManager;
 import com.example.electronicshop.users.SpecificUser;
 import com.example.electronicshop.utils.ConnectionPool;
+import com.example.electronicshop.validate.ValidateLoginFormImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -25,23 +27,19 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class LoginUserServiceTest {
-    private static MockedStatic<ConnectionPool> mocked;
+    private static ConnectionPool connectionPool;
     @BeforeEach
     void init() throws SQLException {
-        mocked = mockStatic(ConnectionPool.class);
+        connectionPool = mock(ConnectionPool.class);
         Connection connection = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/test","root","1991");
-        ConnectionPool dbUtils = mock(ConnectionPool.class);
-        when(dbUtils.getConnection())
-                .thenReturn(connection);
 
-        mocked.when(ConnectionPool::getInstance)
-                .thenReturn(dbUtils);
+        when(connectionPool.getConnection())
+                .thenReturn(connection);
 
         Statement stmt = connection.createStatement();
         stmt.executeUpdate("TRUNCATE TABLE USERS");
@@ -61,7 +59,10 @@ class LoginUserServiceTest {
         when(request.getSession()).thenReturn(session);
         when(request.getParameter(EMAIL)).thenReturn("admin@gmail.com");
         when(request.getParameter(PASSWORD)).thenReturn("123");
-        LoginUserService loginUserService = new LoginUserService(new MySqlUserDao());
+        LoginUserService loginUserService = new LoginUserService(
+                new MySqlUserDao(new ConverterResultSet(),connectionPool),
+                new TransactionManager(connectionPool),
+                new ValidateLoginFormImpl());
         loginUserService.login(request,response);
         SpecificUser specificUser = mock(SpecificUser.class);
         specificUser.setUserId(1);
@@ -69,6 +70,6 @@ class LoginUserServiceTest {
         specificUser.setAvatarUrl(null);
         verify(session,atLeastOnce()).setAttribute(eq(SPECIFIC_USER),any());
         verify(response,atLeastOnce()).sendRedirect(SHOP_PAGE);
-        mocked.close();
+
     }
 }

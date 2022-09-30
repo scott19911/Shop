@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class UserServiceMapStorage implements UserService {
-    private UserDao userDao;
+    private final UserDao userDao;
 
     public UserServiceMapStorage(UserDao userDao) {
         this.userDao = userDao;
@@ -15,23 +15,23 @@ public class UserServiceMapStorage implements UserService {
 
     @Override
     public int createUser(User user) {
-        List<User> allUsers = userDao.getAllUser(null);
+        List<User> allUsers = userDao.getAllUser();
         for (User registeredUser : allUsers) {
             if (user.getEmail().equals(registeredUser.getEmail())) {
                 throw new IllegalArgumentException("Already register");
             }
         }
-       return userDao.addUser(null,user);
+        return userDao.addUser(user);
     }
 
     @Override
     public boolean deleteUser(int userId) {
-        return userDao.deleteUser(null,userId);
+        return userDao.deleteUser(userId);
     }
 
     @Override
     public boolean updateUser(User user) {
-        return userDao.updateUser(null,user);
+        return userDao.updateUser(user);
     }
 
     @Override
@@ -43,14 +43,14 @@ public class UserServiceMapStorage implements UserService {
 
     @Override
     public List<User> getAllUser() {
-        return userDao.getAllUser(null);
+        return userDao.getAllUser();
     }
 
     @Override
     public User getUser(int userId) {
-        if (userDao.selectUserById(null,userId) == null){
+        if (userDao.selectUserById(userId) == null) {
             throw new NoSuchElementException("No such user");
         }
-        return userDao.selectUserById(null,userId);
+        return userDao.selectUserById(userId);
     }
 }

@@ -26,7 +26,6 @@ import static com.example.electronicshop.servlets.Registration.REGISTRATION_ERRO
  * Responsible for registering a new user
  */
 public class RegistrationServiceImpl implements RegistrationService {
-
     @Override
     public void registration(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();

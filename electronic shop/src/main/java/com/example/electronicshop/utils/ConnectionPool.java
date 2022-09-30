@@ -10,27 +10,24 @@ import java.sql.SQLException;
 
 
 public class ConnectionPool {
-    private static ConnectionPool instance = null;
+    private static final ThreadLocal<Connection> CONNECTION_THREAD_LOCAL = new ThreadLocal<>();
 
-    private ConnectionPool() {
-    }
-
-    public static ConnectionPool getInstance() {
-        if (instance == null) {
-            instance = new ConnectionPool();
-        }
-        return instance;
+    public static ThreadLocal<Connection> getConnectionThreadLocal() {
+        return CONNECTION_THREAD_LOCAL;
     }
 
     public Connection getConnection() {
         Context ctx;
-        Connection connection;
-        try {
-            ctx = new InitialContext();
-            DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/mydatabase");
-            connection = ds.getConnection();
-        } catch (NamingException | SQLException ex) {
-            throw new IllegalStateException("not initialized ds ", ex);
+        Connection connection = CONNECTION_THREAD_LOCAL.get();
+        if (connection == null) {
+            try {
+                ctx = new InitialContext();
+                DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/mydatabase");
+                connection = ds.getConnection();
+                CONNECTION_THREAD_LOCAL.set(connection);
+            } catch (NamingException | SQLException ex) {
+                throw new IllegalStateException("not initialized ds ", ex);
+            }
         }
         return connection;
     }

@@ -10,10 +10,21 @@ import java.io.IOException;
  */
 public interface ImageService {
     /**
-     *  rendering images stored on the server
-     * @param req - request to draw an image
+     * rendering images stored on the server
+     *
+     * @param req  - request to draw an image
      * @param resp - response to a request with a rendered image
      * @throws IOException - when can't read image and create output stream
      */
     void drawImage(HttpServletRequest req, HttpServletResponse resp) throws IOException;
+
+    /**
+     * rendering avatar stored on the server
+     *
+     * @param req  - request to draw an avatar
+     * @param resp - response to a request with a rendered avatar
+     * @throws IOException - when can't read avatar and create output stream
+     */
+    void drawAvatar(HttpServletRequest req, HttpServletResponse resp) throws IOException;
+
 }

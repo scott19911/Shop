@@ -4,7 +4,6 @@ import com.example.electronicshop.users.LoginUser;
 import com.example.electronicshop.users.User;
 import com.example.electronicshop.utils.SecurityPassword;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,25 +35,25 @@ public class UserMapDao implements UserDao {
     }
 
     @Override
-    public List<User> getAllUser(Connection connection) {
+    public List<User> getAllUser() {
         return users;
     }
 
     @Override
-    public boolean updateUser(Connection connection, User newUser) {
+    public boolean updateUser(User newUser) {
         users.set(newUser.getId() - 1, newUser);
         return users.get(newUser.getId() - 1).getEmail().equals(newUser.getEmail());
     }
 
     @Override
-    public boolean deleteUser(Connection connection,int id) {
+    public boolean deleteUser(int id) {
         int userSize = users.size();
         users.remove(id);
         return userSize == users.size() + 1;
     }
 
     @Override
-    public int addUser(Connection connection, User user) {
+    public int addUser(User user) {
         user.setId(users.size() + 1);
         SecurityPassword securityPassword = new SecurityPassword();
         String salt = securityPassword.getSalt();
@@ -67,16 +66,16 @@ public class UserMapDao implements UserDao {
 
 
     @Override
-    public boolean addAvatar(Connection connection,int id, String path) {
-        User user = selectUserById(connection,id);
+    public boolean addAvatar(int id, String path) {
+        User user = selectUserById(id);
         user.setAvatarUdl(path);
-        updateUser(connection,user);
-        return selectUserById(connection,id).getAvatarUrl().equals(path);
+        updateUser(user);
+        return selectUserById(id).getAvatarUrl().equals(path);
     }
 
     @Override
-    public LoginUser loginUser(Connection connection,String email) {
-        List<User> userList = getAllUser(connection);
+    public LoginUser loginUser(String email) {
+        List<User> userList = getAllUser();
         LoginUser authorizationUser = new LoginUser();
         for (User user : userList
         ) {
@@ -94,8 +93,8 @@ public class UserMapDao implements UserDao {
     }
 
     @Override
-    public User selectUserById(Connection connection,int userId) {
-        if (userId > users.size()){
+    public User selectUserById(int userId) {
+        if (userId > users.size()) {
             return null;
         }
         return users.get(userId - 1);

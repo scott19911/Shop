@@ -1,7 +1,6 @@
 package com.example.electronicshop.servlets;
 
 
-import com.example.electronicshop.service.UploadAvatar;
 import com.example.electronicshop.service.UploadService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -18,11 +17,12 @@ import java.io.IOException;
         maxRequestSize = 1024 * 1024 * 50) // 50MB
 public class UploadFileServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    public static final String UPLOAD_SERVICE = "UploadService";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        UploadService uploadService = new UploadAvatar();
+        UploadService uploadService = (UploadService) request.getServletContext().getAttribute(UPLOAD_SERVICE);
         uploadService.uploadAvatar(request,response);
     }
 }
