@@ -1,5 +1,6 @@
 package com.example.electronicshop.dao;
 
+import com.example.electronicshop.products.CategoryDTO;
 import com.example.electronicshop.products.Product;
 import com.example.electronicshop.users.User;
 
@@ -16,13 +17,15 @@ import static com.example.electronicshop.dao.MySqlUserDao.PASSWORD;
 import static com.example.electronicshop.dao.MySqlUserDao.RECEIVE_MAILING;
 import static com.example.electronicshop.dao.MySqlUserDao.SALT;
 import static com.example.electronicshop.dao.MySqlUserDao.USER_ID;
-import static com.example.electronicshop.dao.ProductRepository.PRODUCT_BRAND;
-import static com.example.electronicshop.dao.ProductRepository.PRODUCT_CATEGORY;
-import static com.example.electronicshop.dao.ProductRepository.PRODUCT_DESCRIPTION;
-import static com.example.electronicshop.dao.ProductRepository.PRODUCT_ID;
-import static com.example.electronicshop.dao.ProductRepository.PRODUCT_IMAGE;
-import static com.example.electronicshop.dao.ProductRepository.PRODUCT_NAME;
-import static com.example.electronicshop.dao.ProductRepository.PRODUCT_PRICE;
+import static com.example.electronicshop.dao.ProductRepositoryImpl.CATEGORY_ID;
+import static com.example.electronicshop.dao.ProductRepositoryImpl.CATEGORY_NAME;
+import static com.example.electronicshop.dao.ProductRepositoryImpl.PRODUCT_BRAND;
+import static com.example.electronicshop.dao.ProductRepositoryImpl.PRODUCT_CATEGORY;
+import static com.example.electronicshop.dao.ProductRepositoryImpl.PRODUCT_DESCRIPTION;
+import static com.example.electronicshop.dao.ProductRepositoryImpl.PRODUCT_ID;
+import static com.example.electronicshop.dao.ProductRepositoryImpl.PRODUCT_IMAGE;
+import static com.example.electronicshop.dao.ProductRepositoryImpl.PRODUCT_NAME;
+import static com.example.electronicshop.dao.ProductRepositoryImpl.PRODUCT_PRICE;
 
 /**
  * The class allows you to retrieve the user from ResultSet
@@ -97,5 +100,32 @@ public class ConverterResultSet {
             throw new RuntimeException(ex);
         }
         return productList;
+    }
+
+    public List<String> getProductBrand(ResultSet resultSet) {
+        List<String> brandList = new ArrayList<>();
+        try {
+            while (resultSet.next()) {
+                brandList.add(resultSet.getString(PRODUCT_BRAND));
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        return brandList;
+    }
+
+    public List<CategoryDTO> getCategory(ResultSet resultSet) {
+        List<CategoryDTO> categoryDTOList = new ArrayList<>();
+        try {
+            while (resultSet.next()) {
+                CategoryDTO categoryDTO = new CategoryDTO();
+                categoryDTO.setCategoryId(resultSet.getInt(CATEGORY_ID));
+                categoryDTO.setCategoryName(resultSet.getString(CATEGORY_NAME));
+                categoryDTOList.add(categoryDTO);
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        return categoryDTOList;
     }
 }
