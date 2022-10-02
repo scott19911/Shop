@@ -12,9 +12,8 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 
-
+import static com.example.electronicshop.constants.ServletsName.PRODUCT_LIST;
 import static com.example.electronicshop.constants.ServletsName.REGISTRATION_SERVLET;
-import static com.example.electronicshop.constants.ServletsName.SHOP_SERVLET;
 import static com.example.electronicshop.registration.DrawCaptcha.CAPTCHA_STORE_TYPE;
 import static com.example.electronicshop.service.UploadAvatar.SPECIFIC_USER;
 import static com.example.electronicshop.servlets.RegistrationServlets.DB_TYPE;
@@ -61,7 +60,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             }
         }
         if (error.isEmpty()) {
-            resp.sendRedirect(SHOP_SERVLET);
+            resp.sendRedirect(PRODUCT_LIST);
         } else {
             registrationBean.setPassword("");
             registrationBean.setCaptcha("");

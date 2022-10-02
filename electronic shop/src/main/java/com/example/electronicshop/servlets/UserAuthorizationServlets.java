@@ -19,6 +19,7 @@ import static com.example.electronicshop.service.LoginUserService.LOGIN_ERROR;
 @WebServlet("/login")
 public class UserAuthorizationServlets extends HttpServlet {
     public static final String LOGIN_SERVICE = "LoginService";
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();

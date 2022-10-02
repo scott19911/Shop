@@ -1,6 +1,6 @@
 package com.example.electronicshop.registration;
 
-import com.example.electronicshop.servlets.RegistrationServlets;
+import com.example.electronicshop.service.RegistrationServiceImpl;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.electronicshop.constants.ServletsName.PRODUCT_LIST;
 import static com.example.electronicshop.validate.ValidateSession.CAPTCHA;
 import static com.example.electronicshop.validate.ValidateSession.EMAIL;
 import static com.example.electronicshop.validate.ValidateSession.FIRST_NAME;
@@ -49,8 +50,8 @@ class SessionRegistrationTest {
         error.put(FIRST_NAME, "First Name is missing or incorrect");
         error.put(LAST_NAME, "Last Name is missing or incorrect");
 
-        RegistrationServlets registration = new RegistrationServlets();
-        registration.doPost(request, response);
+        RegistrationServiceImpl registration = new RegistrationServiceImpl();
+        registration.registration(request, response);
 
         verify(session, atLeastOnce()).setAttribute(eq("com.example.electronicshop.registration.bean"), any());
         verify(session, atLeastOnce()).setAttribute("com.example.electronicshop.registration.error", error);
@@ -74,8 +75,8 @@ class SessionRegistrationTest {
         error.put(EMAIL, "Email is missing or incorrect");
         error.put(PASSWORD, "Password length must be great then 3 and lower 10 symbols");
 
-        RegistrationServlets registration = new RegistrationServlets();
-        registration.doPost(request, response);
+        RegistrationServiceImpl registration = new RegistrationServiceImpl();
+        registration.registration(request, response);
 
         verify(session, atLeastOnce()).setAttribute(eq("com.example.electronicshop.registration.bean"), any());
         verify(session, atLeastOnce()).setAttribute("com.example.electronicshop.registration.error", error);
@@ -98,8 +99,8 @@ class SessionRegistrationTest {
         Map<String, String> error = new HashMap<>();
         error.put(EMAIL, "Already register");
 
-        RegistrationServlets registration = new RegistrationServlets();
-        registration.doPost(request, response);
+        RegistrationServiceImpl registration = new RegistrationServiceImpl();
+        registration.registration(request, response);
 
         verify(session, atLeastOnce()).setAttribute(eq("com.example.electronicshop.registration.bean"), any());
         verify(session, atLeastOnce()).setAttribute("com.example.electronicshop.registration.error", error);
@@ -120,9 +121,9 @@ class SessionRegistrationTest {
         when(servletContext.getInitParameter(anyString())).thenReturn("session");
         when(session.getAttribute(CAPTCHA)).thenReturn(captchaStore);
 
-        RegistrationServlets registration = new RegistrationServlets();
-        registration.doPost(request, response);
+        RegistrationServiceImpl registration = new RegistrationServiceImpl();
+        registration.registration(request, response);
 
-        verify(response, atLeastOnce()).sendRedirect("/shop.html");
+        verify(response, atLeastOnce()).sendRedirect(PRODUCT_LIST);
     }
 }
