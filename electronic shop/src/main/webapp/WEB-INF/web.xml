@@ -4,12 +4,15 @@
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
          version="5.0">
     <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
     <servlet>
         <servlet-name>CaptchaServlet</servlet-name>
         <servlet-class>com.example.electronicshop.registration.CaptchaServlet</servlet-class>
     </servlet>
+    <listener>
+        <listener-class>com.example.electronicshop.utils.ContextListener</listener-class>
+    </listener>
     <context-param>
         <param-name>storeType</param-name>
         <!-->Possible value's
@@ -20,13 +23,16 @@
         <param-value>field</param-value>
     </context-param>
     <context-param>
+        <param-name>ImageStorage</param-name>
+        <param-value>D:\</param-value>
+    </context-param>
+    <context-param>
         <param-name>dbType</param-name>
         <!-->Possible value's
          map - captcha store in session
          MY_SQL - captcha store in cookie
-         field - captcha store in hidden fields
          <-->
-        <param-value>map</param-value>
+        <param-value>MY_SQL</param-value>
     </context-param>
     <servlet-mapping>
         <servlet-name>CaptchaServlet</servlet-name>

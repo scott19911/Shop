@@ -10,21 +10,21 @@ public interface UserService {
      *
      * @param user - new user
      */
-    void createUser(User user);
+    int createUser(User user);
 
     /**
      * Deletes a user
      *
      * @param userId - deleted user
      */
-    void deleteUser(int userId);
+    boolean deleteUser(int userId);
 
     /**
      * Updates user information
      *
      * @param user - new user information
      */
-    void updateUser(User user);
+    boolean updateUser(User user);
 
     /**
      * Setting a user avatar link
@@ -32,7 +32,7 @@ public interface UserService {
      * @param userId - user identifier
      * @param path   - link to a picture
      */
-    void setAvatar(int userId, String path);
+    boolean setAvatar(int userId, String path);
 
     /**
      * Allows you to get a list of all users

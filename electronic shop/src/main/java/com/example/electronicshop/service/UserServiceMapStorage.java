@@ -4,40 +4,41 @@ import com.example.electronicshop.dao.UserDao;
 import com.example.electronicshop.users.User;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
-public class UserServiceMapStore implements UserService {
-    private UserDao userDao;
+public class UserServiceMapStorage implements UserService {
+    private final UserDao userDao;
 
-    public UserServiceMapStore(UserDao userDao) {
+    public UserServiceMapStorage(UserDao userDao) {
         this.userDao = userDao;
     }
 
     @Override
-    public void createUser(User user) {
+    public int createUser(User user) {
         List<User> allUsers = userDao.getAllUser();
         for (User registeredUser : allUsers) {
             if (user.getEmail().equals(registeredUser.getEmail())) {
                 throw new IllegalArgumentException("Already register");
             }
         }
-        userDao.addUser(user, user.getPassword());
+        return userDao.addUser(user);
     }
 
     @Override
-    public void deleteUser(int userId) {
-        userDao.deleteUser(userId);
+    public boolean deleteUser(int userId) {
+        return userDao.deleteUser(userId);
     }
 
     @Override
-    public void updateUser(User user) {
-        userDao.updateUser(user, user.getFirstName());
+    public boolean updateUser(User user) {
+        return userDao.updateUser(user);
     }
 
     @Override
-    public void setAvatar(int userId, String path) {
+    public boolean setAvatar(int userId, String path) {
         User user = getUser(userId);
         user.setAvatarUdl(path);
-        updateUser(user);
+       return updateUser(user);
     }
 
     @Override
@@ -47,7 +48,9 @@ public class UserServiceMapStore implements UserService {
 
     @Override
     public User getUser(int userId) {
-        List<User> userList = userDao.getAllUser();
-        return userList.get(userId);
+        if (userDao.selectUserById(userId) == null) {
+            throw new NoSuchElementException("No such user");
+        }
+        return userDao.selectUserById(userId);
     }
 }

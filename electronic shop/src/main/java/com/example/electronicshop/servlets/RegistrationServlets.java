@@ -1,6 +1,7 @@
-package com.example.electronicshop.registration;
+package com.example.electronicshop.servlets;
 
-import com.example.electronicshop.service.RegistrationServiceImpl;
+import com.example.electronicshop.registration.RegistrationDTO;
+import com.example.electronicshop.service.RegistrationService;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 
+import static com.example.electronicshop.constants.Pages.REGISTRATION_PAGE;
 import static com.example.electronicshop.registration.DrawCaptcha.CAPTCHA_ID;
 import static com.example.electronicshop.registration.DrawCaptcha.CAPTCHA_STORE_TYPE;
 import static com.example.electronicshop.validate.ValidateFactory.FIELDS;
@@ -20,22 +22,23 @@ import static com.example.electronicshop.validate.ValidateFactory.FIELDS;
  * Responsible for validation and registration of user data
  */
 @WebServlet("/reg")
-public class Registration extends HttpServlet {
+public class RegistrationServlets extends HttpServlet {
 
     public static final String EMAIL = "billing_email";
     private int id = 0;
     public static final String DB_TYPE = "dbType";
     public static final String REGISTRATION_DTO = "com.example.electronicshop.registration.bean";
     public static final String REGISTRATION_ERROR = "com.example.electronicshop.registration.error";
+    public static final String REGISTRATION_SERVICE = "RegService";
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        RegistrationServiceImpl registrationService = new RegistrationServiceImpl();
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        RegistrationService registrationService = (RegistrationService) req.getServletContext().getAttribute(REGISTRATION_SERVICE);
         registrationService.registration(req, resp);
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
         RegistrationDTO registrationBean = (RegistrationDTO) session
                 .getAttribute(REGISTRATION_DTO);
@@ -48,7 +51,7 @@ public class Registration extends HttpServlet {
         if (getServletContext().getInitParameter(CAPTCHA_STORE_TYPE).equals(FIELDS)) {
             req.setAttribute(CAPTCHA_ID, id++);
         }
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/registration.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher(REGISTRATION_PAGE);
         try {
             dispatcher.forward(req, resp);
         } catch (ServletException | IOException ex) {

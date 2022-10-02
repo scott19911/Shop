@@ -32,8 +32,17 @@ public class User {
      * user avatar link
      */
     private String avatarUdl;
+    private String salt;
 
     public User() {
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     /**
@@ -143,11 +152,25 @@ public class User {
         this.mailing = mailing;
     }
 
-    public String getAvatarUdl() {
+    public String getAvatarUrl() {
         return avatarUdl;
     }
 
     public void setAvatarUdl(String avatarUdl) {
         this.avatarUdl = avatarUdl;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", id=" + id +
+                ", mailing=" + mailing +
+                ", avatarUdl='" + avatarUdl + '\'' +
+                ", salt='" + salt + '\'' +
+                '}';
     }
 }
