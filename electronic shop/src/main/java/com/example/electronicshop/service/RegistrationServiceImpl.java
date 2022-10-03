@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 
-import static com.example.electronicshop.constants.ServletsName.PRODUCT_LIST;
+import static com.example.electronicshop.constants.ServletsName.PRODUCT_LIST_SERVLET;
 import static com.example.electronicshop.constants.ServletsName.REGISTRATION_SERVLET;
 import static com.example.electronicshop.registration.DrawCaptcha.CAPTCHA_STORE_TYPE;
 import static com.example.electronicshop.service.UploadAvatar.SPECIFIC_USER;
@@ -60,7 +60,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             }
         }
         if (error.isEmpty()) {
-            resp.sendRedirect(PRODUCT_LIST);
+            resp.sendRedirect(PRODUCT_LIST_SERVLET);
         } else {
             registrationBean.setPassword("");
             registrationBean.setCaptcha("");

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.electronicshop.constants.ServletsName.PRODUCT_LIST;
+import static com.example.electronicshop.constants.ServletsName.PRODUCT_LIST_SERVLET;
 import static com.example.electronicshop.validate.ValidateSession.CAPTCHA;
 import static com.example.electronicshop.validate.ValidateSession.EMAIL;
 import static com.example.electronicshop.validate.ValidateSession.FIRST_NAME;
@@ -124,6 +124,6 @@ class SessionRegistrationTest {
         RegistrationServiceImpl registration = new RegistrationServiceImpl();
         registration.registration(request, response);
 
-        verify(response, atLeastOnce()).sendRedirect(PRODUCT_LIST);
+        verify(response, atLeastOnce()).sendRedirect(PRODUCT_LIST_SERVLET);
     }
 }

@@ -198,6 +198,9 @@
   </div>
   <div class="container">
     <div class="row">
+      <c:if test="${sessionScope.product == null || sessionScope.product.size() == 0}">
+        <h2 style="font-size: xx-large; color: #ac2925">Products not found</h2>
+      </c:if>
       <c:forEach items="${product}" var="product">
         <div class="col-md-offset-3 col-sm-3">
           <div class="single-shop-product">
