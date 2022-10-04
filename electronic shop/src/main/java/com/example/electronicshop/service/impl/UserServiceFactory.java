@@ -1,7 +1,8 @@
-package com.example.electronicshop.service;
+package com.example.electronicshop.service.impl;
 
 import com.example.electronicshop.dao.TransactionManager;
 import com.example.electronicshop.dao.UserDaoFactory;
+import com.example.electronicshop.service.UserService;
 import com.example.electronicshop.utils.ConnectionPool;
 
 import static com.example.electronicshop.dao.UserDaoFactory.MY_SQL;

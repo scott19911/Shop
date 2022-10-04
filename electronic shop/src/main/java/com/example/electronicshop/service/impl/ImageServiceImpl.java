@@ -1,5 +1,6 @@
-package com.example.electronicshop.service;
+package com.example.electronicshop.service.impl;
 
+import com.example.electronicshop.service.ImageService;
 import com.example.electronicshop.users.SpecificUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,7 +13,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Objects;
 
-import static com.example.electronicshop.service.UploadAvatar.SPECIFIC_USER;
+import static com.example.electronicshop.service.impl.UploadAvatar.SPECIFIC_USER;
 import static com.example.electronicshop.servlets.DrawImageServlets.IMAGE_STORAGE_PATH;
 
 public class ImageServiceImpl implements ImageService {

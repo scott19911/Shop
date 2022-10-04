@@ -1,6 +1,6 @@
 package com.example.electronicshop.registration;
 
-import com.example.electronicshop.service.RegistrationServiceImpl;
+import com.example.electronicshop.service.impl.RegistrationServiceImpl;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

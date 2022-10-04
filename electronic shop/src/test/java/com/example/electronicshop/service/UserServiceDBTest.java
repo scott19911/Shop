@@ -3,6 +3,7 @@ package com.example.electronicshop.service;
 import com.example.electronicshop.dao.ConverterResultSet;
 import com.example.electronicshop.dao.MySqlUserDao;
 import com.example.electronicshop.dao.TransactionManager;
+import com.example.electronicshop.service.impl.UserServiceDB;
 import com.example.electronicshop.users.User;
 import com.example.electronicshop.utils.ConnectionPool;
 import org.junit.jupiter.api.BeforeEach;

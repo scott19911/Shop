@@ -15,7 +15,6 @@ import java.util.List;
  * Product database access class
  */
 public class ProductRepositoryImpl implements ProductRepository {
-
     public static final String SELECT_ALL_PRODUCTS = "SELECT * FROM products";
     public static final String SELECT_UNIQUE_BRAND = "SELECT DISTINCT brand FROM products";
     public static final String SELECT_CATEGORY = "SELECT * FROM category";
@@ -32,7 +31,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     public static final String ORDER_ASC = "ASC";
     public static final String ORDER_DESC = "DESC";
     public ConnectionPool connectionPool;
-    String COUNT_PRODUCT = "SELECT COUNT(idproducts) FROM products ";
+    public static final String COUNT_PRODUCT = "SELECT COUNT(idproducts) FROM products ";
+    public Connection connection;
 
     /**
      * Constructor with connection pool initialization
@@ -41,11 +41,11 @@ public class ProductRepositoryImpl implements ProductRepository {
      */
     public ProductRepositoryImpl(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
+        connection = connectionPool.getConnection();
     }
 
     @Override
     public List<String> getUniqueBrand() {
-        Connection connection = connectionPool.getConnection();
         ConverterResultSet converterResultSet = new ConverterResultSet();
         try (PreparedStatement stm = connection.prepareStatement(SELECT_UNIQUE_BRAND)) {
             stm.executeQuery();
@@ -59,7 +59,6 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public List<CategoryDTO> getCategory() {
-        Connection connection = connectionPool.getConnection();
         ConverterResultSet converterResultSet = new ConverterResultSet();
         try (PreparedStatement stm = connection.prepareStatement(SELECT_CATEGORY)) {
             stm.executeQuery();
@@ -73,7 +72,6 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public List<Product> getFiltered(ProductFilter filter) {
-        Connection connection = connectionPool.getConnection();
         ConverterResultSet converterResultSet = new ConverterResultSet();
         String selectProduct = getFilterSelect(filter);
         try (PreparedStatement stm = connection.prepareStatement(selectProduct)) {
@@ -87,7 +85,6 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public int countFiltered(ProductFilter filter) {
-        Connection connection = connectionPool.getConnection();
         String selectProduct = getFilterSelect(filter);
         selectProduct = selectProduct.replace(SELECT_ALL_PRODUCTS, COUNT_PRODUCT);
         selectProduct = selectProduct.replace(PRODUCT_LIMIT, "");

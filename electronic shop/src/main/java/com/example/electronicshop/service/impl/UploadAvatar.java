@@ -1,5 +1,7 @@
-package com.example.electronicshop.service;
+package com.example.electronicshop.service.impl;
 
+import com.example.electronicshop.service.UploadService;
+import com.example.electronicshop.service.UserService;
 import com.example.electronicshop.users.SpecificUser;
 import com.example.electronicshop.users.User;
 import jakarta.servlet.RequestDispatcher;

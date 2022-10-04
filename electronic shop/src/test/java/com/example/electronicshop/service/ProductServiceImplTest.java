@@ -5,6 +5,7 @@ import com.example.electronicshop.dao.TransactionManager;
 import com.example.electronicshop.products.CategoryDTO;
 import com.example.electronicshop.products.Product;
 import com.example.electronicshop.products.ProductFilter;
+import com.example.electronicshop.service.impl.ProductServiceImpl;
 import com.example.electronicshop.utils.ConnectionPool;
 import com.example.electronicshop.validate.ValidateProductFilterImpl;
 import jakarta.servlet.RequestDispatcher;
@@ -28,13 +29,15 @@ import java.util.Map;
 import static com.example.electronicshop.constants.Pages.SHOP_PAGE;
 
 import static com.example.electronicshop.dao.ProductRepositoryImpl.ORDER_DESC;
-import static com.example.electronicshop.service.ProductServiceImpl.SESSION_BRAND;
-import static com.example.electronicshop.service.ProductServiceImpl.SESSION_CATEGORY;
-import static com.example.electronicshop.service.ProductServiceImpl.SESSION_PRODUCT;
-import static com.example.electronicshop.service.ProductServiceImpl.SESSION_PRODUCT_FILTER;
+import static com.example.electronicshop.service.impl.ProductServiceImpl.SESSION_BRAND;
+import static com.example.electronicshop.service.impl.ProductServiceImpl.SESSION_CATEGORY;
+import static com.example.electronicshop.service.impl.ProductServiceImpl.SESSION_PRODUCT;
+import static com.example.electronicshop.service.impl.ProductServiceImpl.SESSION_PRODUCT_FILTER;
 import static com.example.electronicshop.validate.ValidateProductFilterImpl.BRAND;
 import static com.example.electronicshop.validate.ValidateProductFilterImpl.CATEGORY;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 
 import static org.mockito.Mockito.atLeastOnce;
@@ -115,11 +118,11 @@ class ProductServiceImplTest {
                 "uploadDir/img/img_0_60_8353_2_1.jpg","Characteristics",2,1,61999);
         product3 = inputProduct("Galaxy Fold 3 12/512 Gb Dual Sim Phantom Silver (SM-F926BZSGSEK)","SAMSUNG",
                 "uploadDir/img/img_0_60_8162_7_1.jpg","Characteristics",3,2,59999);
-        product4 = inputProduct("Galaxy S22 8/128 Gb Dual Sim Phantom Green (SM-S901BZGDSEK)","SAMSUNG",
+        product5 = inputProduct("Galaxy S22 8/128 Gb Dual Sim Phantom Green (SM-S901BZGDSEK)","SAMSUNG",
                 "uploadDir/img/img_0_60_8574_0_1_637798486657836804.jpg","Characteristics",5,4,33199);
-        product5 = inputProduct("ZenFone 8 16/256GB Dual Sim Black (ZS590KS-2A011EU)","ASUS",
+        product6 = inputProduct("ZenFone 8 16/256GB Dual Sim Black (ZS590KS-2A011EU)","ASUS",
                 "uploadDir/img/img_0_60_8053_0.jpg","Characteristics",6,2,31444);
-        product6 = inputProduct("Redmi Note 10 Pro 6/128 Onyx gray (M2101K6G)","XIAOMI",
+        product4 = inputProduct("Redmi Note 10 Pro 6/128 Onyx gray (M2101K6G)","XIAOMI",
                 "uploadDir/img/img_0_60_7928_0.jpg","Characteristics",4,3,11999);
         categoryDTO1 = new CategoryDTO();
         categoryDTO1.setCategoryName("flagship");
@@ -161,20 +164,13 @@ class ProductServiceImplTest {
     @Test
     void shouldReturnAllProduct_whenNotFiltered() throws SQLException {
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
-        Connection connection1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
-        Connection connection2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
-        Connection connection3 = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
-        when(connectionPool.getConnection()).thenReturn(connection)
-                .thenReturn(connection1).thenReturn(connection2).thenReturn(connection3);
+        when(connectionPool.getConnection()).thenReturn(connection);
         HttpSession session = mock(HttpSession.class);
-        ServletContext servletContext = mock(ServletContext.class);
-        when(request.getServletContext()).thenReturn(servletContext);
-        RequestDispatcher dispatcher = mock(RequestDispatcher.class);
-        when(servletContext.getRequestDispatcher(SHOP_PAGE)).thenReturn(dispatcher);
-        when(request.getSession()).thenReturn(session);
+        when(request.getSession(false)).thenReturn(session);
+        when(session.getAttribute(any())).thenReturn(null);
         ProductServiceImpl productService = new ProductServiceImpl(new TransactionManager(connectionPool),
                 new ProductRepositoryImpl(connectionPool), new ValidateProductFilterImpl());
-        productService.getProducts(request, response);
+        Map<String,Object> mapResult = productService.getProducts(request, response);
         productList.add(product1);
         productList.add(product2);
         productList.add(product3);
@@ -182,54 +178,40 @@ class ProductServiceImplTest {
         productList.add(product5);
         productList.add(product6);
 
-        filter.setOrder(ORDER_DESC);
-
-        verify(session, atLeastOnce()).setAttribute(eq(SESSION_PRODUCT_FILTER), eq(filter));
-        verify(session, atLeastOnce()).setAttribute(eq(SESSION_PRODUCT),eq(productList));
-        verify(session, atLeastOnce()).setAttribute(SESSION_BRAND, brandList);
-        verify(session, atLeastOnce()).setAttribute(eq(SESSION_CATEGORY), eq(categoryDTOList));
+        assertEquals(filter,mapResult.get(SESSION_PRODUCT_FILTER));
+        assertEquals(productList,mapResult.get(SESSION_PRODUCT));
+        assertEquals(brandList,mapResult.get(SESSION_BRAND));
+        assertEquals(categoryDTOList,mapResult.get(SESSION_CATEGORY));
     }
 
     @Test
     void shouldReturnTwoProduct_whenFilteredByCategoryFlagship() throws SQLException {
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
-        Connection connection1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
-        Connection connection2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
-        Connection connection3 = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
-        when(connectionPool.getConnection()).thenReturn(connection)
-                .thenReturn(connection1).thenReturn(connection2).thenReturn(connection3);
+        when(connectionPool.getConnection()).thenReturn(connection);
         HttpSession session = mock(HttpSession.class);
         when(request.getParameter(CATEGORY)).thenReturn("1");
         Map<String,String[]> parameterMap = new HashMap<>();
         parameterMap.put(CATEGORY, new String[]{"1"});
         when(request.getParameterMap()).thenReturn(parameterMap);
-        ServletContext servletContext = mock(ServletContext.class);
-        when(request.getServletContext()).thenReturn(servletContext);
-        RequestDispatcher dispatcher = mock(RequestDispatcher.class);
-        when(servletContext.getRequestDispatcher(SHOP_PAGE)).thenReturn(dispatcher);
-        when(request.getSession()).thenReturn(session);
+        when(request.getSession(false)).thenReturn(session);
+        when(session.getAttribute(any())).thenReturn(null);
         ProductServiceImpl productService = new ProductServiceImpl(new TransactionManager(connectionPool),
                 new ProductRepositoryImpl(connectionPool), new ValidateProductFilterImpl());
-        productService.getProducts(request, response);
+        Map<String,Object> mapResult = productService.getProducts(request, response);
         productList.add(product1);
         productList.add(product2);
         List<Integer> categoryList = new ArrayList<>();
         categoryList.add(1);
-        filter.setOrder(ORDER_DESC);
         filter.setCategory(categoryList);
-        verify(session, atLeastOnce()).setAttribute(eq(SESSION_PRODUCT_FILTER), eq(filter));
-        verify(session, atLeastOnce()).setAttribute(eq(SESSION_PRODUCT),eq(productList));
-        verify(session, atLeastOnce()).setAttribute(SESSION_BRAND, brandList);
-        verify(session, atLeastOnce()).setAttribute(eq(SESSION_CATEGORY), eq(categoryDTOList));
+        assertEquals(filter,mapResult.get(SESSION_PRODUCT_FILTER));
+        assertEquals(productList,mapResult.get(SESSION_PRODUCT));
+        assertEquals(brandList,mapResult.get(SESSION_BRAND));
+        assertEquals(categoryDTOList,mapResult.get(SESSION_CATEGORY));
     }
     @Test
     void shouldReturnOneProduct_whenFilteredByCategoryBusinessAndBrandSamsung() throws SQLException {
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
-        Connection connection1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
-        Connection connection2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
-        Connection connection3 = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
-        when(connectionPool.getConnection()).thenReturn(connection)
-                .thenReturn(connection1).thenReturn(connection2).thenReturn(connection3);
+        when(connectionPool.getConnection()).thenReturn(connection);
         HttpSession session = mock(HttpSession.class);
         when(request.getParameter(CATEGORY)).thenReturn("2");
         when(request.getParameter(BRAND)).thenReturn("SAMSUNG");
@@ -237,25 +219,21 @@ class ProductServiceImplTest {
         parameterMap.put(CATEGORY, new String[]{"2"});
         parameterMap.put(BRAND, new String[]{"SAMSUNG"});
         when(request.getParameterMap()).thenReturn(parameterMap);
-        ServletContext servletContext = mock(ServletContext.class);
-        when(request.getServletContext()).thenReturn(servletContext);
-        RequestDispatcher dispatcher = mock(RequestDispatcher.class);
-        when(servletContext.getRequestDispatcher(SHOP_PAGE)).thenReturn(dispatcher);
-        when(request.getSession()).thenReturn(session);
+        when(request.getSession(false)).thenReturn(session);
+        when(session.getAttribute(any())).thenReturn(null);
         ProductServiceImpl productService = new ProductServiceImpl(new TransactionManager(connectionPool),
                 new ProductRepositoryImpl(connectionPool), new ValidateProductFilterImpl());
-        productService.getProducts(request, response);
+        Map<String,Object> mapResult = productService.getProducts(request, response);
         productList.add(product3);
         List<Integer> categoryList = new ArrayList<>();
         List<String> brandList1 = new ArrayList<>();
         brandList1.add("SAMSUNG");
         categoryList.add(2);
-        filter.setOrder(ORDER_DESC);
         filter.setCategory(categoryList);
         filter.setBrand(brandList1);
-        verify(session, atLeastOnce()).setAttribute(eq(SESSION_PRODUCT_FILTER), eq(filter));
-        verify(session, atLeastOnce()).setAttribute(eq(SESSION_PRODUCT),eq(productList));
-        verify(session, atLeastOnce()).setAttribute(SESSION_BRAND, brandList);
-        verify(session, atLeastOnce()).setAttribute(eq(SESSION_CATEGORY), eq(categoryDTOList));
+        assertEquals(filter,mapResult.get(SESSION_PRODUCT_FILTER));
+        assertEquals(productList,mapResult.get(SESSION_PRODUCT));
+        assertEquals(brandList,mapResult.get(SESSION_BRAND));
+        assertEquals(categoryDTOList,mapResult.get(SESSION_CATEGORY));
     }
 }

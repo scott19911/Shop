@@ -97,7 +97,7 @@ public class ProductsFilterDTO {
 
     @Override
     public String toString() {
-        return "ProductsDTO{" +
+        return "ProductsFilterDTO{" +
                 "minPrice=" + minPrice +
                 ", maxPrice=" + maxPrice +
                 ", category=" + category +
@@ -105,6 +105,7 @@ public class ProductsFilterDTO {
                 ", brand=" + brand +
                 ", pageSize=" + pageSize +
                 ", pageNumber=" + pageNumber +
+                ", order='" + order + '\'' +
                 '}';
     }
 }

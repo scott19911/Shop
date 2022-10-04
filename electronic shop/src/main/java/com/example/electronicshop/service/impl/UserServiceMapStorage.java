@@ -1,6 +1,7 @@
-package com.example.electronicshop.service;
+package com.example.electronicshop.service.impl;
 
 import com.example.electronicshop.dao.UserDao;
+import com.example.electronicshop.service.UserService;
 import com.example.electronicshop.users.User;
 
 import java.util.List;

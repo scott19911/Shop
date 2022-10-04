@@ -3,6 +3,8 @@ package com.example.electronicshop.service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.util.Map;
+
 /**
  * The class is responsible for displaying and processing the list of products
  */
@@ -12,6 +14,8 @@ public interface ProductService {
      *
      * @param request  - input parameters to get a list of products
      * @param response - servlet response
+     * @return - all information about product
      */
-    void getProducts(HttpServletRequest request, HttpServletResponse response);
+
+    Map<String,Object> getProducts(HttpServletRequest request, HttpServletResponse response);
 }

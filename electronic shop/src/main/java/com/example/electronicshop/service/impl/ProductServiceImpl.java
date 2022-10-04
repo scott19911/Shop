@@ -1,22 +1,18 @@
-package com.example.electronicshop.service;
+package com.example.electronicshop.service.impl;
 
 import com.example.electronicshop.dao.ProductRepositoryImpl;
 import com.example.electronicshop.dao.TransactionManager;
-import com.example.electronicshop.products.CategoryDTO;
-import com.example.electronicshop.products.Product;
 import com.example.electronicshop.products.ProductFilter;
+import com.example.electronicshop.service.ProductService;
 import com.example.electronicshop.validate.ValidateProductFilter;
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-
-import java.io.IOException;
 import java.sql.Connection;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import static com.example.electronicshop.dao.ProductRepositoryImpl.ORDER_DESC;
 
-import static com.example.electronicshop.constants.Pages.SHOP_PAGE;
 
 public class ProductServiceImpl implements ProductService {
     public static final String SESSION_PRODUCT_FILTER = "filter";
@@ -35,12 +31,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void getProducts(HttpServletRequest request, HttpServletResponse response) {
-        List<String> brandList = transactionManager.doWithoutTransaction(productRepository::getUniqueBrand);
-        List<CategoryDTO> categoryList = transactionManager.doWithoutTransaction(productRepository::getCategory);
+    public Map<String,Object> getProducts(HttpServletRequest request, HttpServletResponse response) {
         ProductFilter productFilter = validateProductFilter.validate(validateProductFilter.readRequest(request)).getFilter();
-        List<Product> productList = transactionManager.doInTransaction(() -> {
+        if (request.getSession(false).getAttribute(SESSION_PRODUCT_FILTER) != null){
+            ProductFilter productFilterSession = (ProductFilter) request.getSession(false).getAttribute(SESSION_PRODUCT_FILTER);
+            productFilter.setPageSize(productFilterSession.getPageSize());
+            if (productFilter.getOrder() == null) {
+                if(productFilterSession.getOrder() == null){
+                    productFilter.setOrder(ORDER_DESC);
+                } else {
+                    productFilter.setOrder(productFilterSession.getOrder());
+                }
+            }
+        }
+        Map<String,Object> productData  = transactionManager.doInTransaction(() -> {
+            Map<String,Object> productInformation = new HashMap<>();
             int pageQuantity = 0;
+            productInformation.put(SESSION_BRAND,productRepository.getUniqueBrand());
+            productInformation.put(SESSION_CATEGORY,productRepository.getCategory());
             if (productFilter.getPageSize() > 0) {
                 pageQuantity = productRepository.countFiltered(productFilter) / productFilter.getPageSize();
                 if (productRepository.countFiltered(productFilter) % productFilter.getPageSize() > 0) {
@@ -51,19 +59,10 @@ public class ProductServiceImpl implements ProductService {
                 productFilter.setPageNumber(0);
             }
             productFilter.setPageQuantity(pageQuantity);
-            return productRepository.getFiltered(productFilter);
+            productInformation.put(SESSION_PRODUCT, productRepository.getFiltered(productFilter));
+            return productInformation;
         }, Connection.TRANSACTION_READ_COMMITTED);
-        HttpSession session = request.getSession();
-        session.setAttribute(SESSION_PRODUCT_FILTER, productFilter);
-        session.setAttribute(SESSION_PRODUCT, productList);
-        session.setAttribute(SESSION_BRAND, brandList);
-        session.setAttribute(SESSION_CATEGORY, categoryList);
-        try {
-            RequestDispatcher dispatcher = request.getServletContext()
-                    .getRequestDispatcher(SHOP_PAGE);
-            dispatcher.forward(request, response);
-        } catch (ServletException | IOException e) {
-            throw new RuntimeException(e);
-        }
+        productData.put(SESSION_PRODUCT_FILTER,productFilter);
+        return productData;
     }
 }
