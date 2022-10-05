@@ -4,6 +4,12 @@ function codeAddress() {
     if (_url.indexOf('&pageNumber=') > 0) {
         return _url.replace(/&pageNumber=(\w|((?=[^&])\W))*/, '&pageNumber=');
     }
+    if (_url.indexOf('?pageNumber=') > 0) {
+        return _url.replace(/\?pageNumber=(\w|((?=[^&])\W))*/, '?pageNumber=');
+    }
+    if (_url.endsWith('shop')){
+        return  _url + '?pageNumber=';
+    }
     return _url + '&pageNumber=';
 }
 
