@@ -4,12 +4,11 @@ import com.example.electronicshop.dao.ProductRepositoryImpl;
 import com.example.electronicshop.dao.TransactionManager;
 import com.example.electronicshop.products.CategoryDTO;
 import com.example.electronicshop.products.Product;
+import com.example.electronicshop.products.ProductDataDTO;
 import com.example.electronicshop.products.ProductFilter;
 import com.example.electronicshop.service.impl.ProductServiceImpl;
 import com.example.electronicshop.utils.ConnectionPool;
-import com.example.electronicshop.validate.ValidateProductFilterImpl;
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletContext;
+import com.example.electronicshop.products.ReadProductRequestImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -26,26 +25,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.electronicshop.constants.Pages.SHOP_PAGE;
-
 import static com.example.electronicshop.dao.ProductRepositoryImpl.ORDER_DESC;
-import static com.example.electronicshop.service.impl.ProductServiceImpl.SESSION_BRAND;
-import static com.example.electronicshop.service.impl.ProductServiceImpl.SESSION_CATEGORY;
-import static com.example.electronicshop.service.impl.ProductServiceImpl.SESSION_PRODUCT;
-import static com.example.electronicshop.service.impl.ProductServiceImpl.SESSION_PRODUCT_FILTER;
-import static com.example.electronicshop.validate.ValidateProductFilterImpl.BRAND;
-import static com.example.electronicshop.validate.ValidateProductFilterImpl.CATEGORY;
+import static com.example.electronicshop.products.ReadProductRequestImpl.BRAND;
+import static com.example.electronicshop.products.ReadProductRequestImpl.CATEGORY;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-
-import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
-
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 class ProductServiceImplTest {
     public HttpServletRequest request = mock(HttpServletRequest.class);
     public HttpServletResponse response = mock(HttpServletResponse.class);
@@ -169,8 +156,8 @@ class ProductServiceImplTest {
         when(request.getSession(false)).thenReturn(session);
         when(session.getAttribute(any())).thenReturn(null);
         ProductServiceImpl productService = new ProductServiceImpl(new TransactionManager(connectionPool),
-                new ProductRepositoryImpl(connectionPool), new ValidateProductFilterImpl());
-        Map<String,Object> mapResult = productService.getProducts(request, response);
+                new ProductRepositoryImpl(connectionPool), new ReadProductRequestImpl());
+        ProductDataDTO mapResult = productService.getProducts(request, response);
         productList.add(product1);
         productList.add(product2);
         productList.add(product3);
@@ -178,10 +165,10 @@ class ProductServiceImplTest {
         productList.add(product5);
         productList.add(product6);
 
-        assertEquals(filter,mapResult.get(SESSION_PRODUCT_FILTER));
-        assertEquals(productList,mapResult.get(SESSION_PRODUCT));
-        assertEquals(brandList,mapResult.get(SESSION_BRAND));
-        assertEquals(categoryDTOList,mapResult.get(SESSION_CATEGORY));
+        assertEquals(filter,mapResult.getProductFilter());
+        assertEquals(productList,mapResult.getProductList());
+        assertEquals(brandList,mapResult.getBrandList());
+        assertEquals(categoryDTOList,mapResult.getCategoryDTOList());
     }
 
     @Test
@@ -196,17 +183,17 @@ class ProductServiceImplTest {
         when(request.getSession(false)).thenReturn(session);
         when(session.getAttribute(any())).thenReturn(null);
         ProductServiceImpl productService = new ProductServiceImpl(new TransactionManager(connectionPool),
-                new ProductRepositoryImpl(connectionPool), new ValidateProductFilterImpl());
-        Map<String,Object> mapResult = productService.getProducts(request, response);
+                new ProductRepositoryImpl(connectionPool), new ReadProductRequestImpl());
+        ProductDataDTO mapResult = productService.getProducts(request, response);
         productList.add(product1);
         productList.add(product2);
         List<Integer> categoryList = new ArrayList<>();
         categoryList.add(1);
         filter.setCategory(categoryList);
-        assertEquals(filter,mapResult.get(SESSION_PRODUCT_FILTER));
-        assertEquals(productList,mapResult.get(SESSION_PRODUCT));
-        assertEquals(brandList,mapResult.get(SESSION_BRAND));
-        assertEquals(categoryDTOList,mapResult.get(SESSION_CATEGORY));
+        assertEquals(filter,mapResult.getProductFilter());
+        assertEquals(productList,mapResult.getProductList());
+        assertEquals(brandList,mapResult.getBrandList());
+        assertEquals(categoryDTOList,mapResult.getCategoryDTOList());
     }
     @Test
     void shouldReturnOneProduct_whenFilteredByCategoryBusinessAndBrandSamsung() throws SQLException {
@@ -222,8 +209,8 @@ class ProductServiceImplTest {
         when(request.getSession(false)).thenReturn(session);
         when(session.getAttribute(any())).thenReturn(null);
         ProductServiceImpl productService = new ProductServiceImpl(new TransactionManager(connectionPool),
-                new ProductRepositoryImpl(connectionPool), new ValidateProductFilterImpl());
-        Map<String,Object> mapResult = productService.getProducts(request, response);
+                new ProductRepositoryImpl(connectionPool), new ReadProductRequestImpl());
+        ProductDataDTO mapResult = productService.getProducts(request, response);
         productList.add(product3);
         List<Integer> categoryList = new ArrayList<>();
         List<String> brandList1 = new ArrayList<>();
@@ -231,9 +218,9 @@ class ProductServiceImplTest {
         categoryList.add(2);
         filter.setCategory(categoryList);
         filter.setBrand(brandList1);
-        assertEquals(filter,mapResult.get(SESSION_PRODUCT_FILTER));
-        assertEquals(productList,mapResult.get(SESSION_PRODUCT));
-        assertEquals(brandList,mapResult.get(SESSION_BRAND));
-        assertEquals(categoryDTOList,mapResult.get(SESSION_CATEGORY));
+        assertEquals(filter,mapResult.getProductFilter());
+        assertEquals(productList,mapResult.getProductList());
+        assertEquals(brandList,mapResult.getBrandList());
+        assertEquals(categoryDTOList,mapResult.getCategoryDTOList());
     }
 }

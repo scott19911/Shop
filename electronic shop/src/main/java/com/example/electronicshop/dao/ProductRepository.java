@@ -2,6 +2,7 @@ package com.example.electronicshop.dao;
 
 import com.example.electronicshop.products.CategoryDTO;
 import com.example.electronicshop.products.Product;
+import com.example.electronicshop.products.ProductDataDTO;
 import com.example.electronicshop.products.ProductFilter;
 
 import java.util.List;
@@ -36,6 +37,6 @@ public interface ProductRepository {
      * @param filter - filter options
      * @return - products quantity
      */
-    int countFiltered(ProductFilter filter);
+    ProductDataDTO countFiltered(ProductFilter filter);
 
 }

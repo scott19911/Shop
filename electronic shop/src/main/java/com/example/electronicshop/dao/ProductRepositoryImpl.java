@@ -2,6 +2,7 @@ package com.example.electronicshop.dao;
 
 import com.example.electronicshop.products.CategoryDTO;
 import com.example.electronicshop.products.Product;
+import com.example.electronicshop.products.ProductDataDTO;
 import com.example.electronicshop.products.ProductFilter;
 import com.example.electronicshop.utils.ConnectionPool;
 
@@ -30,8 +31,12 @@ public class ProductRepositoryImpl implements ProductRepository {
     public static final String CATEGORY_NAME = "categoryType";
     public static final String ORDER_ASC = "ASC";
     public static final String ORDER_DESC = "DESC";
+    public static final String QUANTITY = "quantity";
+    public static final String MIN = "min";
+    public static final String MAX = "max";
     public ConnectionPool connectionPool;
-    public static final String COUNT_PRODUCT = "SELECT COUNT(idproducts) FROM products ";
+    public static final String COUNT_PRODUCT = "SELECT COUNT(idproducts) as quantity," +
+            " MIN(price) as min, MAX(price) as max FROM products ";
     public Connection connection;
 
     /**
@@ -84,7 +89,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public int countFiltered(ProductFilter filter) {
+    public ProductDataDTO countFiltered(ProductFilter filter) {
+        ProductDataDTO productData = new ProductDataDTO();
         String selectProduct = getFilterSelect(filter);
         selectProduct = selectProduct.replace(SELECT_ALL_PRODUCTS, COUNT_PRODUCT);
         selectProduct = selectProduct.replace(PRODUCT_LIMIT, "");
@@ -92,12 +98,15 @@ public class ProductRepositoryImpl implements ProductRepository {
             setParameters(filter, stm, false).executeQuery();
             ResultSet resultSet = stm.getResultSet();
             if (resultSet.next()) {
-                return resultSet.getInt(1);
+                productData.setProductQuantity(resultSet.getInt(QUANTITY));
+                productData.setDbMinPrice(resultSet.getInt(MIN));
+                productData.setDbMaxPrice(resultSet.getInt(MAX));
+                return productData;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return 0;
+        return productData;
     }
 
     /**

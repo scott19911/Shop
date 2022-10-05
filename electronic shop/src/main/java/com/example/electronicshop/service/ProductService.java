@@ -1,9 +1,8 @@
 package com.example.electronicshop.service;
 
+import com.example.electronicshop.products.ProductDataDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.util.Map;
 
 /**
  * The class is responsible for displaying and processing the list of products
@@ -17,5 +16,5 @@ public interface ProductService {
      * @return - all information about product
      */
 
-    Map<String,Object> getProducts(HttpServletRequest request, HttpServletResponse response);
+    ProductDataDTO getProducts(HttpServletRequest request, HttpServletResponse response);
 }

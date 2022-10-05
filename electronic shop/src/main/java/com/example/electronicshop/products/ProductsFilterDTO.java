@@ -1,7 +1,11 @@
 package com.example.electronicshop.products;
 
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.electronicshop.dao.ProductRepositoryImpl.ORDER_ASC;
+import static com.example.electronicshop.dao.ProductRepositoryImpl.ORDER_DESC;
 
 /**
  * product data transfer object
@@ -107,5 +111,106 @@ public class ProductsFilterDTO {
                 ", pageNumber=" + pageNumber +
                 ", order='" + order + '\'' +
                 '}';
+    }
+
+    public static FilterBuilder newBuilder() {
+        return new ProductsFilterDTO().new FilterBuilder();
+    }
+
+    public class FilterBuilder {
+        public FilterBuilder priceFrom(String fromPrice) {
+            if (fromPrice != null) {
+                try {
+                    ProductsFilterDTO.this.minPrice = Math.max(Integer.parseInt(fromPrice), 0);
+                } catch (NumberFormatException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            return this;
+        }
+
+        public FilterBuilder priceTo(String toPrice) {
+            if (toPrice != null) {
+                try {
+                    ProductsFilterDTO.this.maxPrice = Math.max(Integer.parseInt(toPrice), 0);
+                } catch (NumberFormatException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            return this;
+        }
+
+        public FilterBuilder brand(String[] brands) {
+            List<String> brandList = new ArrayList<>();
+            for (String brand : brands
+            ) {
+                if (brand != null && !brand.isBlank()) {
+                    brandList.add(brand);
+                }
+            }
+            ProductsFilterDTO.this.brand = brandList.size() > 0 ? brandList : null;
+            return this;
+        }
+
+        public FilterBuilder name(String name) {
+            if (name != null && !name.isBlank()) {
+                ProductsFilterDTO.this.productName = name;
+            }
+            return this;
+        }
+
+        public FilterBuilder category(String[] category) {
+            if (category != null) {
+                List<Integer> categoryList = new ArrayList<>();
+                for (String s : category) {
+                    try {
+                        if (s != null) {
+                            categoryList.add(Integer.parseInt(s));
+                        }
+                    } catch (NumberFormatException exception) {
+                        exception.printStackTrace();
+                    }
+                }
+                ProductsFilterDTO.this.category = categoryList.size() > 0 ? categoryList : null;
+            }
+            return this;
+        }
+
+        public FilterBuilder orderBy(String order) {
+            if (order != null && order.equalsIgnoreCase(ORDER_ASC)) {
+                ProductsFilterDTO.this.order = order;
+            } else {
+                ProductsFilterDTO.this.order = ORDER_DESC;
+            }
+            return this;
+        }
+
+        public FilterBuilder pageSize(String size) {
+            if (size != null) {
+                try {
+                    ProductsFilterDTO.this.pageSize = Math.max(Integer.parseInt(size), 1);
+                } catch (NumberFormatException ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                ProductsFilterDTO.this.pageSize = 3;
+            }
+            return this;
+        }
+
+        public FilterBuilder pageNumber(String pageNumber) {
+            if (pageNumber != null) {
+                try {
+                    ProductsFilterDTO.this.pageSize = Math.max(Integer.parseInt(pageNumber), 0);
+                } catch (NumberFormatException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            return this;
+        }
+
+        public ProductsFilterDTO build() {
+            return ProductsFilterDTO.this;
+        }
     }
 }

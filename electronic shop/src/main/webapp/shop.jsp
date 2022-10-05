@@ -164,19 +164,21 @@
       <p>Price</p>
       <div class="InputInline">
         <input type="number" name="minPrice" id="minPrice" placeholder="Min" onchange="setPageSize()"
-               value="${sessionScope.filter.minPrice}">
+               value="${sessionScope.productData.minPrice}">
 
-        <input type="number" name="maxPrice" id="maxPrice" placeholder="Max" value="${sessionScope.filter.maxPrice}">
+        <input type="number" name="maxPrice" id="maxPrice" placeholder="Max" value="${sessionScope.productData.maxPrice}">
       </div>
+      <input type="hidden" name="pageSize" value="${sessionScope.productData.productFilter.pageSize}">
+      <input type="hidden" name="pageSize" value="${sessionScope.productData.productFilter.order}">
       <br>
       <label for="productName">Product name </label>
-      <input type="text" name="productName" id="productName" value="${sessionScope.filter.productName}">
+      <input type="text" name="productName" id="productName" value="${sessionScope.productData.productFilter.productName}">
       <br>
       <br>
       <label for="brand">Choose a brand:</label>
       <select multiple="multiple" search='true' name="brand" id="brand" style="width: 98%">
-        <c:forEach items="${sessionScope.brand}" var="brand">
-          <option<c:if test="${sessionScope.filter != null && sessionScope.filter.getBrand().contains(brand)}"> selected</c:if>
+        <c:forEach items="${sessionScope.productData.brandList}" var="brand">
+          <option<c:if test="${sessionScope.productData.productFilter != null && sessionScope.productData.productFilter.getBrand().contains(brand)}"> selected</c:if>
                   value="${brand}">${brand}</option>
         </c:forEach>
       </select>
@@ -184,8 +186,8 @@
       <br>
       <label for="category">Choose a category:</label>
       <select multiple="multiple" search='true' name="category" id="category" style="width: 98%">
-        <c:forEach items="${sessionScope.category}" var="category">
-          <option <c:if test="${sessionScope.filter != null && sessionScope.filter.getCategory().contains(category.categoryId)}"> selected</c:if>
+        <c:forEach items="${sessionScope.productData.categoryDTOList}" var="category">
+          <option <c:if test="${sessionScope.productData.productFilter != null && sessionScope.productData.productFilter.getCategory().contains(category.categoryId)}"> selected</c:if>
                   value="${category.categoryId}">${category.categoryName}</option>
         </c:forEach>
       </select>
@@ -198,10 +200,10 @@
   </div>
   <div class="container">
     <div class="row">
-      <c:if test="${sessionScope.product == null || sessionScope.product.size() == 0}">
+      <c:if test="${sessionScope.productData.productList == null || sessionScope.productData.productList.size() == 0}">
         <h2 style="font-size: xx-large; color: #ac2925">Products not found</h2>
       </c:if>
-      <c:forEach items="${product}" var="product">
+      <c:forEach items="${sessionScope.productData.productList}" var="product">
         <div class="col-md-offset-3 col-sm-3">
           <div class="single-shop-product">
             <div class="product-upper">
