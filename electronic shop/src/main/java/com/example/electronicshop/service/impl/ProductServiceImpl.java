@@ -27,8 +27,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDataDTO getProducts(HttpServletRequest request, HttpServletResponse response) {
         ProductFilter productFilter = readProductRequest.readRequest(request).getFilter();
-        System.out.println(readProductRequest.readRequest(request));
-        System.out.println(productFilter);
         ProductDataDTO productData = transactionManager.doInTransaction(() -> {
             int pageQuantity;
             ProductDataDTO productInformation = productRepository.countFiltered(productFilter);

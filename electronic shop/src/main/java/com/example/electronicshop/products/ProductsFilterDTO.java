@@ -201,7 +201,7 @@ public class ProductsFilterDTO {
         public FilterBuilder pageNumber(String pageNumber) {
             if (pageNumber != null) {
                 try {
-                    ProductsFilterDTO.this.pageSize = Math.max(Integer.parseInt(pageNumber), 0);
+                    ProductsFilterDTO.this.pageNumber = Math.max(Integer.parseInt(pageNumber), 0);
                 } catch (NumberFormatException ex) {
                     ex.printStackTrace();
                 }
