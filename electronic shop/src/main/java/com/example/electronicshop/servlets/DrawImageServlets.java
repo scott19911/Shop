@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-import static com.example.electronicshop.service.ImageServiceImpl.PRODUCT_IMG;
+import static com.example.electronicshop.service.impl.ImageServiceImpl.PRODUCT_IMG;
 
 
 /**

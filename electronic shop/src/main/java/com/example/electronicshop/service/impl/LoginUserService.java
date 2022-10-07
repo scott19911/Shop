@@ -1,7 +1,8 @@
-package com.example.electronicshop.service;
+package com.example.electronicshop.service.impl;
 
 import com.example.electronicshop.dao.TransactionManager;
 import com.example.electronicshop.dao.UserDao;
+import com.example.electronicshop.service.LoginService;
 import com.example.electronicshop.users.LoginUser;
 import com.example.electronicshop.users.SpecificUser;
 import com.example.electronicshop.utils.SecurityPassword;
@@ -14,12 +15,12 @@ import java.io.IOException;
 import java.util.Map;
 
 import static com.example.electronicshop.constants.ServletsName.LOGIN_SERVLET;
-import static com.example.electronicshop.constants.ServletsName.SHOP_SERVLET;
+import static com.example.electronicshop.constants.ServletsName.PRODUCT_LIST_SERVLET;
 import static com.example.electronicshop.dao.MySqlUserDao.EMAIL;
 import static com.example.electronicshop.dao.MySqlUserDao.PASSWORD;
-import static com.example.electronicshop.service.UploadAvatar.SPECIFIC_USER;
+import static com.example.electronicshop.service.impl.UploadAvatar.SPECIFIC_USER;
 
-public class LoginUserService implements LoginService{
+public class LoginUserService implements LoginService {
     public static final String LOGIN_ERROR = "com.example.electronicshop.login.error";
     private final UserDao userDao;
     private final TransactionManager transactionManager;
@@ -51,7 +52,7 @@ public class LoginUserService implements LoginService{
           }
         }
         if (error.isEmpty()) {
-            response.sendRedirect(SHOP_SERVLET);
+            response.sendRedirect(PRODUCT_LIST_SERVLET);
         } else {
             session.setAttribute(LOGIN_ERROR, error);
             response.sendRedirect(LOGIN_SERVLET);

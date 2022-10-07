@@ -1,0 +1,33 @@
+.InputInline {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+
+/* Add some margins for each label */
+.InputInline label {
+    margin: 5px 10px 5px 0;
+}
+
+/* Style the input fields */
+.InputInline input {
+    vertical-align: middle;
+    margin: 5px 10px 5px 0;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    width: 45%;
+}
+
+
+/* Add responsiveness - display the form controls vertically instead of horizontally on screens that are less than 800px wide */
+@media (max-width: 800px) {
+    .InputInline input {
+        margin: 10px 0;
+    }
+
+    .InputInline {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

@@ -29,6 +29,7 @@
   <link rel="stylesheet" href="css/owl.carousel.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/inputInLine.css">
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -41,6 +42,7 @@
 
 <div class="header-area">
   <div class="container">
+
     <div class="row">
       <div class="col-md-8">
         <customTag:login></customTag:login>
@@ -79,13 +81,14 @@
     <div class="row">
       <div class="col-sm-6">
         <div class="logo">
-          <h1><a href="index.html">e<span>Electronics</span></a></h1>
+          <h1><a href="index.jsp">e<span>Electronics</span></a></h1>
         </div>
       </div>
 
       <div class="col-sm-6">
         <div class="shopping-item">
-          <a href="cart.html">Cart - <span class="cart-amunt">$800</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">5</span></a>
+          <a href="cart.html">Cart - <span class="cart-amunt">$800</span> <i class="fa fa-shopping-cart"></i> <span
+                  class="product-count">5</span></a>
         </div>
       </div>
     </div>
@@ -105,12 +108,11 @@
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li><a href="index.html">Home</a></li>
-          <li class="active"><a href="shop.html">Shop page</a></li>
+          <li><a href="/index.jsp">Home</a></li>
+          <li class="active"><a href="${pageContext.request.contextPath}/shop">Shop page</a></li>
           <li><a href="single-product.html">Single product</a></li>
           <li><a href="cart.html">Cart</a></li>
           <li><a href="checkout.html">Checkout</a></li>
-          <li><a href="#">Category</a></li>
           <li><a href="#">Others</a></li>
           <li><a href="#">Contact</a></li>
         </ul>
@@ -134,18 +136,74 @@
 
 <div class="single-product-area">
   <div class="zigzag-bottom"></div>
+  <div class="product-pagination text-center">
+    <nav>
+      <ul class="pagination">
+        <customTag:pagination></customTag:pagination>
+      </ul>
+    </nav>
+  </div>
+  <br>
   <div class="col-md-2 col-sm-2">
-    <form action="/shop" class="checkout" method="get" name="checkout">
-      <div class="form-row place-order">
-        <input type="submit" data-value="Place order" value="Place order"
-               id="place_order" name="woocommerce_checkout_place_order"
-               class="button alt">
+    <select name="pageSize" id="pageSize" onchange="setPageSize(this)">
+      <option value="">Select element on page</option>
+      <option value="3">3</option>
+      <option value="6">6</option>
+      <option value="10">10</option>
+    </select>
+    <br>
+    <br>
+    <select name="orderBy" id="orderBy" onchange="setOrderBy(this)">
+      <option value="">Select order</option>
+      <option value="ASC">price increase</option>
+      <option value="DESC">price reduction</option>
+    </select>
+    <br>
+    <br>
+    <form action="${pageContext.request.contextPath}/shop" class="checkout" method="get" name="checkout">
+      <p>Price</p>
+      <div class="InputInline">
+        <input type="number" name="minPrice" id="minPrice" placeholder="Min" onchange="setPageSize()"
+               value="${sessionScope.productData.minPrice}">
+
+        <input type="number" name="maxPrice" id="maxPrice" placeholder="Max" value="${sessionScope.productData.maxPrice}">
       </div>
+      <input type="hidden" name="pageSize" value="${sessionScope.productData.productFilter.pageSize}">
+      <input type="hidden" name="pageSize" value="${sessionScope.productData.productFilter.order}">
+      <br>
+      <label for="productName">Product name </label>
+      <input type="text" name="productName" id="productName" value="${sessionScope.productData.productFilter.productName}">
+      <br>
+      <br>
+      <label for="brand">Choose a brand:</label>
+      <select multiple="multiple" search='true' name="brand" id="brand" style="width: 98%">
+        <c:forEach items="${sessionScope.productData.brandList}" var="brand">
+          <option<c:if test="${sessionScope.productData.productFilter != null && sessionScope.productData.productFilter.getBrand().contains(brand)}"> selected</c:if>
+                  value="${brand}">${brand}</option>
+        </c:forEach>
+      </select>
+      <br>
+      <br>
+      <label for="category">Choose a category:</label>
+      <select multiple="multiple" search='true' name="category" id="category" style="width: 98%">
+        <c:forEach items="${sessionScope.productData.categoryDTOList}" var="category">
+          <option <c:if test="${sessionScope.productData.productFilter != null && sessionScope.productData.productFilter.getCategory().contains(category.categoryId)}"> selected</c:if>
+                  value="${category.categoryId}">${category.categoryName}</option>
+        </c:forEach>
+      </select>
+      <br>
+      <br>
+      <input type="submit" data-value="Place order" value="Place order"
+             id="place_order" name="woocommerce_checkout_place_order"
+             class="button alt">
     </form>
   </div>
   <div class="container">
     <div class="row">
-      <c:forEach items="${product}" var="product">
+      <c:if test="${sessionScope.productData.productList == null || sessionScope.productData.productList.size() == 0}">
+        <h2 style="font-size: xx-large; color: #ac2925">Products not found</h2>
+      </c:if>
+      <c:forEach items="${sessionScope.productData.productList}" var="product">
         <div class="col-md-offset-3 col-sm-3">
           <div class="single-shop-product">
             <div class="product-upper">
@@ -154,10 +212,12 @@
             <h2> ${product.brand}</h2>
             <h2><a href="">${ product.name}</a></h2>
             <p>${product.description}</p>
-            <h2><div class="product-carousel-price">
-              <ins>₴${product.price}</ins>
-              <del>₴${product.price + (product.price * 0.2)}</del>
-            </div></h2>
+            <h2>
+              <div class="product-carousel-price">
+                <ins>₴${product.price}</ins>
+                <del>₴${product.price + (product.price * 0.2)}</del>
+              </div>
+            </h2>
 
             <div class="product-option-shop">
               <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow"
@@ -173,21 +233,7 @@
         <div class="product-pagination text-center">
           <nav>
             <ul class="pagination">
-              <li>
-                <a href="#" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li>
-                <a href="#" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
+              <customTag:pagination></customTag:pagination>
             </ul>
           </nav>
         </div>
@@ -290,5 +336,8 @@
 
 <!-- Main Script -->
 <script src="js/main.js"></script>
+<script src="js/selectPageSize.js"></script>
+<script src="js/paginationUrl.js"></script>
+<script src="js/multi-select-dropdown.js"></script>
 </body>
 </html>

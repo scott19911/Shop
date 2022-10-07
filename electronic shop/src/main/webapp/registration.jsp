@@ -51,7 +51,7 @@
             <div class="col-md-4">
                 <div class="header-right">
                     <ul class="list-unstyled list-inline">
-                        <a href="/reg">Sign up</a>
+                        <a href="${pageContext.request.contextPath}/reg">Sign up</a>
                         <li class="dropdown dropdown-small">
                             <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span
                                     class="key">currency :</span><span class="value">USD </span><b
@@ -85,7 +85,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="logo">
-                    <h1><a href="index.html">e<span>Electronics</span></a></h1>
+                    <h1><a href="index.jsp">e<span>Electronics</span></a></h1>
                 </div>
             </div>
         </div>
@@ -105,12 +105,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="shop.html">Shop page</a></li>
+                    <li><a href="index.jsp">Home</a></li>
+                    <li><a href="${pageContext.request.contextPath}/shop">Shop page</a></li>
                     <li><a href="single-product.html">Single product</a></li>
                     <li><a href="cart.html">Cart</a></li>
-                    <li class="active"><a href="checkout.html">Checkout</a></li>
-                    <li><a href="#">Category</a></li>
+                    <li><a href="checkout.html">Checkout</a></li>
                     <li><a href="#">Others</a></li>
                     <li><a href="#">Contact</a></li>
                 </ul>
@@ -168,8 +167,7 @@
                                                        name="billing_last_name" class="input-text ">
                                             <p id="demo1" style="color: red;"></p>
                                             <p id="errorMassage" style="color:red"> ${requestScope.get("com.example.electronicshop.registration.error").get("billing_last_name")}
-                                            </p>
-                                            </p>
+
                                             <div class="clear"></div>
                                             <p id="billing_email_field"
                                                class="form-row form-row-first validate-required validate-email">

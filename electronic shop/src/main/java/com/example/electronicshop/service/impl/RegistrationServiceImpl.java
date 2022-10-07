@@ -1,6 +1,8 @@
-package com.example.electronicshop.service;
+package com.example.electronicshop.service.impl;
 
 import com.example.electronicshop.registration.RegistrationDTO;
+import com.example.electronicshop.service.RegistrationService;
+import com.example.electronicshop.service.UserService;
 import com.example.electronicshop.users.SpecificUser;
 import com.example.electronicshop.users.User;
 import com.example.electronicshop.validate.ValidateFactory;
@@ -12,11 +14,10 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 
-
+import static com.example.electronicshop.constants.ServletsName.PRODUCT_LIST_SERVLET;
 import static com.example.electronicshop.constants.ServletsName.REGISTRATION_SERVLET;
-import static com.example.electronicshop.constants.ServletsName.SHOP_SERVLET;
 import static com.example.electronicshop.registration.DrawCaptcha.CAPTCHA_STORE_TYPE;
-import static com.example.electronicshop.service.UploadAvatar.SPECIFIC_USER;
+import static com.example.electronicshop.service.impl.UploadAvatar.SPECIFIC_USER;
 import static com.example.electronicshop.servlets.RegistrationServlets.DB_TYPE;
 import static com.example.electronicshop.servlets.RegistrationServlets.EMAIL;
 import static com.example.electronicshop.servlets.RegistrationServlets.REGISTRATION_DTO;
@@ -61,7 +62,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             }
         }
         if (error.isEmpty()) {
-            resp.sendRedirect(SHOP_SERVLET);
+            resp.sendRedirect(PRODUCT_LIST_SERVLET);
         } else {
             registrationBean.setPassword("");
             registrationBean.setCaptcha("");
