@@ -1,22 +1,16 @@
-package com.example.electronicshop.service;
+package com.example.electronicshop.cart;
 
-import com.example.electronicshop.dao.ProductRepositoryImpl;
+import com.example.electronicshop.dao.CartRepositoryImpl;
 import com.example.electronicshop.dao.TransactionManager;
 import com.example.electronicshop.products.CategoryDTO;
 import com.example.electronicshop.products.Product;
-import com.example.electronicshop.products.ProductDataDTO;
 import com.example.electronicshop.products.ProductFilter;
-import com.example.electronicshop.service.impl.ProductServiceImpl;
 import com.example.electronicshop.utils.ConnectionPool;
-import com.example.electronicshop.products.ReadProductRequestImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -27,19 +21,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.electronicshop.cart.CartImpl.ID;
+import static com.example.electronicshop.cart.CartImpl.PRICE;
+import static com.example.electronicshop.cart.CartImpl.QUANTITY;
 import static com.example.electronicshop.dao.ProductRepositoryImpl.ORDER_DESC;
-import static com.example.electronicshop.products.ReadProductRequestImpl.BRAND;
-import static com.example.electronicshop.products.ReadProductRequestImpl.CATEGORY;
-
+import static com.example.electronicshop.servlets.CartServlets.ADD_TO_CART;
+import static com.example.electronicshop.servlets.CartServlets.COMMAND_DELETE_PRODUCT;
 import static com.example.electronicshop.utils.ConnectionPool.CONNECTION_THREAD_LOCAL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
-class ProductServiceImplTest {
+
+class CartImplTest {
     public HttpServletRequest request = mock(HttpServletRequest.class);
-    public HttpServletResponse response = mock(HttpServletResponse.class);
     public ConnectionPool connectionPool;
     public Product product1;
     public Product product2;
@@ -52,11 +48,8 @@ class ProductServiceImplTest {
     public CategoryDTO categoryDTO3;
     public CategoryDTO categoryDTO4;
     public List<CategoryDTO> categoryDTOList;
-    public List<Product> productList = new ArrayList<>();
     public List<String> brandList = new ArrayList<>();
-    public  ProductFilter filter = new ProductFilter();
-
-
+    public CartImpl cart = new CartImpl(new CartRepositoryImpl(), new TransactionManager());
 
     @BeforeEach
     void init() throws SQLException {
@@ -100,18 +93,18 @@ class ProductServiceImplTest {
                 "'SAMSUNG',33199,4,'uploadDir/img/img_0_60_8574_0_1_637798486657836804.jpg','Characteristics',0)," +
                 "(6,'ZenFone 8 16/256GB Dual Sim Black (ZS590KS-2A011EU)','ASUS',31444,2,'uploadDir/img/img_0_60_8053_0.jpg','Characteristics',0)");
 
-        product1 = inputProduct("iPhone 13 Pro Max 1TB Graphite (MLLK3HU/A)","APPLE",
-                "uploadDir/img/iphone_13_pro_max.jpg","Characteristics",1,1,69999);
-        product2 = inputProduct("iPhone 13 Pro Max 512GB Sierra Blue (MLLJ3HU/A)","APPLE",
-                "uploadDir/img/img_0_60_8353_2_1.jpg","Characteristics",2,1,61999);
-        product3 = inputProduct("Galaxy Fold 3 12/512 Gb Dual Sim Phantom Silver (SM-F926BZSGSEK)","SAMSUNG",
-                "uploadDir/img/img_0_60_8162_7_1.jpg","Characteristics",3,2,59999);
-        product5 = inputProduct("Galaxy S22 8/128 Gb Dual Sim Phantom Green (SM-S901BZGDSEK)","SAMSUNG",
-                "uploadDir/img/img_0_60_8574_0_1_637798486657836804.jpg","Characteristics",5,4,33199);
-        product6 = inputProduct("ZenFone 8 16/256GB Dual Sim Black (ZS590KS-2A011EU)","ASUS",
-                "uploadDir/img/img_0_60_8053_0.jpg","Characteristics",6,2,31444);
-        product4 = inputProduct("Redmi Note 10 Pro 6/128 Onyx gray (M2101K6G)","XIAOMI",
-                "uploadDir/img/img_0_60_7928_0.jpg","Characteristics",4,3,11999);
+        product1 = inputProduct("iPhone 13 Pro Max 1TB Graphite (MLLK3HU/A)", "APPLE",
+                "uploadDir/img/iphone_13_pro_max.jpg", "Characteristics", 1, 1, 69999);
+        product2 = inputProduct("iPhone 13 Pro Max 512GB Sierra Blue (MLLJ3HU/A)", "APPLE",
+                "uploadDir/img/img_0_60_8353_2_1.jpg", "Characteristics", 2, 1, 61999);
+        product3 = inputProduct("Galaxy Fold 3 12/512 Gb Dual Sim Phantom Silver (SM-F926BZSGSEK)", "SAMSUNG",
+                "uploadDir/img/img_0_60_8162_7_1.jpg", "Characteristics", 3, 2, 59999);
+        product5 = inputProduct("Galaxy S22 8/128 Gb Dual Sim Phantom Green (SM-S901BZGDSEK)", "SAMSUNG",
+                "uploadDir/img/img_0_60_8574_0_1_637798486657836804.jpg", "Characteristics", 5, 4, 33199);
+        product6 = inputProduct("ZenFone 8 16/256GB Dual Sim Black (ZS590KS-2A011EU)", "ASUS",
+                "uploadDir/img/img_0_60_8053_0.jpg", "Characteristics", 6, 2, 31444);
+        product4 = inputProduct("Redmi Note 10 Pro 6/128 Onyx gray (M2101K6G)", "XIAOMI",
+                "uploadDir/img/img_0_60_7928_0.jpg", "Characteristics", 4, 3, 11999);
         categoryDTO1 = new CategoryDTO();
         categoryDTO1.setCategoryName("flagship");
         categoryDTO1.setCategoryId(1);
@@ -137,8 +130,9 @@ class ProductServiceImplTest {
         categoryDTOList.add(categoryDTO4);
 
     }
-    private Product inputProduct (String name, String brand,String img, String description, int id, int category, int price){
-       Product product = new Product();
+
+    private Product inputProduct(String name, String brand, String img, String description, int id, int category, int price) {
+        Product product = new Product();
         product.setName(name);
         product.setBrand(brand);
         product.setImgUrl(img);
@@ -150,79 +144,58 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void shouldReturnAllProduct_whenNotFiltered() throws SQLException {
+    void shouldReturnCartSize2_whenAddTwoProducts() throws SQLException {
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
+        Connection connection1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
         CONNECTION_THREAD_LOCAL.set(connection);
         HttpSession session = mock(HttpSession.class);
         when(request.getSession(false)).thenReturn(session);
         when(session.getAttribute(any())).thenReturn(null);
-        ProductServiceImpl productService = new ProductServiceImpl(new TransactionManager(),
-                new ProductRepositoryImpl(), new ReadProductRequestImpl());
-        ProductDataDTO mapResult = productService.getProducts(request, response);
-        productList.add(product1);
-        productList.add(product2);
-        productList.add(product3);
-        productList.add(product4);
-        productList.add(product5);
-        productList.add(product6);
-        filter.setPageSize(3);
-        filter.setOrder(ORDER_DESC);
-        assertEquals(filter,mapResult.getProductFilter());
-        assertEquals(productList,mapResult.getProductList());
-        assertEquals(brandList,mapResult.getBrandList());
-        assertEquals(categoryDTOList,mapResult.getCategoryDTOList());
+        when(request.getParameter(ADD_TO_CART)).thenReturn("1").thenReturn("2");
+        Map<Product,Integer> expected = new HashMap<>();
+        int expectedSize = 2;
+        expected.put(product1,1);
+        expected.put(product2,1);
+        cart.addProduct(request);
+        CONNECTION_THREAD_LOCAL.set(connection1);
+        cart.addProduct(request);
+        assertEquals(expected, cart.getCart());
+        assertEquals(expectedSize,cart.totalQuantity());
     }
 
     @Test
-    void shouldReturnTwoProduct_whenFilteredByCategoryFlagship() throws SQLException {
+    void shouldReturnCartSize1_whenDeleteProduct() throws SQLException {
+        shouldReturnCartSize2_whenAddTwoProducts();
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
-        when(connectionPool.getConnection()).thenReturn(connection);
-        HttpSession session = mock(HttpSession.class);
-        when(request.getParameter(CATEGORY)).thenReturn("1");
-        Map<String,String[]> parameterMap = new HashMap<>();
-        parameterMap.put(CATEGORY, new String[]{"1"});
-        when(request.getParameterMap()).thenReturn(parameterMap);
-        when(request.getSession(false)).thenReturn(session);
-        when(session.getAttribute(any())).thenReturn(null);
-        ProductServiceImpl productService = new ProductServiceImpl(new TransactionManager(),
-                new ProductRepositoryImpl(), new ReadProductRequestImpl());
-        ProductDataDTO mapResult = productService.getProducts(request, response);
-        productList.add(product1);
-        productList.add(product2);
-        List<Integer> categoryList = new ArrayList<>();
-        categoryList.add(1);
-        filter.setCategory(categoryList);
-        assertEquals(filter,mapResult.getProductFilter());
-        assertEquals(productList,mapResult.getProductList());
-        assertEquals(brandList,mapResult.getBrandList());
-        assertEquals(categoryDTOList,mapResult.getCategoryDTOList());
+        CONNECTION_THREAD_LOCAL.set(connection);
+        when(request.getParameter(COMMAND_DELETE_PRODUCT)).thenReturn("2");
+        when(request.getParameter(PRICE)).thenReturn(String.valueOf(product2.getPrice()));
+        Map<Product,Integer> expected = new HashMap<>();
+        int expectedSize = 1;
+        expected.put(product1,1);
+        cart.deleteProduct(request);
+        assertEquals(expected, cart.getCart());
+        assertEquals(expectedSize,cart.totalQuantity());
+    }
+
+    @Test
+    void shouldReturnEmptyCart_whenClearCart() throws SQLException {
+        shouldReturnCartSize2_whenAddTwoProducts();
+        cart.clearCart(request);
+        assertTrue(cart.getCart().isEmpty());
     }
     @Test
-    void shouldReturnOneProduct_whenFilteredByCategoryBusinessAndBrandSamsung() throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
-        when(connectionPool.getConnection()).thenReturn(connection);
-        HttpSession session = mock(HttpSession.class);
-        when(request.getParameter(CATEGORY)).thenReturn("2");
-        when(request.getParameter(BRAND)).thenReturn("SAMSUNG");
-        Map<String,String[]> parameterMap = new HashMap<>();
-        parameterMap.put(CATEGORY, new String[]{"2"});
-        parameterMap.put(BRAND, new String[]{"SAMSUNG"});
+    void shouldReturnCartWithQuantity5_whenUpdateCart() throws SQLException {
+        shouldReturnCartSize1_whenDeleteProduct();
+        Map<String, String[]> parameterMap = new HashMap<>();
+        parameterMap.put(ID,new String[]{"1"});
+        parameterMap.put(PRICE,new String[]{"69999.0"});
+        parameterMap.put(QUANTITY,new String[]{"5"});
         when(request.getParameterMap()).thenReturn(parameterMap);
-        when(request.getSession(false)).thenReturn(session);
-        when(session.getAttribute(any())).thenReturn(null);
-        ProductServiceImpl productService = new ProductServiceImpl(new TransactionManager(),
-                new ProductRepositoryImpl(), new ReadProductRequestImpl());
-        ProductDataDTO mapResult = productService.getProducts(request, response);
-        productList.add(product3);
-        List<Integer> categoryList = new ArrayList<>();
-        List<String> brandList1 = new ArrayList<>();
-        brandList1.add("SAMSUNG");
-        categoryList.add(2);
-        filter.setCategory(categoryList);
-        filter.setBrand(brandList1);
-        assertEquals(filter,mapResult.getProductFilter());
-        assertEquals(productList,mapResult.getProductList());
-        assertEquals(brandList,mapResult.getBrandList());
-        assertEquals(categoryDTOList,mapResult.getCategoryDTOList());
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
+        CONNECTION_THREAD_LOCAL.set(connection);
+        cart.updateCart(request);
+        int expected = 5;
+        assertEquals(expected,cart.totalQuantity());
     }
 }

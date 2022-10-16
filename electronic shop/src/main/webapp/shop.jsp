@@ -87,8 +87,8 @@
 
       <div class="col-sm-6">
         <div class="shopping-item">
-          <a href="cart.html">Cart - <span class="cart-amunt">$800</span> <i class="fa fa-shopping-cart"></i> <span
-                  class="product-count">5</span></a>
+          <a href="/cart">Cart - <span class="cart-amunt">₴${sessionScope.cartInfo.totalPrice}</span> <i class="fa fa-shopping-cart"></i> <span
+                  class="product-count">${sessionScope.cartInfo.totalQuantity}</span></a>
         </div>
       </div>
     </div>
@@ -111,7 +111,7 @@
           <li><a href="/index.jsp">Home</a></li>
           <li class="active"><a href="${pageContext.request.contextPath}/shop">Shop page</a></li>
           <li><a href="single-product.html">Single product</a></li>
-          <li><a href="cart.html">Cart</a></li>
+          <li><a href="/cart">Cart</a></li>
           <li><a href="checkout.html">Checkout</a></li>
           <li><a href="#">Others</a></li>
           <li><a href="#">Contact</a></li>
@@ -193,8 +193,8 @@
       </select>
       <br>
       <br>
-      <input type="submit" data-value="Place order" value="Place order"
-             id="place_order" name="woocommerce_checkout_place_order"
+      <input type="submit" data-value="Place order" value="Search"
+             id="place_order"
              class="button alt">
     </form>
   </div>
@@ -219,10 +219,12 @@
               </div>
             </h2>
 
-            <div class="product-option-shop">
-              <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow"
-                 href="/addCart=${product.productId}">Add to cart</a>
-            </div>
+            <form action="${pageContext.request.contextPath}/cart" class="checkout" method="get" name="checkout" onsubmit="setInput(${product.productId})">
+              <input type="hidden" name="cameFrom" id="cameFrom${product.productId}">
+              <input type="hidden" name="add" value="${product.productId}">
+              <input type="hidden" name="command" value="add">
+              <input type="submit" value="add" id="place" class="button alt">
+            </form>
           </div>
         </div>
       </c:forEach>

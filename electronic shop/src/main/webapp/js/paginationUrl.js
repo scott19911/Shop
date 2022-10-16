@@ -18,3 +18,11 @@ function setAddress(selectObject, page) {
     selectObject.setAttribute("href", codeAddress() + page);
     return false;
 }
+function setInput(number) {
+    var x = document.getElementById("cameFrom" + number);
+    var _url = location.href;
+    var ur = _url.slice(_url.lastIndexOf('/'))
+
+    x.setAttribute("value",ur);
+    return false;
+}

@@ -2,6 +2,8 @@ package com.example.electronicshop.products;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.util.Map;
+
 public class ReadProductRequestImpl implements ReadProductRequest {
     public static final String MIN_PRICE = "minPrice";
     public static final String MAX_PRICE = "maxPrice";
@@ -13,9 +15,10 @@ public class ReadProductRequestImpl implements ReadProductRequest {
     public static final String PAGE_ORDER = "orderBy";
     @Override
     public ProductsFilterDTO readRequest(HttpServletRequest request) {
+        Map<String,String[]> requestMap =  request.getParameterMap();
         return ProductsFilterDTO.newBuilder().priceFrom(request.getParameter(MIN_PRICE))
                 .priceTo(request.getParameter(MAX_PRICE)).name(request.getParameter(PRODUCT_NAME))
-                .brand(new String[]{request.getParameter(BRAND)}).category(new String[]{request.getParameter(CATEGORY)})
+                .brand(requestMap.get(BRAND)).category(requestMap.get(CATEGORY))
                 .pageNumber(request.getParameter(PAGE_NUMBER)).pageSize(request.getParameter(PAGE_SIZE))
                 .orderBy(request.getParameter(PAGE_ORDER)).build();
     }

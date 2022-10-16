@@ -14,5 +14,5 @@
     url="jdbc:mysql://localhost:3306/electronics_shop?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8"
     validationQuery="select 1"
     maxTotal="5"
-    maxIdle="4"/>
+    maxIdle="40"/>
 </Context>

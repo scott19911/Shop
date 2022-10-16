@@ -141,14 +141,16 @@ public class ProductsFilterDTO {
         }
 
         public FilterBuilder brand(String[] brands) {
-            List<String> brandList = new ArrayList<>();
-            for (String brand : brands
-            ) {
-                if (brand != null && !brand.isBlank()) {
-                    brandList.add(brand);
+            if(brands != null) {
+                List<String> brandList = new ArrayList<>();
+                for (String brand : brands
+                ) {
+                    if (brand != null && !brand.isBlank()) {
+                        brandList.add(brand);
+                    }
                 }
+                ProductsFilterDTO.this.brand = brandList.size() > 0 ? brandList : null;
             }
-            ProductsFilterDTO.this.brand = brandList.size() > 0 ? brandList : null;
             return this;
         }
 

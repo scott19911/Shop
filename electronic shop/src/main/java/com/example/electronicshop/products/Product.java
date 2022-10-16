@@ -1,9 +1,10 @@
 package com.example.electronicshop.products;
 
+
 /**
  * Product representation class
  */
-public class Product {
+public class Product implements Cloneable{
     private String name;
     private String brand;
     private String imgUrl;
@@ -11,7 +12,7 @@ public class Product {
     private int productId;
     private int category;
     private int quantity;
-    private int price;
+    private double price;
 
     public String getName() {
         return name;
@@ -69,11 +70,11 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -117,7 +118,25 @@ public class Product {
         result = 31 * result + getProductId();
         result = 31 * result + getCategory();
         result = 31 * result + getQuantity();
-        result = 31 * result + getPrice();
+        result = (int) (31 * result + getPrice());
         return result;
+    }
+    @Override
+    public Object clone() {
+        Product product;
+        try {
+            product = (Product) super.clone();
+        } catch (CloneNotSupportedException e) {
+            product = new Product();
+        }
+        product.setBrand(this.brand);
+        product.setQuantity(this.quantity);
+        product.setPrice(this.price);
+        product.setProductId(this.productId);
+        product.setCategory(this.category);
+        product.setName(this.name);
+        product.setDescription(this.description);
+        product.setImgUrl(this.imgUrl);
+        return product;
     }
 }
