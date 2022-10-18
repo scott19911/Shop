@@ -210,4 +210,50 @@ public class OrderDetailsDTO {
         order.setCart(orderCart);
         return order;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OrderDetailsDTO)) return false;
+
+        OrderDetailsDTO that = (OrderDetailsDTO) o;
+
+        if (getDelivery() != that.getDelivery()) return false;
+        if (getPayment() != that.getPayment()) return false;
+        if (getCity() != null ? !getCity().equals(that.getCity()) : that.getCity() != null) return false;
+        if (getRecipientName() != null ? !getRecipientName().equals(that.getRecipientName()) : that.getRecipientName() != null)
+            return false;
+        if (getRecipientSurname() != null ? !getRecipientSurname().equals(that.getRecipientSurname()) : that.getRecipientSurname() != null)
+            return false;
+        if (getStreet() != null ? !getStreet().equals(that.getStreet()) : that.getStreet() != null) return false;
+        if (getRecipientPhone() != null ? !getRecipientPhone().equals(that.getRecipientPhone()) : that.getRecipientPhone() != null)
+            return false;
+        if (getHouse() != null ? !getHouse().equals(that.getHouse()) : that.getHouse() != null) return false;
+        if (getOrderCart() != null ? !getOrderCart().equals(that.getOrderCart()) : that.getOrderCart() != null)
+            return false;
+        if (getCardNumber() != null ? !getCardNumber().equals(that.getCardNumber()) : that.getCardNumber() != null)
+            return false;
+        if (getDataCard() != null ? !getDataCard().equals(that.getDataCard()) : that.getDataCard() != null)
+            return false;
+        if (getCvv2() != null ? !getCvv2().equals(that.getCvv2()) : that.getCvv2() != null) return false;
+        return getDepartment() != null ? getDepartment().equals(that.getDepartment()) : that.getDepartment() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getCity() != null ? getCity().hashCode() : 0;
+        result = 31 * result + (getRecipientName() != null ? getRecipientName().hashCode() : 0);
+        result = 31 * result + (getRecipientSurname() != null ? getRecipientSurname().hashCode() : 0);
+        result = 31 * result + (getStreet() != null ? getStreet().hashCode() : 0);
+        result = 31 * result + (getRecipientPhone() != null ? getRecipientPhone().hashCode() : 0);
+        result = 31 * result + (getHouse() != null ? getHouse().hashCode() : 0);
+        result = 31 * result + (getOrderCart() != null ? getOrderCart().hashCode() : 0);
+        result = 31 * result + (getCardNumber() != null ? getCardNumber().hashCode() : 0);
+        result = 31 * result + (getDataCard() != null ? getDataCard().hashCode() : 0);
+        result = 31 * result + (getCvv2() != null ? getCvv2().hashCode() : 0);
+        result = 31 * result + (getDepartment() != null ? getDepartment().hashCode() : 0);
+        result = 31 * result + getDelivery();
+        result = 31 * result + getPayment();
+        return result;
+    }
 }

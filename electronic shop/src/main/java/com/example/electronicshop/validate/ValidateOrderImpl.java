@@ -62,7 +62,7 @@ public class ValidateOrderImpl implements ValidateOrder {
     @Override
     public Map<String, String> validate(OrderDetailsDTO orderDetails) {
         Map<String, String> errorMap = new HashMap<>();
-        String regexName = "^[\\w'\\-,.][^0-9_!¡?÷?¿/\\\\+=@#$%ˆ&*(){}|~<>;:]{2,}";
+        String regexName = "^[\\w'а-яА-Я\\-,.][^0-9_!¡?÷?¿/\\\\+=@#$%ˆ&*(){}|~<>;:]{2,}";
         String regexCity = "^[a-zA-Zа-яА-Я]+(?:[\\s-][a-zA-Zа-яА-Я]+)*$";
         String regexPhone = "((\\+38)?\\(?\\d{3}\\)?[\\s\\.-]?(\\d{7}|\\d{3}[\\s\\.-]\\d{2}[\\s\\.-]\\d{2}|\\d{3}-\\d{4}))";
         String regexCard = "\\d+ ?\\d+[^a-zA-zА-Яа-я]+";

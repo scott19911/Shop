@@ -42,7 +42,7 @@ public interface ValidatesRegistrationForm {
      */
     default Map<String, String> validate(RegistrationDTO bean) {
         Map<String, String> errorMap = new HashMap<>();
-        String regexName = "^[\\w'\\-,.][^0-9_!¡?÷?¿/\\\\+=@#$%ˆ&*(){}|~<>;:]{2,}";
+        String regexName = "^[\\w'а-яА-Я\\-,.][^0-9_!¡?÷?¿/\\\\+=@#$%ˆ&*(){}|~<>;:]{2,}";
         String regexEmail = "^([_\\-0-9a-zA-Z]+)@([_\\-0-9a-zA-Z]+)\\.([a-zA-Z]){2,7}";
         if (bean.getFirstName() == null || checkRegex(bean.getFirstName(), regexName)) {
             errorMap.put(FIRST_NAME, "First Name is missing or incorrect");

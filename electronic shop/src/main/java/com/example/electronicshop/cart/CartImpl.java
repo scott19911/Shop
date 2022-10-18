@@ -5,6 +5,7 @@ import com.example.electronicshop.dao.TransactionManager;
 import com.example.electronicshop.products.Product;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -122,23 +123,24 @@ public class CartImpl implements CartService {
         String[] prices = parameterMap.get(PRICE);
         String[] stringsQuantity = parameterMap.get(QUANTITY);
         Map<Product, Integer> tempCart = cart;
-        for (int i = 0; i < stringsID.length; i++) {
-            try {
-                int id = Integer.parseInt(stringsID[i]);
-                double price = Double.parseDouble(prices[i]);
-                Product product = transactionManager.doWithoutTransaction(() ->
-                        cartRepository.getProductByIdAndPrice(id, price));
-                if (Integer.parseInt(stringsQuantity[i]) > 0 && product != null) {
-                    tempCart.put(product, Integer.parseInt(stringsQuantity[i]));
+        cart = transactionManager.doInTransaction(() -> {
+            for (int i = 0; i < stringsID.length; i++) {
+                try {
+                    int id = Integer.parseInt(stringsID[i]);
+                    double price = Double.parseDouble(prices[i]);
+                    Product product = cartRepository.getProductByIdAndPrice(id, price);
+                    if (Integer.parseInt(stringsQuantity[i]) > 0 && product != null) {
+                        tempCart.put(product, Integer.parseInt(stringsQuantity[i]));
+                    }
+                    if (Integer.parseInt(stringsQuantity[i]) < 1 && product != null) {
+                        tempCart.remove(product);
+                    }
+                } catch (NumberFormatException exception) {
+                    exception.printStackTrace();
                 }
-                if(Integer.parseInt(stringsQuantity[i]) < 1 && product != null){
-                    tempCart.remove(product);
-                }
-            } catch (NumberFormatException exception) {
-                exception.printStackTrace();
             }
-        }
-        cart = tempCart;
+            return tempCart;
+        }, Connection.TRANSACTION_READ_COMMITTED);
     }
 
     @Override

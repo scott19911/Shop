@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
         errorMap = validateOrder.validate(orderDetailsDTO);
         CartInfo cartInfo = (CartInfo) session.getAttribute(CART_INFO);
         SpecificUser user = (SpecificUser) session.getAttribute(SPECIFIC_USER);
-        if (cartInfo.getCart() == null) {
+        if (cartInfo == null || cartInfo.getCart() == null) {
             errorMap.put("cartError", "Cart is empty");
         } else {
             cartInfo.setCart(orderDetailsDTO.getOrderCart());
