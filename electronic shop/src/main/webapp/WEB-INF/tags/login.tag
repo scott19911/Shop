@@ -7,7 +7,7 @@
 <div class="log">
     <c:if test="${specificUser.getUserId() > 0}">
         <img src="/drawAvatar" class="avatar__image1">
-        <a href="/uploadFile" style="padding-left: 10px; font-size: 25px; padding-top: 15px" >Hi, ${specificUser.getFirstName()}</a>
+        <a href="/orderInf" style="padding-left: 10px; font-size: 25px; padding-top: 15px" >Hi, ${specificUser.getFirstName()}</a>
         <a href="/LogOff" style="padding-left: 10px; font-size: 25px; padding-top: 15px" >LogOff</a>
     </c:if>
     <c:if test="${specificUser == null || specificUser.getUserId() == 0}">

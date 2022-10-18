@@ -19,6 +19,7 @@ public class OrderDetailsDTO {
     private String department;
     private int delivery;
     private int payment;
+    private double totalPrice;
 
     public String getCity() {
         return city;
@@ -42,6 +43,14 @@ public class OrderDetailsDTO {
 
     public void setRecipientSurname(String recipientSurname) {
         this.recipientSurname = recipientSurname;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public String getStreet() {
@@ -208,6 +217,7 @@ public class OrderDetailsDTO {
         order.setDeliveryId(delivery);
         order.setPaymentId(payment);
         order.setCart(orderCart);
+        order.setTotalPrice(totalPrice);
         return order;
     }
 

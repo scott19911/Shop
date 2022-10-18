@@ -6,6 +6,8 @@ import com.example.electronicshop.dao.TransactionManager;
 import com.example.electronicshop.products.Product;
 import com.example.electronicshop.users.SpecificUser;
 import com.example.electronicshop.validate.ValidateOrder;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -79,6 +81,7 @@ public class OrderServiceImpl implements OrderService {
             errorMap.put("cartError", "Cart is empty");
         } else {
             cartInfo.setCart(orderDetailsDTO.getOrderCart());
+            orderDetailsDTO.setTotalPrice(cartInfo.getTotalPrice());
         }
         if (user == null) {
             errorMap.put("userError", "First you need to log in or register");
@@ -93,5 +96,22 @@ public class OrderServiceImpl implements OrderService {
             session.setAttribute("error", errorMap);
             response.sendRedirect(CART_PAGE);
         }
+    }
+
+    @Override
+    public void showUserOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        SpecificUser specificUser = (SpecificUser) session.getAttribute(SPECIFIC_USER);
+        if(specificUser != null) {
+            UserOrders userOrders = transactionManager.doInTransaction(() -> {
+                UserOrders userOrder = new UserOrders();
+                userOrder.setOrderInfoList(orderRepository.getUserOrders(1));
+                userOrder.setOrderProduct(orderRepository.getOrderProduct(1));
+                return userOrder;
+            }, Connection.TRANSACTION_READ_COMMITTED);
+            session.setAttribute("orderInfo", userOrders);
+        }
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("orders.jsp");
+        requestDispatcher.forward(request,response);
     }
 }

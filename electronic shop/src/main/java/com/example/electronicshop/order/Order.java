@@ -15,7 +15,15 @@ public class Order {
     private int deliveryId;
     private int paymentId;
     private int receiverId;
+    private double totalPrice;
 
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 
     public int getOrderId() {
         return orderId;

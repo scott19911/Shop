@@ -9,6 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="customtag" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -150,65 +151,56 @@
                 <div class="product-content-right">
                     <div class="woocommerce">
                         <p id="errorMassage1"
-                           style="color:red;font-size: xx-large"><c:if test='${sessionScope.get("specificUser") == null}'>${sessionScope.get("error").get("userError")}</c:if>
+                           style="color:red;font-size: xx-large"><c:if
+                                test='${sessionScope.get("specificUser") == null}'>${sessionScope.get("error").get("userError")}</c:if>
                         </p>
+                        <table cellspacing="0" class="shop_table cart">
+                            <thead>
+                            <tr>
+                                <th class="product-thumbnail">№ Order</th>
+                                <th class="product-name">Date</th>
+                                <th class="product-price">Status</th>
+                                <th class="product-quantity">Status description</th>
+                                <th class="product-quantity">Delivery type</th>
+                                <th class="product-subtotal">Total price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="orderInfo" items="${sessionScope.orderInfo.orderInfoList}">
+                                <tr class="cart_item">
+                                    <td class="product-thumbnail">
+                                        ${orderInfo.orderNumber}
+                                    </td>
+                                    <td class="product-name">
+                                        <fmt:formatDate type="date" value="${orderInfo.orderDate}" pattern="dd.MM.yyyy HH:MM"/>
+                                    </td>
 
-                        <div class="cart-collaterals">
-                                <h2><a onclick="hiddenAllEmptyFields()" class="shipping-calculator-button"
-                                       data-toggle="collapse"
-                                       href="#calcalute-shipping-wrap" aria-expanded="false"
-                                       aria-controls="calcalute-shipping-wrap">order № 1 date 17.10.2022 total price ₴ ${sessionScope.cartInfo.totalPrice} </a></h2>
+                                    <td class="product-price">
+                                       ${orderInfo.orderStatus}
+                                    </td>
 
-                                <section id="calcalute-shipping-wrap" class="shipping-calculator-form collapse">
-                                    <table cellspacing="0" class="shop_table cart">
-                                        <c:if test="${sessionScope.cartInfo.cart != null}">
-                                            <thead>
-                                            <tr>
-                                                <th class="product-thumbnail">&nbsp;</th>
-                                                <th class="product-name">Product</th>
-                                                <th class="product-price">Price</th>
-                                                <th class="product-quantity">Quantity</th>
-                                                <th class="product-subtotal">Total</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <c:forEach var="entry" items="${sessionScope.cartInfo.cart.entrySet()}">
-                                                <tr class="cart_item">
-                                                    <td class="product-thumbnail">
-                                                        <a href="single-product.html"><img width="145" height="145"
-                                                                                           alt="poster_1_up"
-                                                                                           class="shop_thumbnail"
-                                                                                           src="/drawAvatar?productImg=${entry.getKey().imgUrl}"></a>
-                                                    </td>
-                                                    <td class="product-name">
-                                                        <a href="single-product.html">${entry.getKey().name}</a>
-                                                    </td>
+                                    <td class="product-quantity">
+                                            ${orderInfo.statusDescription}
+                                    </td>
 
-                                                    <td class="product-price">
-                                                        <span class="amount">₴${entry.getKey().price}</span>
-                                                    </td>
-
-                                                    <td class="product-quantity">
-                                                            ${entry.getValue()}
-                                                        <p id="errorProduct${entry.getKey().productId}" style="color:red"> ${sessionScope.get("error").get("errorProduct".concat(entry.getKey().productId))}
-                                                        </p>
-                                                    </td>
-
-                                                    <td class="product-subtotal">
-                                                        <span class="amount">₴${entry.getKey().price * entry.getValue()}</span>
-                                                    </td>
-
-                                                </tr>
-                                            </c:forEach>
-                                            </tbody>
-                                        </c:if>
-                                    </table>
-
-                                </section>
+                                    <td class="product-subtotal">
+                                            ${orderInfo.deliveryType}
+                                    </td>
+                                    <td class="product-subtotal">
+                                            ${orderInfo.totalPrice}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="product-subtotal" colspan="6">
+                                        <customtag:orderDetails orderId="${orderInfo.orderNumber}"></customtag:orderDetails>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
 
 
 
-                        </div>
                     </div>
                 </div>
             </div>

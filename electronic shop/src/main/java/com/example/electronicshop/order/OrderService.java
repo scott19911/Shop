@@ -1,6 +1,7 @@
 package com.example.electronicshop.order;
 
 import com.example.electronicshop.users.SpecificUser;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -28,4 +29,5 @@ public interface OrderService {
      * @throws IOException when can't send redirect response
      */
     void orderVerifier(HttpServletRequest request, HttpServletResponse response) throws IOException;
+    void showUserOrders(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 }
