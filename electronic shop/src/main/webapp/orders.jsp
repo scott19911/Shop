@@ -48,35 +48,15 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-md-8">
-                <customtag:login></customtag:login>
+            <div class="col-md-7">
+                <customtag:login/>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div class="header-right">
                     <ul class="list-unstyled list-inline">
-                        <a href="/reg">Sign up</a>
-                        <li class="dropdown dropdown-small">
-                            <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span
-                                    class="key">currency :</span><span class="value">USD </span><b
-                                    class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">USD</a></li>
-                                <li><a href="#">INR</a></li>
-                                <li><a href="#">GBP</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="dropdown dropdown-small">
-                            <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span
-                                    class="key">language :</span><span class="value">English </span><b
-                                    class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">English</a></li>
-                                <li><a href="#">French</a></li>
-                                <li><a href="#">German</a></li>
-                            </ul>
-                        </li>
+                        <a href="/reg"><fmt:message key="sign.up" /></a>
+                        <customTag:language/>
                     </ul>
                 </div>
             </div>
@@ -95,7 +75,7 @@
 
             <div class="col-sm-6">
                 <div class="shopping-item">
-                    <a href="/cart">Cart - <span class="cart-amunt">₴${sessionScope.cartInfo.totalPrice}</span> <i
+                    <a href="/cart"><fmt:message key="cart" /> - <span class="cart-amunt">₴${sessionScope.cartInfo.totalPrice}</span> <i
                             class="fa fa-shopping-cart"></i> <span
                             class="product-count">${sessionScope.cartInfo.totalQuantity}</span></a>
                 </div>
@@ -117,13 +97,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/index.jsp">Home</a></li>
-                    <li><a href="${pageContext.request.contextPath}/shop">Shop page</a></li>
-                    <li><a href="single-product.html">Single product</a></li>
-                    <li><a href="/cart">Cart</a></li>
-                    <li><a href="checkout.html">Checkout</a></li>
-                    <li><a href="#">Others</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="/index.jsp"><fmt:message key="home" /></a></li>
+                    <li><a href="${pageContext.request.contextPath}/shop"><fmt:message key="shop" /></a></li>
+                    <li><a href="/cart"><fmt:message key="cart" /></a></li>
                 </ul>
             </div>
         </div>
@@ -135,7 +111,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="product-bit-title text-center">
-                    <h2>Orders</h2>
+                    <h2><fmt:message key="orders" /></h2>
                 </div>
             </div>
         </div>
@@ -157,12 +133,12 @@
                         <table cellspacing="0" class="shop_table cart">
                             <thead>
                             <tr>
-                                <th class="product-thumbnail">№ Order</th>
-                                <th class="product-name">Date</th>
-                                <th class="product-price">Status</th>
-                                <th class="product-quantity">Status description</th>
-                                <th class="product-quantity">Delivery type</th>
-                                <th class="product-subtotal">Total price</th>
+                                <th class="product-thumbnail"><fmt:message key="Norders" /></th>
+                                <th class="product-name"><fmt:message key="date" /></th>
+                                <th class="product-price"><fmt:message key="status" /></th>
+                                <th class="product-quantity"><fmt:message key="stDes" /></th>
+                                <th class="product-quantity"><fmt:message key="deliveryType" /></th>
+                                <th class="product-subtotal"><fmt:message key="totPrice" /></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -192,15 +168,12 @@
                                 </tr>
                                 <tr>
                                     <td class="product-subtotal" colspan="6">
-                                        <customtag:orderDetails orderId="${orderInfo.orderNumber}"></customtag:orderDetails>
+                                        <customtag:orderDetails orderId="${orderInfo.orderNumber}"/>
                                     </td>
                                 </tr>
                             </c:forEach>
                             </tbody>
                         </table>
-
-
-
                     </div>
                 </div>
             </div>

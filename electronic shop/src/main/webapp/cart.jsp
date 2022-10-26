@@ -8,13 +8,14 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="customtag" tagdir="/WEB-INF/tags" %>
 <html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cart</title>
+    <title><fmt:message key="cart"/></title>
 
     <!-- Google Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
@@ -47,35 +48,16 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-md-8">
-                <customtag:login></customtag:login>
+            <div class="col-md-7">
+                <customtag:login/>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div class="header-right">
                     <ul class="list-unstyled list-inline">
-                        <a href="/reg">Sign up</a>
-                        <li class="dropdown dropdown-small">
-                            <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span
-                                    class="key">currency :</span><span class="value">USD </span><b
-                                    class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">USD</a></li>
-                                <li><a href="#">INR</a></li>
-                                <li><a href="#">GBP</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="dropdown dropdown-small">
-                            <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span
-                                    class="key">language :</span><span class="value">English </span><b
-                                    class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">English</a></li>
-                                <li><a href="#">French</a></li>
-                                <li><a href="#">German</a></li>
-                            </ul>
-                        </li>
+                        <a href="/reg"><fmt:message key="sign.up" /></a>
+                        &nbsp; &nbsp;
+                        <customtag:language/>
                     </ul>
                 </div>
             </div>
@@ -94,7 +76,7 @@
 
             <div class="col-sm-6">
                 <div class="shopping-item">
-                    <a href="/cart">Cart - <span class="cart-amunt">₴${sessionScope.cartInfo.totalPrice}</span> <i
+                    <a href="/cart"><fmt:message key="cart"/> - <span class="cart-amunt">₴${sessionScope.cartInfo.totalPrice}</span> <i
                             class="fa fa-shopping-cart"></i> <span
                             class="product-count">${sessionScope.cartInfo.totalQuantity}</span></a>
                 </div>
@@ -116,13 +98,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/index.jsp">Home</a></li>
-                    <li><a href="${pageContext.request.contextPath}/shop">Shop page</a></li>
-                    <li><a href="single-product.html">Single product</a></li>
-                    <li class="active"><a href="/cart">Cart</a></li>
-                    <li><a href="checkout.html">Checkout</a></li>
-                    <li><a href="#">Others</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="/index.jsp"><fmt:message key="home"/></a></li>
+                    <li><a href="${pageContext.request.contextPath}/shop"><fmt:message key="shop"/></a></li>
+                    <li class="active"><a href="/cart"><fmt:message key="cart"/></a></li>
                 </ul>
             </div>
         </div>
@@ -134,7 +112,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="product-bit-title text-center">
-                    <h2>Shopping Cart</h2>
+                    <h2><fmt:message key="shopCart"/></h2>
                 </div>
             </div>
         </div>
@@ -162,10 +140,10 @@
                                     <tr>
                                         <th class="product-remove">&nbsp;</th>
                                         <th class="product-thumbnail">&nbsp;</th>
-                                        <th class="product-name">Product</th>
-                                        <th class="product-price">Price</th>
-                                        <th class="product-quantity">Quantity</th>
-                                        <th class="product-subtotal">Total</th>
+                                        <th class="product-name"><fmt:message key="product"/></th>
+                                        <th class="product-price"><fmt:message key="price"/></th>
+                                        <th class="product-quantity"><fmt:message key="quantity"/></th>
+                                        <th class="product-subtotal"><fmt:message key="total"/></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -212,7 +190,7 @@
                                     </c:forEach>
                                     <tr>
                                         <td class="actions" colspan="6">
-                                            <input type="submit" value="Update Cart" name="update_cart" class="button">
+                                            <input type="submit" value="<fmt:message key="updateCart"/>" name="update_cart" class="button">
                                             <br>
                                             <br>
                                         </td>
@@ -223,30 +201,30 @@
                             <form action="${pageContext.request.contextPath}/cart" class="checkout" method="get"
                                   name="checkout">
                                 <input type="hidden" name="command" value="clear">
-                                <input type="submit" value="clear cart" id="place" class="button alt">
+                                <input type="submit" value="<fmt:message key="clearCart"/>" id="place" class="button alt">
                             </form>
                         </table>
 
                         <div class="cart-collaterals">
                             <div class="cart_totals ">
-                                <h2>Cart Totals</h2>
+                                <h2><fmt:message key="totalCart"/></h2>
 
                                 <table cellspacing="0">
                                     <tbody>
                                     <tr class="cart-subtotal">
-                                        <th>Cart Subtotal</th>
+                                        <th><fmt:message key="subtotalCart"/></th>
                                         <td><span class="amount">₴${sessionScope.cartInfo.totalPrice}</span></td>
                                     </tr>
 
                                     <tr class="shipping">
-                                        <th>Shipping and Handling</th>
-                                        <td>₴${200 / sessionScope.cartInfo.totalQuantity}</td>
+                                        <th><fmt:message key="ship"/></th>
+                                        <td><fmt:message key="free"/></td>
                                     </tr>
 
                                     <tr class="order-total">
-                                        <th>Order Total</th>
+                                        <th><fmt:message key="orderTotal"/></th>
                                         <td><strong><span
-                                                class="amount">₴${sessionScope.cartInfo.totalPrice + (200 / sessionScope.cartInfo.totalQuantity)}</span></strong>
+                                                class="amount">₴${sessionScope.cartInfo.totalPrice}</span></strong>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -258,60 +236,60 @@
                                 <h2><a onclick="hiddenAllEmptyFields()" class="shipping-calculator-button"
                                        data-toggle="collapse"
                                        href="#calcalute-shipping-wrap" aria-expanded="false"
-                                       aria-controls="calcalute-shipping-wrap">Create order</a></h2>
+                                       aria-controls="calcalute-shipping-wrap"><fmt:message key="orderCreate"/></a></h2>
 
                                 <section id="calcalute-shipping-wrap" class="shipping-calculator-form collapse">
-                                    <label  for="delivery">Delivery service</label>
+                                    <label  for="delivery"><fmt:message key="delivery"/></label>
                                     <p class="form-row form-row-wide">
                                         <select rel="calc_shipping_state" class="country_to_state"
                                                 id="delivery" name="delivery">
-                                            <option disabled>Delivery service</option>
+                                            <option disabled><fmt:message key="delivery"/></option>
                                             <c:forEach items="${sessionScope.payment.delivery.entrySet()}" var="entry">
                                                 <option value="${entry.getKey()}"  <c:if test='${sessionScope.get("order").delivery.equals(entry.getKey())}'>selected</c:if>>${entry.getValue()}</option>
                                             </c:forEach>
                                         </select>
                                     </p>
-                                    <label id="cityLabel" for="city">City</label>
+                                    <label id="cityLabel" for="city"><fmt:message key="city"/></label>
                                     <input type="text" name="city" id="city" value="${sessionScope.get("order").city}">
                                     <p id="errorCity" style="color:red"> ${sessionScope.get("error").get("valCity")}
                                     </p>
-                                    <label id="departmentLabel" for="department">Department number</label>
+                                    <label id="departmentLabel" for="department"><fmt:message key="department"/></label>
                                     <input type="text" name="department" id="department"
                                            value="${sessionScope.get("order").department}">
 
-                                    <label id="streetLabel" for="street">Street</label>
+                                    <label id="streetLabel" for="street"><fmt:message key="Street"/></label>
                                     <input type="text" name="street" id="street"
                                            value="<c:if test='${sessionScope.get("order").department.isBlank()}'>${sessionScope.get("order").street}</c:if>">
-                                    <label id="apartmentLabel" for="apartment">Apartment/House</label>
+                                    <label id="apartmentLabel" for="apartment"><fmt:message key="Apartment/House"/></label>
                                     <input type="text" name="apartment" id="apartment" value="<c:if test='${sessionScope.get("order").department.isBlank()}'>${sessionScope.get("order").house}</c:if>">
-                                    <label id="firstNameLabel" for="firstName">Recipient's name</label>
+                                    <label id="firstNameLabel" for="firstName"><fmt:message key="recName"/></label>
                                     <input type="text" name="firstName" id="firstName" value="${sessionScope.get("order").recipientName}">
                                     <p id="errorName" style="color:red"> ${sessionScope.get("error").get("valName")}
                                     </p>
-                                    <label id="surnameLabel" for="surname">Surname of recipient</label>
+                                    <label id="surnameLabel" for="surname"><fmt:message key="recSurName"/></label>
                                     <input type="text" name="surname" id="surname" value="${sessionScope.get("order").recipientSurname}">
                                     <p id="errorSurname"
                                        style="color:red"> ${sessionScope.get("error").get("valSurname")}
                                     </p>
-                                    <label id="phoneLabel" for="phone">Recipient's phone number</label>
+                                    <label id="phoneLabel" for="phone"><fmt:message key="recPhone"/></label>
                                     <input type="text" name="phone" id="phone" value="${sessionScope.get("order").recipientPhone}">
                                     <p id="errorPhone" style="color:red"> ${sessionScope.get("error").get("valPhone")}
                                     </p>
-                                    <label  for="payment">Payment type</label>
+                                    <label  for="payment"><fmt:message key="payment"/></label>
                                     <p class="form-row form-row-wide">
                                         <select rel="calc_shipping_state" class="country_to_state"
                                                 id="payment" name="payment">
-                                            <option disabled>Payment type</option>
+                                            <option disabled><fmt:message key="payment"/></option>
                                             <c:forEach items="${sessionScope.payment.payment.entrySet()}" var="entry">
                                                 <option value="${entry.getKey()}" <c:if test='${sessionScope.get("order").payment.equals(entry.getKey())}'>selected</c:if>>${entry.getValue()}</option>
                                             </c:forEach>
                                         </select>
                                     </p>
-                                    <label id="cardLabel" for="card">Card number</label>
+                                    <label id="cardLabel" for="card"><fmt:message key="card"/></label>
                                     <input type="text" name="card" id="card" value="${sessionScope.get("order").cardNumber}">
                                     <p id="errorCard" style="color:red"> ${sessionScope.get("error").get("valCard")}
                                     </p>
-                                    <label id="dataLabel" for="data">Validity period</label>
+                                    <label id="dataLabel" for="data"><fmt:message key="per"/></label>
                                     <input type="text" name="data" id="data" value="${sessionScope.get("order").dataCard}">
                                     <p id="errorCardData"
                                        style="color:red"> ${sessionScope.get("error").get("valCardData")}
@@ -323,7 +301,7 @@
                                     <br>
                                     <br>
                                     <p>
-                                        <button class="button" value="1" name="calc_shipping" type="submit">Create
+                                        <button class="button" value="1" name="calc_shipping" type="submit"><fmt:message key="create"/>
                                         </button>
                                     </p>
 

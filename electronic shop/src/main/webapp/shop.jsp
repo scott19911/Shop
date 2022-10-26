@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="customTag" tagdir="/WEB-INF/tags" %>
 <html><head>
   <meta charset="utf-8">
@@ -44,11 +45,11 @@
   <div class="container">
 
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-7">
         <customTag:login></customTag:login>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-5">
         <div class="header-right">
           <ul class="list-unstyled list-inline">
             <a href="/reg" >Sign up</a>
@@ -61,14 +62,7 @@
               </ul>
             </li>
 
-            <li class="dropdown dropdown-small">
-              <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">language :</span><span class="value">English </span><b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">English</a></li>
-                <li><a href="#">French</a></li>
-                <li><a href="#">German</a></li>
-              </ul>
-            </li>
+            <customTag:language></customTag:language>
           </ul>
         </div>
       </div>
@@ -223,7 +217,7 @@
               <input type="hidden" name="cameFrom" id="cameFrom${product.productId}">
               <input type="hidden" name="add" value="${product.productId}">
               <input type="hidden" name="command" value="add">
-              <input type="submit" value="add" id="place" class="button alt">
+              <input type="submit" value="add" id="place${product.productId}" class="button alt">
             </form>
           </div>
         </div>

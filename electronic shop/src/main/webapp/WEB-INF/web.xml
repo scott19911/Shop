@@ -10,6 +10,7 @@
         <servlet-name>CaptchaServlet</servlet-name>
         <servlet-class>com.example.electronicshop.registration.CaptchaServlet</servlet-class>
     </servlet>
+
     <listener>
         <listener-class>com.example.electronicshop.utils.ContextListener</listener-class>
     </listener>
@@ -26,6 +27,38 @@
         <param-name>ImageStorage</param-name>
         <param-value>D:\</param-value>
     </context-param>
+
+
+    <context-param>
+        <param-name>jakarta.servlet.jsp.jstl.fmt.localizationContext</param-name>
+        <param-value>langRes</param-value>
+    </context-param>
+    <context-param>
+        <param-name>localeStorage</param-name>
+        <!-->Possible value's
+            session - locale store in session
+            cookies - locale store in cookie
+        <-->
+        <param-value>session</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>jakarta.servlet.jsp.jstl.fmt.locale</param-name>
+        <param-value>en</param-value>
+    </context-param>
+    <context-param>
+        <param-name>availableLocale</param-name>
+        <param-value>en;uk</param-value>
+    </context-param>
+    <context-param>
+        <param-name>cookiesLives</param-name>
+        <param-value>200</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>locales</param-name>
+        <param-value>/locales.properties</param-value>
+    </context-param>
     <context-param>
         <param-name>dbType</param-name>
         <!-->Possible value's
@@ -38,4 +71,37 @@
         <servlet-name>CaptchaServlet</servlet-name>
         <url-pattern>/captcha</url-pattern>
     </servlet-mapping>
+    <filter>
+        <filter-name>CacheFilter</filter-name>
+        <filter-class>com.example.electronicshop.servletFilters.CacheOffFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CacheFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>LanguageFilter</filter-name>
+        <filter-class>com.example.electronicshop.servletFilters.localization.LocalizationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LanguageFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>GzipFilter</filter-name>
+        <filter-class>com.example.electronicshop.servletFilters.compressionResponse.GZipServletFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>GzipFilter</filter-name>
+        <url-pattern>*.css</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>GzipFilter</filter-name>
+        <url-pattern>*.html</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>GzipFilter</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
 </web-app>
