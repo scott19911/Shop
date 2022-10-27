@@ -162,9 +162,9 @@ class CartImplTest {
         expected.put(product2,1);
         cart.updateCart(request);
         CONNECTION_THREAD_LOCAL.set(connection1);
-        cart.updateCart(request);
-        assertEquals(expected, cart.getCart());
-        assertEquals(expectedSize,cart.totalQuantity());
+        Map<Product, Integer> productIntegerMap = cart.updateCart(request);
+        assertEquals(expected, productIntegerMap);
+        assertEquals(expectedSize,cart.totalQuantity(productIntegerMap));
     }
 
     @Test
@@ -189,9 +189,9 @@ class CartImplTest {
         Map<Product,Integer> expected = new HashMap<>();
         int expectedSize = 1;
         expected.put(product1,1);
-        cart.updateCart(request);
-        assertEquals(expected, cart.getCart());
-        assertEquals(expectedSize,cart.totalQuantity());
+        Map<Product, Integer> productIntegerMap = cart.updateCart(request);
+        assertEquals(expected, productIntegerMap);
+        assertEquals(expectedSize,cart.totalQuantity(productIntegerMap));
     }
 
     @Test
@@ -210,8 +210,8 @@ class CartImplTest {
         when(request.getParameterMap()).thenReturn(parameterMap);
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
         CONNECTION_THREAD_LOCAL.set(connection);
-        cart.updateCart(request);
+        Map<Product, Integer> productIntegerMap = cart.updateCart(request);
         int expected = 5;
-        assertEquals(expected,cart.totalQuantity());
+        assertEquals(expected,cart.totalQuantity(productIntegerMap));
     }
 }

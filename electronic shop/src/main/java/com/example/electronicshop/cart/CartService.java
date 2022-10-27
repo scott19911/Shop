@@ -21,21 +21,21 @@ public interface CartService {
     *
     * @return - quantity of products
     */
-   int totalQuantity();
+   int totalQuantity(Map<Product, Integer> cart);
 
    /**
     * returns the total price of the cart
     *
     * @return - total price of the cart
     */
-   double cartPrice();
+   double cartPrice(Map<Product, Integer> cart);
 
    /**
     * updates the contents of the cart
     *
     * @param request parameter to update Cart
     */
-   void updateCart(HttpServletRequest request);
+   Map<Product, Integer> updateCart(HttpServletRequest request);
 
    /**
     * allows you to empty the shopping cart
@@ -56,5 +56,5 @@ public interface CartService {
     *
     * @return - product cart view class
     */
-   CartInfo getCartInfo();
+   CartInfo getCartInfo(Map<Product, Integer> cart);
 }
