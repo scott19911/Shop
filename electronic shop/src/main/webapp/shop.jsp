@@ -52,17 +52,8 @@
       <div class="col-md-5">
         <div class="header-right">
           <ul class="list-unstyled list-inline">
-            <a href="/reg" >Sign up</a>
-            <li class="dropdown dropdown-small">
-              <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">currency :</span><span class="value">USD </span><b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">USD</a></li>
-                <li><a href="#">INR</a></li>
-                <li><a href="#">GBP</a></li>
-              </ul>
-            </li>
-
-            <customTag:language></customTag:language>
+            <a href="${pageContext.request.contextPath}/reg"><fmt:message key="sign.up" /></a>
+            <customTag:language/>
           </ul>
         </div>
       </div>
@@ -102,13 +93,9 @@
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li><a href="/index.jsp">Home</a></li>
-          <li class="active"><a href="${pageContext.request.contextPath}/shop">Shop page</a></li>
-          <li><a href="single-product.html">Single product</a></li>
-          <li><a href="/cart">Cart</a></li>
-          <li><a href="checkout.html">Checkout</a></li>
-          <li><a href="#">Others</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="/index.jsp"><fmt:message key="home"/></a></li>
+          <li class="active"><a href="${pageContext.request.contextPath}/shop"><fmt:message key="shop"/></a></li>
+          <li><a href="/cart"><fmt:message key="cart"/></a></li>
         </ul>
       </div>
     </div>
@@ -120,7 +107,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="product-bit-title text-center">
-          <h2>Shop</h2>
+          <h2><fmt:message key="shops"/></h2>
         </div>
       </div>
     </div>
@@ -140,7 +127,7 @@
   <br>
   <div class="col-md-2 col-sm-2">
     <select name="pageSize" id="pageSize" onchange="setPageSize(this)">
-      <option value="">Select element on page</option>
+      <option value=""><fmt:message key="quantityEl"/></option>
       <option value="3">3</option>
       <option value="6">6</option>
       <option value="10">10</option>
@@ -148,14 +135,14 @@
     <br>
     <br>
     <select name="orderBy" id="orderBy" onchange="setOrderBy(this)">
-      <option value="">Select order</option>
-      <option value="ASC">price increase</option>
-      <option value="DESC">price reduction</option>
+      <option value=""><fmt:message key="selOrder"/></option>
+      <option value="ASC"><fmt:message key="priceIncrease"/></option>
+      <option value="DESC"><fmt:message key="priceLower"/></option>
     </select>
     <br>
     <br>
     <form action="${pageContext.request.contextPath}/shop" class="checkout" method="get" name="checkout">
-      <p>Price</p>
+      <p><fmt:message key="price"/></p>
       <div class="InputInline">
         <input type="number" name="minPrice" id="minPrice" placeholder="Min" onchange="setPageSize()"
                value="${sessionScope.productData.minPrice}">
@@ -165,11 +152,11 @@
       <input type="hidden" name="pageSize" value="${sessionScope.productData.productFilter.pageSize}">
       <input type="hidden" name="pageSize" value="${sessionScope.productData.productFilter.order}">
       <br>
-      <label for="productName">Product name </label>
+      <label for="productName"><fmt:message key="productName"/></label>
       <input type="text" name="productName" id="productName" value="${sessionScope.productData.productFilter.productName}">
       <br>
       <br>
-      <label for="brand">Choose a brand:</label>
+      <label for="brand"><fmt:message key="chooseBrand"/></label>
       <select multiple="multiple" search='true' name="brand" id="brand" style="width: 98%">
         <c:forEach items="${sessionScope.productData.brandList}" var="brand">
           <option<c:if test="${sessionScope.productData.productFilter != null && sessionScope.productData.productFilter.getBrand().contains(brand)}"> selected</c:if>
@@ -178,7 +165,7 @@
       </select>
       <br>
       <br>
-      <label for="category">Choose a category:</label>
+      <label for="category"><fmt:message key="chooseCategory"/></label>
       <select multiple="multiple" search='true' name="category" id="category" style="width: 98%">
         <c:forEach items="${sessionScope.productData.categoryDTOList}" var="category">
           <option <c:if test="${sessionScope.productData.productFilter != null && sessionScope.productData.productFilter.getCategory().contains(category.categoryId)}"> selected</c:if>
@@ -187,7 +174,7 @@
       </select>
       <br>
       <br>
-      <input type="submit" data-value="Place order" value="Search"
+      <input type="submit" data-value="Place order" value="<fmt:message key="search"/>"
              id="place_order"
              class="button alt">
     </form>
@@ -195,7 +182,7 @@
   <div class="container">
     <div class="row">
       <c:if test="${sessionScope.productData.productList == null || sessionScope.productData.productList.size() == 0}">
-        <h2 style="font-size: xx-large; color: #ac2925">Products not found</h2>
+        <h2 style="font-size: xx-large; color: #ac2925"><fmt:message key="productNotFound"/></h2>
       </c:if>
       <c:forEach items="${sessionScope.productData.productList}" var="product">
         <div class="col-md-offset-3 col-sm-3">
@@ -219,7 +206,7 @@
               <input type="hidden" name="price" value="${product.price}">
               <input type="hidden" name="command" value="update">
               <input type="hidden" name="quantity" value="${sessionScope.cartInfo.cart.get(product) + 1}">
-              <input type="submit" value="add" id="place" class="button alt">
+              <input type="submit" value="<fmt:message key="add"/>" id="place" class="button alt">
             </form>
           </div>
         </div>

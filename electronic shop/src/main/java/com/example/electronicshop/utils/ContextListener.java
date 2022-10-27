@@ -94,7 +94,7 @@ public class ContextListener implements ServletContextListener {
         ImageService imageService = new ImageServiceImpl();
         context.setAttribute(IMAGE_SERVICE, imageService);
         CartRepository cartRepository = new CartRepositoryImpl();
-        CartService cart = new CartImpl(cartRepository, transactionManager);
+        CartService cart = new CartServiceImpl(cartRepository, transactionManager);
         context.setAttribute(CART_SERVICE, cart);
 
         OrderRepository orderRepository = new OrderRepositoryImpl();
