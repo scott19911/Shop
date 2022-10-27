@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import static com.example.electronicshop.constants.Pages.CART_PAGE;
+import static com.example.electronicshop.constants.ServletsName.PRODUCT_LIST_SERVLET;
 import static com.example.electronicshop.service.impl.UploadAvatar.SPECIFIC_USER;
 import static com.example.electronicshop.servlets.CartServlets.CART_INFO;
 
@@ -81,12 +82,13 @@ public class OrderServiceImpl implements OrderService {
         }, Connection.TRANSACTION_READ_COMMITTED);
         if (errorMap  == null || errorMap.isEmpty()) {
             session.removeAttribute("error");
-            response.sendRedirect("/cart?command=clear&cameFrom=/shop");
+            session.removeAttribute(CART_INFO);
+            response.sendRedirect(PRODUCT_LIST_SERVLET);
         }
     }
 
     @Override
-    public OrderDetails orderVerifier(HttpServletRequest request, HttpServletResponse response){
+    public OrderDetails orderVerifier(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         OrderDetails orderDetails = validateOrder.readRequest(request);
         errorMap = validateOrder.validate(orderDetails);
@@ -94,6 +96,8 @@ public class OrderServiceImpl implements OrderService {
         SpecificUser user = (SpecificUser) session.getAttribute(SPECIFIC_USER);
         if (cartInfo == null || cartInfo.getCart() == null) {
             errorMap.put("cartError", "Cart is empty");
+            session.setAttribute("error", errorMap);
+            response.sendRedirect(CART_PAGE);
         } else {
             cartInfo.setCart(orderDetails.getOrderCart());
             orderDetails.setTotalPrice(cartInfo.getTotalPrice());
