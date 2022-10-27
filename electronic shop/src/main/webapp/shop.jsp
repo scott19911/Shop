@@ -221,8 +221,10 @@
 
             <form action="${pageContext.request.contextPath}/cart" class="checkout" method="get" name="checkout" onsubmit="setInput(${product.productId})">
               <input type="hidden" name="cameFrom" id="cameFrom${product.productId}">
-              <input type="hidden" name="add" value="${product.productId}">
-              <input type="hidden" name="command" value="add">
+              <input type="hidden" name="id" value="${product.productId}">
+              <input type="hidden" name="price" value="${product.price}">
+              <input type="hidden" name="command" value="update">
+              <input type="hidden" name="quantity" value="${sessionScope.cartInfo.cart.get(product) + 1}">
               <input type="submit" value="add" id="place" class="button alt">
             </form>
           </div>

@@ -24,9 +24,9 @@ import static com.example.electronicshop.service.impl.UploadAvatar.SPECIFIC_USER
 import static com.example.electronicshop.servlets.CartServlets.CART_INFO;
 
 public class OrderServiceImpl implements OrderService {
-    private OrderRepository orderRepository;
-    private TransactionManager transactionManager;
-    private ValidateOrder validateOrder;
+    private final OrderRepository orderRepository;
+    private final TransactionManager transactionManager;
+    private final ValidateOrder validateOrder;
     private Map<String, String> errorMap;
 
     public OrderServiceImpl(OrderRepository orderRepository, TransactionManager transactionManager, ValidateOrder validateOrder) {
@@ -46,13 +46,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void createOrder(OrderDetailsDTO orderDetailsDTO, SpecificUser user) {
-        Order order = orderDetailsDTO.getOrder();
-        order.setUserId(user.getUserId());
+    public void createOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();
+        OrderDetails orderDetails = orderVerifier(request,response);
+        Order order = orderDetails.getOrder();
+        SpecificUser user = (SpecificUser) session.getAttribute(SPECIFIC_USER);
+        if (user != null) {
+            order.setUserId(user.getUserId());
+        }
         order.setStatusId(1);
         order.setDate(new Date());
         transactionManager.doInTransaction(() -> {
-            for (Entry<Product, Integer> entry : orderDetailsDTO.getOrderCart().entrySet()
+            for (Entry<Product, Integer> entry : orderDetails.getOrderCart().entrySet()
             ) {
                 int quantity = orderRepository.getAvailableQuantity(entry.getKey().getProductId());
                 if (entry.getValue() > quantity) {
@@ -62,40 +67,41 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
             if (!errorMap.isEmpty()) {
+                session.setAttribute("error", errorMap);
+                try {
+                    response.sendRedirect(CART_PAGE);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 throw new SQLException();
             }
-            order.setReceiverId(orderRepository.insertRecipient(orderDetailsDTO, user.getUserId()));
+            order.setReceiverId(orderRepository.insertRecipient(orderDetails, user.getUserId()));
             order.setOrderId(orderRepository.insertOrder(order));
             return orderRepository.insertOrderDetails(order);
         }, Connection.TRANSACTION_READ_COMMITTED);
+        if (errorMap  == null || errorMap.isEmpty()) {
+            session.removeAttribute("error");
+            response.sendRedirect("/cart?command=clear&cameFrom=/shop");
+        }
     }
 
     @Override
-    public void orderVerifier(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public OrderDetails orderVerifier(HttpServletRequest request, HttpServletResponse response){
         HttpSession session = request.getSession();
-        OrderDetailsDTO orderDetailsDTO = validateOrder.readRequest(request);
-        errorMap = validateOrder.validate(orderDetailsDTO);
+        OrderDetails orderDetails = validateOrder.readRequest(request);
+        errorMap = validateOrder.validate(orderDetails);
         CartInfo cartInfo = (CartInfo) session.getAttribute(CART_INFO);
         SpecificUser user = (SpecificUser) session.getAttribute(SPECIFIC_USER);
         if (cartInfo == null || cartInfo.getCart() == null) {
             errorMap.put("cartError", "Cart is empty");
         } else {
-            cartInfo.setCart(orderDetailsDTO.getOrderCart());
-            orderDetailsDTO.setTotalPrice(cartInfo.getTotalPrice());
+            cartInfo.setCart(orderDetails.getOrderCart());
+            orderDetails.setTotalPrice(cartInfo.getTotalPrice());
         }
         if (user == null) {
             errorMap.put("userError", "First you need to log in or register");
-        } else {
-            createOrder(orderDetailsDTO, user);
         }
-        if (errorMap.isEmpty()) {
-            session.removeAttribute("error");
-            response.sendRedirect("/cart?command=clear&cameFrom=/shop");
-        } else {
-            session.setAttribute("order", orderDetailsDTO);
-            session.setAttribute("error", errorMap);
-            response.sendRedirect(CART_PAGE);
-        }
+        return orderDetails;
     }
 
     @Override

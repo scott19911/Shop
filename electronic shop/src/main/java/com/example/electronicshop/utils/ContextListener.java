@@ -1,7 +1,7 @@
 package com.example.electronicshop.utils;
 
 import com.example.electronicshop.cart.CartService;
-import com.example.electronicshop.cart.CartImpl;
+import com.example.electronicshop.cart.CartServiceImpl;
 import com.example.electronicshop.dao.CartRepository;
 import com.example.electronicshop.dao.CartRepositoryImpl;
 import com.example.electronicshop.dao.ConverterResultSet;
@@ -81,7 +81,7 @@ public class ContextListener implements ServletContextListener {
         ImageService imageService = new ImageServiceImpl();
         context.setAttribute(IMAGE_SERVICE, imageService);
         CartRepository cartRepository = new CartRepositoryImpl();
-        CartService cart = new CartImpl(cartRepository, transactionManager);
+        CartService cart = new CartServiceImpl(cartRepository, transactionManager);
         context.setAttribute(CART_SERVICE, cart);
 
         OrderRepository orderRepository = new OrderRepositoryImpl();

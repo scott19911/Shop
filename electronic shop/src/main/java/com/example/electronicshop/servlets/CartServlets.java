@@ -22,10 +22,8 @@ public class CartServlets extends HttpServlet {
     public static final String REQUEST_CAME_FROM = "cameFrom";
     public static final String DELIVERY_AND_PAYMENT = "payment";
     public static final String COMMAND = "command";
-    public static final String COMMAND_ADD = "add";
     public static final String COMMAND_DELETE_PRODUCT = "delete";
-    public static final String COMMAND_UPDATE_PRODUCT = "update";
-    public static final String COMMAND_CLEAR_CART = "clear";
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -33,9 +31,11 @@ public class CartServlets extends HttpServlet {
         OrderService orderService = (OrderService) req.getServletContext().getAttribute(ORDER_SERVICE);
         DeliveryAndPayment deliveryAndPayment = orderService.getDeliveryPayment();
         String cameFrom = req.getParameter(REQUEST_CAME_FROM);
-        executeCommand(req, cartService);
         HttpSession session = req.getSession();
-        session.setAttribute(CART_INFO, cartService.getCartInfo());
+        if(req.getParameter(COMMAND) != null){
+            cartService.updateCart(req);
+            session.setAttribute(CART_INFO, cartService.getCartInfo());
+        }
         session.setAttribute(DELIVERY_AND_PAYMENT, deliveryAndPayment);
         if (cameFrom != null) {
             resp.sendRedirect(cameFrom);
@@ -44,25 +44,5 @@ public class CartServlets extends HttpServlet {
         }
     }
 
-    private void executeCommand(HttpServletRequest req, CartService cartService) {
-        String command = "";
-        if (req.getParameter(COMMAND) != null) {
-            command = req.getParameter(COMMAND);
-        }
-        switch (command) {
-            case COMMAND_ADD:
-                cartService.addProduct(req);
-                break;
-            case COMMAND_UPDATE_PRODUCT:
-                cartService.updateCart(req);
-                break;
-            case COMMAND_DELETE_PRODUCT:
-                cartService.deleteProduct(req);
-                break;
-            case COMMAND_CLEAR_CART:
-                cartService.clearCart(req);
-                break;
-        }
-    }
 
 }

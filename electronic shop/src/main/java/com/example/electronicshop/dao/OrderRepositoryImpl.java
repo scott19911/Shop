@@ -1,7 +1,7 @@
 package com.example.electronicshop.dao;
 
 import com.example.electronicshop.order.Order;
-import com.example.electronicshop.order.OrderDetailsDTO;
+import com.example.electronicshop.order.OrderDetails;
 import com.example.electronicshop.order.OrderInfo;
 import com.example.electronicshop.products.Product;
 import com.example.electronicshop.utils.ConnectionPool;
@@ -84,7 +84,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public int insertRecipient(OrderDetailsDTO orderDTO, int userId) {
+    public int insertRecipient(OrderDetails orderDTO, int userId) {
         connection = ConnectionPool.getConnectionThreadLocal().get();
         try (PreparedStatement stm = connection.prepareStatement(INSERT_RECEIVER, Statement.RETURN_GENERATED_KEYS)) {
             stm.setInt(1,userId);

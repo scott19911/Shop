@@ -37,7 +37,7 @@ class OrderServiceImplTest {
         when(request.getParameter("surname")).thenReturn("Verizhenko");
         when(request.getParameter("delivery")).thenReturn("1");
         when(request.getParameter("payment")).thenReturn("1");
-        OrderDetailsDTO orderDetailsDTO = OrderDetailsDTO.newBuilder().setCity("Kharkov").setRecipientName("Andrii")
+        OrderDetails orderDetailsDTO = OrderDetails.newBuilder().setCity("Kharkov").setRecipientName("Andrii")
                 .setPhone("0988398205").setRecipientSurname("Verizhenko").setStreet("Prospekt Haharina").setHouse("38a").build();
         orderDetailsDTO.setDepartment("2");
         orderDetailsDTO.setPayment(1);

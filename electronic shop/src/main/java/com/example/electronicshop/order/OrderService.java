@@ -1,11 +1,10 @@
 package com.example.electronicshop.order;
-
-import com.example.electronicshop.users.SpecificUser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+
 
 public interface OrderService {
     /**
@@ -16,10 +15,10 @@ public interface OrderService {
     /**
      * Create new order
      *
-     * @param orderDetailsDTO - order information
-     * @param user            - which create order
+     * @param request - order information request
+     * @param response- for the request
      */
-    void createOrder(OrderDetailsDTO orderDetailsDTO, SpecificUser user);
+    void createOrder(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
     /**
      * Checks all the necessary data to create an order
@@ -28,6 +27,6 @@ public interface OrderService {
      * @param response - for the request
      * @throws IOException when can't send redirect response
      */
-    void orderVerifier(HttpServletRequest request, HttpServletResponse response) throws IOException;
+    OrderDetails orderVerifier(HttpServletRequest request, HttpServletResponse response) throws IOException;
     void showUserOrders(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 }
