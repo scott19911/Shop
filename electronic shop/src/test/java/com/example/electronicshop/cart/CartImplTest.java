@@ -7,7 +7,6 @@ import com.example.electronicshop.products.Product;
 import com.example.electronicshop.products.ProductFilter;
 import com.example.electronicshop.utils.ConnectionPool;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,12 +20,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.electronicshop.cart.CartImpl.ID;
-import static com.example.electronicshop.cart.CartImpl.PRICE;
-import static com.example.electronicshop.cart.CartImpl.QUANTITY;
+import static com.example.electronicshop.cart.CartServiceImpl.ID;
+import static com.example.electronicshop.cart.CartServiceImpl.PRICE;
+import static com.example.electronicshop.cart.CartServiceImpl.QUANTITY;
 import static com.example.electronicshop.dao.ProductRepositoryImpl.ORDER_DESC;
-import static com.example.electronicshop.servlets.CartServlets.ADD_TO_CART;
-import static com.example.electronicshop.servlets.CartServlets.COMMAND_DELETE_PRODUCT;
+import static com.example.electronicshop.servlets.CartServlets.CART_INFO;
+import static com.example.electronicshop.servlets.CartServlets.COMMAND;
 import static com.example.electronicshop.utils.ConnectionPool.CONNECTION_THREAD_LOCAL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -49,7 +48,7 @@ class CartImplTest {
     public CategoryDTO categoryDTO4;
     public List<CategoryDTO> categoryDTOList;
     public List<String> brandList = new ArrayList<>();
-    public CartImpl cart = new CartImpl(new CartRepositoryImpl(), new TransactionManager());
+    public CartServiceImpl cart = new CartServiceImpl(new CartRepositoryImpl(), new TransactionManager());
 
     @BeforeEach
     void init() throws SQLException {
@@ -151,14 +150,19 @@ class CartImplTest {
         HttpSession session = mock(HttpSession.class);
         when(request.getSession(false)).thenReturn(session);
         when(session.getAttribute(any())).thenReturn(null);
-        when(request.getParameter(ADD_TO_CART)).thenReturn("1").thenReturn("2");
+        Map<String, String[]> parameterMap = new HashMap<>();
+        when(request.getParameter(COMMAND)).thenReturn("update");
+        parameterMap.put(ID,new String[]{"1","2"});
+        parameterMap.put(PRICE,new String[]{"69999","61999"});
+        parameterMap.put(QUANTITY,new String[]{"1","1"});
+        when( request.getParameterMap()).thenReturn(parameterMap);
         Map<Product,Integer> expected = new HashMap<>();
         int expectedSize = 2;
         expected.put(product1,1);
         expected.put(product2,1);
-        cart.addProduct(request);
+        cart.updateCart(request);
         CONNECTION_THREAD_LOCAL.set(connection1);
-        cart.addProduct(request);
+        cart.updateCart(request);
         assertEquals(expected, cart.getCart());
         assertEquals(expectedSize,cart.totalQuantity());
     }
@@ -168,12 +172,24 @@ class CartImplTest {
         shouldReturnCartSize2_whenAddTwoProducts();
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1991");
         CONNECTION_THREAD_LOCAL.set(connection);
-        when(request.getParameter(COMMAND_DELETE_PRODUCT)).thenReturn("2");
-        when(request.getParameter(PRICE)).thenReturn(String.valueOf(product2.getPrice()));
+        when(request.getParameter(COMMAND)).thenReturn("update");
+        Map<String, String[]> parameterMap = new HashMap<>();
+        parameterMap.put(ID,new String[]{"2"});
+        parameterMap.put(PRICE,new String[]{"61999"});
+        parameterMap.put(QUANTITY,new String[]{"0"});
+        when( request.getParameterMap()).thenReturn(parameterMap);
+        HttpSession session = mock(HttpSession.class);
+        when(request.getSession(false)).thenReturn(session);
+        CartInfo cartInfo = new CartInfo();
+        Map<Product,Integer> cartMap = new HashMap<>();
+        cartMap.put(product1,1);
+        cartMap.put(product2,2);
+        cartInfo.setCart(cartMap);
+        when(session.getAttribute(CART_INFO)).thenReturn(cartInfo);
         Map<Product,Integer> expected = new HashMap<>();
         int expectedSize = 1;
         expected.put(product1,1);
-        cart.deleteProduct(request);
+        cart.updateCart(request);
         assertEquals(expected, cart.getCart());
         assertEquals(expectedSize,cart.totalQuantity());
     }

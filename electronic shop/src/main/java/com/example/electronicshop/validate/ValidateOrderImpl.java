@@ -2,7 +2,7 @@ package com.example.electronicshop.validate;
 
 import com.example.electronicshop.cart.CartInfo;
 import com.example.electronicshop.order.DeliveryNP;
-import com.example.electronicshop.order.OrderDetailsDTO;
+import com.example.electronicshop.order.OrderDetails;
 import com.example.electronicshop.products.Product;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -20,9 +20,9 @@ public class ValidateOrderImpl implements ValidateOrder {
     private final static int DELIVERY_UKRPOSHTA = 2;
 
     @Override
-    public OrderDetailsDTO readRequest(HttpServletRequest request) {
+    public OrderDetails readRequest(HttpServletRequest request) {
         int delivery = 0;
-        OrderDetailsDTO orderDetailsDTO;
+        OrderDetails orderDetailsDTO;
         if (request.getParameter("delivery") != null) {
             try {
                 delivery = Integer.parseInt(request.getParameter("delivery"));
@@ -60,7 +60,7 @@ public class ValidateOrderImpl implements ValidateOrder {
     }
 
     @Override
-    public Map<String, String> validate(OrderDetailsDTO orderDetails) {
+    public Map<String, String> validate(OrderDetails orderDetails) {
         Map<String, String> errorMap = new HashMap<>();
         String regexName = "^[\\w'а-яА-Я\\-,.][^0-9_!¡?÷?¿/\\\\+=@#$%ˆ&*(){}|~<>;:]{2,}";
         String regexCity = "^[a-zA-Zа-яА-Я]+(?:[\\s-][a-zA-Zа-яА-Я]+)*$";
@@ -81,7 +81,7 @@ public class ValidateOrderImpl implements ValidateOrder {
         return errorMap;
     }
 
-    private OrderDetailsDTO deliveryNP(HttpServletRequest request) {
+    private OrderDetails deliveryNP(HttpServletRequest request) {
         int department = 0;
         if (request.getParameter("department") != null) {
             try {
@@ -91,22 +91,22 @@ public class ValidateOrderImpl implements ValidateOrder {
             }
         }
         DeliveryNP deliveryNP = new DeliveryNP(department);
-        return OrderDetailsDTO.newBuilder().setCity(request.getParameter("city")).setHouse(deliveryNP.getHouse())
+        return OrderDetails.newBuilder().setCity(request.getParameter("city")).setHouse(deliveryNP.getHouse())
                 .setPhone(request.getParameter("phone")).setStreet(deliveryNP.getStreet())
                 .setRecipientName(request.getParameter("firstName")).setRecipientSurname(request.getParameter("surname"))
                 .build();
     }
 
-    private OrderDetailsDTO deliveryUkrPoshta(HttpServletRequest request) {
-        return OrderDetailsDTO.newBuilder().setCity(request.getParameter("city")).setHouse(request.getParameter("apartment"))
+    private OrderDetails deliveryUkrPoshta(HttpServletRequest request) {
+        return OrderDetails.newBuilder().setCity(request.getParameter("city")).setHouse(request.getParameter("apartment"))
                 .setPhone(request.getParameter("phone")).setStreet(request.getParameter("street"))
                 .setRecipientName(request.getParameter("firstName")).setRecipientSurname(request.getParameter("surname"))
                 .build();
 
     }
 
-    private OrderDetailsDTO deliveryPickUp(HttpServletRequest request) {
-        return OrderDetailsDTO.newBuilder().setCity(SHOP_CITY).setHouse(SHOP_HOUSE)
+    private OrderDetails deliveryPickUp(HttpServletRequest request) {
+        return OrderDetails.newBuilder().setCity(SHOP_CITY).setHouse(SHOP_HOUSE)
                 .setPhone(request.getParameter("phone")).setStreet(SHOP_STREET)
                 .setRecipientName(request.getParameter("firstName")).setRecipientSurname(request.getParameter("surname"))
                 .build();

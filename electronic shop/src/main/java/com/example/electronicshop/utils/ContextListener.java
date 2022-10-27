@@ -1,7 +1,7 @@
 package com.example.electronicshop.utils;
 
-import com.example.electronicshop.cart.CartImpl;
 import com.example.electronicshop.cart.CartService;
+import com.example.electronicshop.cart.CartServiceImpl;
 import com.example.electronicshop.dao.CartRepository;
 import com.example.electronicshop.dao.CartRepositoryImpl;
 import com.example.electronicshop.dao.ConverterResultSet;

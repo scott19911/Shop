@@ -15,6 +15,6 @@ public class OrderServlets extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         OrderService orderService = (OrderService) req.getServletContext().getAttribute(ORDER_SERVICE);
-        orderService.orderVerifier(req,resp);
+        orderService.createOrder(req,resp);
     }
 }

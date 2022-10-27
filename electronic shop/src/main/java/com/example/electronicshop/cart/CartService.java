@@ -2,8 +2,6 @@ package com.example.electronicshop.cart;
 
 import com.example.electronicshop.products.Product;
 import jakarta.servlet.http.HttpServletRequest;
-
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,34 +15,6 @@ public interface CartService {
     * @param cart - new cart
     */
    void setCart(Map<Product, Integer> cart);
-
-   /**
-    * add new item to cart
-    *
-    * @param request - parameter to add the element
-    */
-   void addProduct(HttpServletRequest request);
-
-   /**
-    * * delete item from cart
-    *
-    * @param request - parameter to remove the element
-    */
-   void deleteProduct(HttpServletRequest request);
-
-   /**
-    * allows you to get a list of items in the shopping cart
-    *
-    * @return - list of products
-    */
-   List<Product> productsInCart();
-
-   /**
-    * allows you to get a quantity of product in the shopping cart
-    *
-    * @return - quantity of product
-    */
-   int productQuantity(int productId);
 
    /**
     * allows you to get a quantity of products in the shopping cart

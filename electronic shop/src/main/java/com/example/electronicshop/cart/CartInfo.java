@@ -36,4 +36,13 @@ public class CartInfo {
     public void setCart(Map<Product, Integer> cart) {
         this.cart = cart;
     }
+
+    @Override
+    public String toString() {
+        return "CartInfo{" +
+                "totalPrice=" + totalPrice +
+                ", totalQuantity=" + totalQuantity +
+                ", cart=" + cart +
+                '}';
+    }
 }

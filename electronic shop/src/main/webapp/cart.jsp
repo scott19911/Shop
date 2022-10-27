@@ -151,7 +151,7 @@
                                         <tr class="cart_item">
                                             <td class="product-remove">
                                                 <a title="Remove this item" class="remove"
-                                                   href="/cart?command=delete&delete=${entry.getKey().productId}&price=${entry.getKey().price}">×</a>
+                                                   href="/cart?command=update&id=${entry.getKey().productId}&price=${entry.getKey().price}&quantity=0">×</a>
                                             </td>
 
                                             <td class="product-thumbnail">

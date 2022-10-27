@@ -5,7 +5,7 @@ import com.example.electronicshop.products.Product;
 
 import java.util.Map;
 
-public class OrderDetailsDTO {
+public class OrderDetails {
     private String city;
     private String recipientName;
     private String recipientSurname;
@@ -134,62 +134,62 @@ public class OrderDetailsDTO {
     }
 
     public static OrderDetailsDTOBuilder newBuilder() {
-        return new OrderDetailsDTO().new OrderDetailsDTOBuilder();
+        return new OrderDetails().new OrderDetailsDTOBuilder();
     }
 
     public class OrderDetailsDTOBuilder {
 
         public OrderDetailsDTOBuilder setCity(String city) {
             if (city != null && !city.isBlank()) {
-                OrderDetailsDTO.this.city = city;
+                OrderDetails.this.city = city;
             }
             return this;
         }
 
         public OrderDetailsDTOBuilder setRecipientName(String recipientName) {
             if (recipientName != null && !recipientName.isBlank()) {
-                OrderDetailsDTO.this.recipientName = recipientName;
+                OrderDetails.this.recipientName = recipientName;
             }
             return this;
         }
 
         public OrderDetailsDTOBuilder setRecipientSurname(String recipientSurname) {
             if (recipientSurname != null && !recipientSurname.isBlank()) {
-                OrderDetailsDTO.this.recipientSurname = recipientSurname;
+                OrderDetails.this.recipientSurname = recipientSurname;
             }
             return this;
         }
 
         public OrderDetailsDTOBuilder setStreet(String street) {
             if (street != null && !street.isBlank()) {
-                OrderDetailsDTO.this.street = street;
+                OrderDetails.this.street = street;
             }
             return this;
         }
 
         public OrderDetailsDTOBuilder setPhone(String phone) {
             if (phone != null && !phone.isBlank()) {
-                OrderDetailsDTO.this.recipientPhone = phone;
+                OrderDetails.this.recipientPhone = phone;
             }
             return this;
         }
 
         public OrderDetailsDTOBuilder setHouse(String house) {
             if (house != null && !house.isBlank()) {
-                OrderDetailsDTO.this.house = house;
+                OrderDetails.this.house = house;
             }
             return this;
         }
 
         public OrderDetailsDTOBuilder setCart(Map<Product, Integer> cart) {
             if (cart != null && !cart.isEmpty()) {
-                OrderDetailsDTO.this.orderCart = cart;
+                OrderDetails.this.orderCart = cart;
             }
             return this;
         }
 
-        public OrderDetailsDTO build() {
-            return OrderDetailsDTO.this;
+        public OrderDetails build() {
+            return OrderDetails.this;
         }
     }
 
@@ -224,9 +224,9 @@ public class OrderDetailsDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof OrderDetailsDTO)) return false;
+        if (!(o instanceof OrderDetails)) return false;
 
-        OrderDetailsDTO that = (OrderDetailsDTO) o;
+        OrderDetails that = (OrderDetails) o;
 
         if (getDelivery() != that.getDelivery()) return false;
         if (getPayment() != that.getPayment()) return false;
