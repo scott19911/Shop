@@ -9,7 +9,7 @@ function validateForm() {
     var email = document.forms["checkout"]["billing_email"].value;
     var password = document.forms["checkout"]["account_password"].value;
     var captcha = document.forms["checkout"]["captcha"].value;
-    var regexName = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/;
+    var regexName = /^[\w'а-яА-Я\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/;
     var regexEmail = /^([_\-\.0-9a-zA-Z]+)@([_\-\.0-9a-zA-Z]+)\.([a-zA-Z]){2,7}$/;
     var regexCaptcha = /^[0-9]{6}$/;
     var validName = valid(name, "First Name is missing or incorrect", regexName, "demo");

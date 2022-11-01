@@ -6,17 +6,16 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class TransactionManager {
-    public ConnectionPool pool;
 
-    public TransactionManager(ConnectionPool pool) {
-        this.pool = pool;
+    public TransactionManager() {
+
     }
 
     public<E>  E doInTransaction(TransactionOperation<E> transactionOperation, int transactionIsolation) {
         E result = null;
         Connection connection = null;
         try {
-            connection = pool.getConnection();
+            connection = ConnectionPool.getConnectionThreadLocal().get();
             connection.setAutoCommit(false);
             connection.setTransactionIsolation(transactionIsolation);
             result = transactionOperation.operation();
@@ -47,8 +46,9 @@ public class TransactionManager {
         E result;
         Connection connection = null;
         try {
-            connection = pool.getConnection();
+            connection = ConnectionPool.getConnectionThreadLocal().get();
             result = transactionOperation.operation();
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {

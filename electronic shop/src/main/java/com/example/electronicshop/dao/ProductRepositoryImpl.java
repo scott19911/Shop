@@ -34,7 +34,6 @@ public class ProductRepositoryImpl implements ProductRepository {
     public static final String QUANTITY = "quantity";
     public static final String MIN = "min";
     public static final String MAX = "max";
-    public ConnectionPool connectionPool;
     public static final String COUNT_PRODUCT = "SELECT COUNT(idproducts) as quantity," +
             " MIN(price) as min, MAX(price) as max FROM products ";
     public Connection connection;
@@ -42,15 +41,14 @@ public class ProductRepositoryImpl implements ProductRepository {
     /**
      * Constructor with connection pool initialization
      *
-     * @param connectionPool - db connection pool
      */
-    public ProductRepositoryImpl(ConnectionPool connectionPool) {
-        this.connectionPool = connectionPool;
-        connection = connectionPool.getConnection();
+    public ProductRepositoryImpl() {
+
     }
 
     @Override
     public List<String> getUniqueBrand() {
+        connection = ConnectionPool.getConnectionThreadLocal().get();
         ConverterResultSet converterResultSet = new ConverterResultSet();
         try (PreparedStatement stm = connection.prepareStatement(SELECT_UNIQUE_BRAND)) {
             stm.executeQuery();
@@ -59,11 +57,11 @@ public class ProductRepositoryImpl implements ProductRepository {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
-
     }
 
     @Override
     public List<CategoryDTO> getCategory() {
+        connection = ConnectionPool.getConnectionThreadLocal().get();
         ConverterResultSet converterResultSet = new ConverterResultSet();
         try (PreparedStatement stm = connection.prepareStatement(SELECT_CATEGORY)) {
             stm.executeQuery();
@@ -72,11 +70,11 @@ public class ProductRepositoryImpl implements ProductRepository {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
-
     }
 
     @Override
     public List<Product> getFiltered(ProductFilter filter) {
+        connection = ConnectionPool.getConnectionThreadLocal().get();
         ConverterResultSet converterResultSet = new ConverterResultSet();
         String selectProduct = getFilterSelect(filter);
         try (PreparedStatement stm = connection.prepareStatement(selectProduct)) {
@@ -90,6 +88,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public ProductDataDTO countFiltered(ProductFilter filter) {
+        connection = ConnectionPool.getConnectionThreadLocal().get();
         ProductDataDTO productData = new ProductDataDTO();
         String selectProduct = getFilterSelect(filter);
         selectProduct = selectProduct.replace(SELECT_ALL_PRODUCTS, COUNT_PRODUCT);
@@ -164,7 +163,7 @@ public class ProductRepositoryImpl implements ProductRepository {
      * Query string builder
      */
     public static class Builder {
-        private final StringBuilder sqlSelect = new StringBuilder("SELECT * FROM products ");
+        private final StringBuilder sqlSelect = new StringBuilder("SELECT * FROM products ").append("WHERE quantity>0");
 
         public Builder priceFrom(int minPrice) {
             if (minPrice > 0) {

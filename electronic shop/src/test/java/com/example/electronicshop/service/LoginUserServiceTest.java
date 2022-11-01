@@ -61,8 +61,8 @@ class LoginUserServiceTest {
         when(request.getParameter(EMAIL)).thenReturn("admin@gmail.com");
         when(request.getParameter(PASSWORD)).thenReturn("123");
         LoginUserService loginUserService = new LoginUserService(
-                new MySqlUserDao(new ConverterResultSet(),connectionPool),
-                new TransactionManager(connectionPool),
+                new MySqlUserDao(new ConverterResultSet()),
+                new TransactionManager(),
                 new ValidateLoginFormImpl());
         loginUserService.login(request,response);
         SpecificUser specificUser = mock(SpecificUser.class);

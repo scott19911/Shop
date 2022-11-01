@@ -85,7 +85,8 @@
 
       <div class="col-sm-6">
         <div class="shopping-item">
-          <a href="cart.html">Cart - <span class="cart-amunt">$800</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">5</span></a>
+          <a href="/cart">Cart - <span class="cart-amunt">₴${sessionScope.cartInfo.totalPrice}</span> <i class="fa fa-shopping-cart"></i> <span
+                  class="product-count">${sessionScope.cartInfo.totalQuantity}</span></a>
         </div>
       </div>
     </div>
@@ -108,7 +109,7 @@
                     <li class="active"><a href="index.html">Home</a></li>
                     <li><a href="/shop">Shop page</a></li>
                     <li><a href="single-product.html">Single product</a></li>
-                    <li><a href="cart.html">Cart</a></li>
+                    <li><a href="/cart">Cart</a></li>
                     <li><a href="checkout.html">Checkout</a></li>
                     <li><a href="#">Category</a></li>
                     <li><a href="#">Others</a></li>

@@ -43,8 +43,8 @@ class UserServiceDBTest {
 
     @Test
     void shouldReturn0_whenEntered_registerEmail() {
-        UserServiceDB userServiceDB = new UserServiceDB(new MySqlUserDao(new ConverterResultSet(), connectionPool),
-                new TransactionManager(connectionPool));
+        UserServiceDB userServiceDB = new UserServiceDB(new MySqlUserDao(new ConverterResultSet()),
+                new TransactionManager());
         int expected = 0;
         User user = new User("admin@gmail.com");
         assertEquals(expected,userServiceDB.createUser(user));
@@ -52,8 +52,8 @@ class UserServiceDBTest {
     }
     @Test
     void shouldReturn3_whenEntered_newUser() {
-        UserServiceDB userServiceDB = new UserServiceDB(new MySqlUserDao(new ConverterResultSet(), connectionPool),
-                new TransactionManager(connectionPool));
+        UserServiceDB userServiceDB = new UserServiceDB(new MySqlUserDao(new ConverterResultSet()),
+                new TransactionManager());
         int expected = 3;
         User user = new User();
         user.setEmail("user@gmail.com");
@@ -67,8 +67,8 @@ class UserServiceDBTest {
 
     @Test
     void shouldReturnList_ofUsers_withTwoUsers_whenGetAllUser() {
-        UserServiceDB userServiceDB = new UserServiceDB(new MySqlUserDao(new ConverterResultSet(), connectionPool),
-                new TransactionManager(connectionPool));
+        UserServiceDB userServiceDB = new UserServiceDB(new MySqlUserDao(new ConverterResultSet()),
+                new TransactionManager());
         List<User> userList = userServiceDB.getAllUser();
         String[] expectedEmail = {"admin@gmail.com", "admin1@gmail.com"};
         int expectedLength = 2;
@@ -79,8 +79,8 @@ class UserServiceDBTest {
     }
     @Test
     void shouldDeleteUser_whenUserIdIsExist() throws SQLException {
-        UserServiceDB userServiceDB = new UserServiceDB(new MySqlUserDao(new ConverterResultSet(), connectionPool),
-                new TransactionManager(connectionPool));
+        UserServiceDB userServiceDB = new UserServiceDB(new MySqlUserDao(new ConverterResultSet()),
+                new TransactionManager());
         List<User> userList = userServiceDB.getAllUser();
         String[] expectedEmail = {"admin@gmail.com", "admin1@gmail.com"};
         int expectedLength = 2;
@@ -90,8 +90,8 @@ class UserServiceDBTest {
         ConnectionPool dbUtils = mock(ConnectionPool.class);
         when(dbUtils.getConnection())
                 .thenReturn(connection);
-        UserServiceDB userServiceDB0 = new UserServiceDB(new MySqlUserDao(new ConverterResultSet(), dbUtils),
-                new TransactionManager(dbUtils));
+        UserServiceDB userServiceDB0 = new UserServiceDB(new MySqlUserDao(new ConverterResultSet()),
+                new TransactionManager());
         assertEquals(expectedLength,userList.size());
         userServiceDB0.deleteUser(userList.get(0).getId());
 
@@ -100,8 +100,8 @@ class UserServiceDBTest {
         ConnectionPool dbUtils1 = mock(ConnectionPool.class);
         when(dbUtils1.getConnection())
                 .thenReturn(connection1);
-        UserServiceDB userServiceDB1 = new UserServiceDB(new MySqlUserDao(new ConverterResultSet(), dbUtils1),
-                new TransactionManager(dbUtils1));
+        UserServiceDB userServiceDB1 = new UserServiceDB(new MySqlUserDao(new ConverterResultSet()),
+                new TransactionManager());
 
         List<User> userList1 = userServiceDB1.getAllUser();
         assertEquals(expectedLengthAfterDelete,userList1.size());
@@ -113,8 +113,8 @@ class UserServiceDBTest {
 
     @Test
     void shouldUpdateUser_whenEnteredNewUserData() throws SQLException {
-        UserServiceDB userServiceDB = new UserServiceDB(new MySqlUserDao(new ConverterResultSet(), connectionPool),
-                new TransactionManager(connectionPool));
+        UserServiceDB userServiceDB = new UserServiceDB(new MySqlUserDao(new ConverterResultSet()),
+                new TransactionManager());
         User newUser = new User();
         newUser.setId(1);
         newUser.setEmail("newEmail@gmaile.com");
@@ -125,8 +125,8 @@ class UserServiceDBTest {
         when(dbUtils1.getConnection())
                 .thenReturn(connection1);
 
-        UserServiceDB userServiceDB1 = new UserServiceDB(new MySqlUserDao(new ConverterResultSet(), dbUtils1),
-                new TransactionManager(dbUtils1));
+        UserServiceDB userServiceDB1 = new UserServiceDB(new MySqlUserDao(new ConverterResultSet()),
+                new TransactionManager());
         List<User> userList1 = userServiceDB1.getAllUser();
         assertEquals(newUser.getEmail(),userList1.get(0).getEmail());
 

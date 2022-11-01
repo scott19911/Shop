@@ -10,8 +10,8 @@ import java.sql.SQLException;
 
 
 public class ConnectionPool {
-    private static final ThreadLocal<Connection> CONNECTION_THREAD_LOCAL = new ThreadLocal<>();
-    private DataSource ds;
+    public static final ThreadLocal<Connection> CONNECTION_THREAD_LOCAL = new ThreadLocal<>();
+    private static DataSource ds;
     public ConnectionPool(){
         try {
             Context ctx = new InitialContext();
@@ -22,14 +22,16 @@ public class ConnectionPool {
     }
 
     public static ThreadLocal<Connection> getConnectionThreadLocal() {
+        if (CONNECTION_THREAD_LOCAL.get() == null ){
+            getConnection();
+        }
         return CONNECTION_THREAD_LOCAL;
     }
 
-    public Connection getConnection() {
+    public static Connection getConnection() {
         Connection connection = CONNECTION_THREAD_LOCAL.get();
         if (connection == null) {
             try {
-
                 connection = ds.getConnection();
                 CONNECTION_THREAD_LOCAL.set(connection);
             } catch ( SQLException ex) {

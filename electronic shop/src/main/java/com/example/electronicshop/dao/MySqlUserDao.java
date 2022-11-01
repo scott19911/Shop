@@ -30,16 +30,15 @@ public class MySqlUserDao implements UserDao {
     private static final String UPDATE_USER_AVATAR = "UPDATE USERS SET AVATAR=? WHERE ID=?;";
     private static final String SELECT_LOGIN_INFORMATION_BY_EMAIL = "SELECT id, password, salt, avatar, first_name FROM users WHERE email=?";
     public ConverterResultSet converterResultSet;
-    public ConnectionPool pool;
 
-    public MySqlUserDao(ConverterResultSet converterResultSet, ConnectionPool pool) {
+
+    public MySqlUserDao(ConverterResultSet converterResultSet) {
         this.converterResultSet = converterResultSet;
-        this.pool = pool;
     }
 
     @Override
     public List<User> getAllUser() {
-        Connection connection = pool.getConnection();
+        Connection connection = ConnectionPool.getConnectionThreadLocal().get();
         try (Statement stm = connection.createStatement()) {
             ResultSet rs = stm.executeQuery(SELECT_ALL_USERS);
             return converterResultSet.getListUser(rs);
@@ -50,7 +49,7 @@ public class MySqlUserDao implements UserDao {
 
     @Override
     public boolean updateUser(User newUser) {
-        Connection con = pool.getConnection();
+        Connection con = ConnectionPool.getConnectionThreadLocal().get();
         try (PreparedStatement stm = con.prepareStatement(UPDATE_USER)) {
             stm.setString(1, newUser.getFirstName());
             stm.setString(2, newUser.getLastName());
@@ -68,7 +67,7 @@ public class MySqlUserDao implements UserDao {
 
     @Override
     public boolean deleteUser(int id) {
-        Connection con = pool.getConnection();
+        Connection con = ConnectionPool.getConnectionThreadLocal().get();
         try (PreparedStatement stm = con.prepareStatement(DELETE_USER_BY_ID)) {
             stm.setInt(1, id);
             stm.executeUpdate();
@@ -80,7 +79,7 @@ public class MySqlUserDao implements UserDao {
 
     @Override
     public int addUser( User user) {
-        Connection con = pool.getConnection();
+        Connection con = ConnectionPool.getConnectionThreadLocal().get();
         try (PreparedStatement stm = con.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
             stm.setString(1, user.getFirstName());
             stm.setString(2, user.getLastName());
@@ -102,7 +101,7 @@ public class MySqlUserDao implements UserDao {
 
     @Override
     public boolean addAvatar( int id, String path) {
-        Connection con = pool.getConnection();
+        Connection con = ConnectionPool.getConnectionThreadLocal().get();
         try (PreparedStatement stm = con.prepareStatement(UPDATE_USER_AVATAR)) {
             stm.setString(1, path);
             stm.setInt(2, id);
@@ -116,7 +115,7 @@ public class MySqlUserDao implements UserDao {
     @Override
     public LoginUser loginUser(String email) {
         LoginUser authorizationUser = new LoginUser();
-        Connection con = pool.getConnection();
+        Connection con = ConnectionPool.getConnectionThreadLocal().get();
         try (PreparedStatement stm = con.prepareStatement(SELECT_LOGIN_INFORMATION_BY_EMAIL)) {
             stm.setString(1, email);
             stm.executeQuery();
@@ -138,7 +137,7 @@ public class MySqlUserDao implements UserDao {
 
     @Override
     public User selectUserById( int userId) {
-        Connection con = pool.getConnection();
+        Connection con = ConnectionPool.getConnectionThreadLocal().get();
         try (PreparedStatement stm = con.prepareStatement(SELECT_USER_BY_ID)) {
             stm.setInt(1, userId);
             stm.executeQuery();
