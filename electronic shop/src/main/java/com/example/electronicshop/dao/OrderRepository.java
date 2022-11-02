@@ -18,4 +18,8 @@ public interface OrderRepository {
     boolean insertOrderDetails(Order order);
     List<OrderInfo> getUserOrders(int userId);
     Map<String,Map<Product,Integer>> getOrderProduct(int userId);
+    Map<String, Map<Product, Integer>> getAllOrderProduct();
+    List<OrderInfo> getAllOrders();
+    void updateStatus(int orderId, int statusId, String comment);
+    Map<Integer, String> getStatus();
 }

@@ -21,4 +21,5 @@
         </form>
     </c:if>
 </div>
+<p id="errorMassage0" style="color:red;font-size: xx-large"> ${sessionScope.get("errMessage")}
 </p>

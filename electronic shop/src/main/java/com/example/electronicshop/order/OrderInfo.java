@@ -11,7 +11,15 @@ public class OrderInfo {
     private String statusDescription;
     private String deliveryType;
     private double totalPrice;
+    private int userId;
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     public int getOrderNumber() {
         return orderNumber;
@@ -61,5 +69,18 @@ public class OrderInfo {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderInfo{" +
+                "orderNumber=" + orderNumber +
+                ", orderDate=" + orderDate +
+                ", orderStatus='" + orderStatus + '\'' +
+                ", statusDescription='" + statusDescription + '\'' +
+                ", deliveryType='" + deliveryType + '\'' +
+                ", totalPrice=" + totalPrice +
+                ", userId=" + userId +
+                '}';
     }
 }

@@ -67,6 +67,10 @@
          <-->
         <param-value>MY_SQL</param-value>
     </context-param>
+    <context-param>
+        <param-name>permission</param-name>
+        <param-value>D:\Git\lab-task\electronic shop\securityRole.xml</param-value>
+    </context-param>
     <servlet-mapping>
         <servlet-name>CaptchaServlet</servlet-name>
         <url-pattern>/captcha</url-pattern>

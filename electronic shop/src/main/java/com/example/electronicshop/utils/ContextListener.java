@@ -15,6 +15,8 @@ import com.example.electronicshop.order.OrderService;
 import com.example.electronicshop.order.OrderServiceImpl;
 import com.example.electronicshop.products.ReadProductRequest;
 import com.example.electronicshop.products.ReadProductRequestImpl;
+import com.example.electronicshop.security.ReadPermissions;
+import com.example.electronicshop.security.SecurityConfig;
 import com.example.electronicshop.service.ImageService;
 import com.example.electronicshop.service.LoginService;
 import com.example.electronicshop.service.ProductService;
@@ -55,6 +57,7 @@ public class ContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         context = sce.getServletContext();
         String localesFileName = context.getInitParameter("locales");
+        String securityFileName = context.getInitParameter("permission");
         String localesFileRealPath = context.getRealPath(localesFileName);
         Properties locales = new Properties();
         try {
@@ -64,6 +67,8 @@ public class ContextListener implements ServletContextListener {
         }
         context.setAttribute("locales", locales);
         initPool();
+        ReadPermissions readPermissions = new ReadPermissions();
+        SecurityConfig securityConfig = new SecurityConfig(readPermissions.readFile(securityFileName));
         try {
             initService();
         } catch (SQLException e) {
@@ -96,10 +101,10 @@ public class ContextListener implements ServletContextListener {
         CartRepository cartRepository = new CartRepositoryImpl();
         CartService cart = new CartServiceImpl(cartRepository, transactionManager);
         context.setAttribute(CART_SERVICE, cart);
-
         OrderRepository orderRepository = new OrderRepositoryImpl();
         ValidateOrder validateOrder = new ValidateOrderImpl();
         OrderService orderService = new OrderServiceImpl(orderRepository,transactionManager,validateOrder);
         context.setAttribute(ORDER_SERVICE,orderService);
+
     }
 }

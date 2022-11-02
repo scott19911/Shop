@@ -18,11 +18,10 @@ import static com.example.electronicshop.utils.ContextListener.ORDER_SERVICE;
 @WebServlet("/cart")
 public class CartServlets extends HttpServlet {
     public static final String CART_INFO = "cartInfo";
-    public static final String ADD_TO_CART = "add";
     public static final String REQUEST_CAME_FROM = "cameFrom";
     public static final String DELIVERY_AND_PAYMENT = "payment";
     public static final String COMMAND = "command";
-    public static final String COMMAND_DELETE_PRODUCT = "delete";
+
 
 
     @Override

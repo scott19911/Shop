@@ -49,11 +49,14 @@ public class OrderServiceImpl implements OrderService {
     public void createOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         OrderDetails orderDetails = orderVerifier(request,response);
-        Order order = orderDetails.getOrder();
         SpecificUser user = (SpecificUser) session.getAttribute(SPECIFIC_USER);
-        if (user != null) {
-            order.setUserId(user.getUserId());
+        if (!errorMap.isEmpty()){
+            session.setAttribute("error", errorMap);
+            response.sendRedirect(CART_PAGE);
+            return;
         }
+        Order order = orderDetails.getOrder();
+        order.setUserId(user.getUserId());
         order.setStatusId(1);
         order.setDate(new Date());
         transactionManager.doInTransaction(() -> {
@@ -81,7 +84,8 @@ public class OrderServiceImpl implements OrderService {
         }, Connection.TRANSACTION_READ_COMMITTED);
         if (errorMap  == null || errorMap.isEmpty()) {
             session.removeAttribute("error");
-            response.sendRedirect("/cart?command=clear&cameFrom=/shop");
+            session.removeAttribute(CART_INFO);
+            response.sendRedirect("/shop");
         }
     }
 
@@ -111,8 +115,8 @@ public class OrderServiceImpl implements OrderService {
         if(specificUser != null) {
             UserOrders userOrders = transactionManager.doInTransaction(() -> {
                 UserOrders userOrder = new UserOrders();
-                userOrder.setOrderInfoList(orderRepository.getUserOrders(1));
-                userOrder.setOrderProduct(orderRepository.getOrderProduct(1));
+                userOrder.setOrderInfoList(orderRepository.getUserOrders(specificUser.getUserId()));
+                userOrder.setOrderProduct(orderRepository.getOrderProduct(specificUser.getUserId()));
                 return userOrder;
             }, Connection.TRANSACTION_READ_COMMITTED);
             session.setAttribute("orderInfo", userOrders);

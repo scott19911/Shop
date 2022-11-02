@@ -16,6 +16,7 @@ public class SpecificUser {
      * user id
      */
     private int userId;
+    private String userRole;
 
     public String getFirstName() {
         return firstName;
@@ -39,5 +40,13 @@ public class SpecificUser {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
     }
 }

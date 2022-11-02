@@ -1,0 +1,21 @@
+<security>
+
+    <constraint>
+
+        <url-pattern>/confirm</url-pattern>
+
+        <role>admin</role >
+
+    </constraint>
+
+    <constraint>
+
+        <url-pattern>/order</url-pattern>
+
+        <role>user</role >
+
+        <role>admin</role >
+
+    </constraint>
+
+</security>

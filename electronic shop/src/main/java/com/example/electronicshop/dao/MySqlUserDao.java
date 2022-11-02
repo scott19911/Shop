@@ -16,6 +16,7 @@ public class MySqlUserDao implements UserDao {
     public static final String FIRST_NAME = "FIRST_NAME";
     public static final String LAST_NAME = "LAST_NAME";
     public static final String EMAIL = "EMAIL";
+    public static final String ROLE = "role";
     public static final String AVATAR_URL = "AVATAR";
     public static final String RECEIVE_MAILING = "MAILINGS";
     public static final String PASSWORD = "password";
@@ -28,7 +29,7 @@ public class MySqlUserDao implements UserDao {
     private static final String INSERT_USER = "INSERT INTO USERS (first_name,last_name,email," +
             "password,salt,mailings,avatar) VALUES (?,?,?,?,?,?,?);";
     private static final String UPDATE_USER_AVATAR = "UPDATE USERS SET AVATAR=? WHERE ID=?;";
-    private static final String SELECT_LOGIN_INFORMATION_BY_EMAIL = "SELECT id, password, salt, avatar, first_name FROM users WHERE email=?";
+    private static final String SELECT_LOGIN_INFORMATION_BY_EMAIL = "SELECT id, password, salt, avatar, first_name,role FROM users WHERE email=?";
     public ConverterResultSet converterResultSet;
 
 
@@ -127,6 +128,7 @@ public class MySqlUserDao implements UserDao {
                 authorizationUser.setUserId(resultSet.getInt(USER_ID));
                 authorizationUser.setAvatarUrl(resultSet.getString(AVATAR_URL));
                 authorizationUser.setFirstName(resultSet.getString(FIRST_NAME));
+                authorizationUser.setUserRole(resultSet.getString(ROLE));
                 return authorizationUser;
             }
         } catch (SQLException ex) {

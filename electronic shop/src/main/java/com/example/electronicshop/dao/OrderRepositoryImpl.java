@@ -21,32 +21,41 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
-
-
 public class OrderRepositoryImpl implements OrderRepository {
     private Connection connection;
     public static final String SELECT_SHIPPERS = "SELECT deliveryID, type from delivery;";
     public static final String SELECT_PAYMENTS = "SELECT paymentId, type from payment;";
     public static final String SELECT_PRODUCT_QUANTITY = "SELECT quantity from products where idproducts=?;";
     public static final String UPDATE_PRODUCT_QUANTITY = "UPDATE products set quantity=? where idproducts=?;";
+    public static final String UPDATE_STATUS = "UPDATE `order` set statusId=?, description=? where orderID=?;";
     public static final String INSERT_ORDER = "INSERT INTO " +
             "`order`(customerID,orderDate,ShipperId,paymentId,receiverId,statusId,totalPrice) values (?,?,?,?,?,?,?);";
     public static final String INSERT_RECEIVER = "INSERT INTO `receiver`(userId,First_Name,surname,Phone,City,streat,apartment) " +
             "values (?,?,?,?,?,?,?);";
     public static final String INSERT_ORDER_DETAILS = "INSERT INTO orderdetails (orderID, ProductID, Quantity, current_price)" +
             " values (?,?,?,?);";
+    public static final String SELECT_STATUS = "SELECT * FROM order_status";
     public static final String DELIVERY_ID = "deliveryID";
     public static final String PAYMENT_ID = "paymentId";
+    public static final String STATUS_ID = "statusId";
+    public static final String STATUS = "status";
     public static final String PAYMENT_TYPE = "type";
     public static final String DELIVERY_TYPE = "type";
     private final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT);
     public static final String ORDER_INFORMATION = "SELECT ord.orderId, orderDate, order_status.status, description,delivery.Type as delivery, totalPrice\n" +
             " FROM electronics_shop.order as ord inner join delivery on ShipperId = deliveryID \n" +
             "inner join order_status on ord.statusId = order_status.statusId WHERE customerID =?";
+    public static final String ALL_ORDER_INFORMATION = "SELECT customerID,ord.orderId, orderDate, order_status.status, description,delivery.Type as delivery, totalPrice\n" +
+            " FROM electronics_shop.order as ord inner join delivery on ShipperId = deliveryID \n" +
+            "inner join order_status on ord.statusId = order_status.statusId WHERE ord.statusId != ? AND ord.statusId != ?";
     public static final String ORDER_PRODUCTS = "SELECT ord.orderId,idproducts,name,brand, current_price as price,category,imgUrl,products.description,\n" +
             "orderdetails.Quantity as quantity FROM electronics_shop.order as ord inner join orderdetails on ord.orderId =orderdetails.orderID\n" +
             "inner join products on ProductID = idproducts \n" +
             "where customerID = ?";
+    public static final String ALL_ORDER_PRODUCTS = "SELECT ord.orderId,idproducts,name,brand, current_price as price,category,imgUrl,products.description,\n" +
+            "orderdetails.Quantity as quantity FROM electronics_shop.order as ord inner join orderdetails on ord.orderId =orderdetails.orderID\n" +
+            "inner join products on ProductID = idproducts \n" +
+            "where statusId != ? AND statusId != ?";
 
     public OrderRepositoryImpl() {
     }
@@ -55,7 +64,10 @@ public class OrderRepositoryImpl implements OrderRepository {
     public Map<Integer, String> getShippers() {
         return getIntegerStringMap(SELECT_SHIPPERS, DELIVERY_ID, DELIVERY_TYPE);
     }
-
+    @Override
+    public Map<Integer, String> getStatus() {
+        return getIntegerStringMap(SELECT_STATUS, STATUS_ID, STATUS);
+    }
     @Override
     public Map<Integer, String> getPayments() {
         return getIntegerStringMap(SELECT_PAYMENTS, PAYMENT_ID, PAYMENT_TYPE);
@@ -132,13 +144,25 @@ public class OrderRepositoryImpl implements OrderRepository {
             ResultSet resultSet = stm.executeQuery();
             while (resultSet.next()) {
                 OrderInfo orderInfo = new OrderInfo();
-                orderInfo.setOrderNumber(resultSet.getInt("orderId"));
-                orderInfo.setOrderDate(resultSet.getTimestamp("orderDate"));
-                orderInfo.setOrderStatus(resultSet.getString("status"));
-                orderInfo.setStatusDescription(resultSet.getString("description"));
-                orderInfo.setDeliveryType(resultSet.getString("delivery"));
-                orderInfo.setTotalPrice(resultSet.getDouble("totalPrice"));
-                orderInfoList.add(orderInfo);
+                getOrders(orderInfoList, resultSet, orderInfo);
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        return orderInfoList;
+    }
+    @Override
+    public List<OrderInfo> getAllOrders() {
+        List<OrderInfo> orderInfoList = new ArrayList<>();
+        connection = ConnectionPool.getConnectionThreadLocal().get();
+        try (PreparedStatement stm = connection.prepareStatement(ALL_ORDER_INFORMATION)) {
+            stm.setInt(1, 5);
+            stm.setInt(2, 6);
+            ResultSet resultSet = stm.executeQuery();
+            while (resultSet.next()) {
+                OrderInfo orderInfo = new OrderInfo();
+                orderInfo.setUserId(resultSet.getInt("customerID"));
+                getOrders(orderInfoList, resultSet, orderInfo);
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
@@ -147,36 +171,73 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Map<String, Map<Product, Integer>> getOrderProduct(int userId) {
-        ConverterResultSet converterResultSet = new ConverterResultSet();
+    public void updateStatus(int orderId, int statusId, String comment) {
         connection = ConnectionPool.getConnectionThreadLocal().get();
-        Map<String, Map<Product, Integer>> orderProduct = new HashMap<>();
-        Map<Product, Integer> productMap = new HashMap<>();
-        int orderId = 0;
+        try (PreparedStatement stm = connection.prepareStatement(UPDATE_STATUS)) {
+            stm.setInt(1, statusId);
+            stm.setString(2,comment);
+            stm.setInt(3, orderId);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private void getOrders(List<OrderInfo> orderInfoList, ResultSet resultSet, OrderInfo orderInfo) throws SQLException {
+        orderInfo.setOrderNumber(resultSet.getInt("orderId"));
+        orderInfo.setOrderDate(resultSet.getTimestamp("orderDate"));
+        orderInfo.setOrderStatus(resultSet.getString("status"));
+        orderInfo.setStatusDescription(resultSet.getString("description"));
+        orderInfo.setDeliveryType(resultSet.getString("delivery"));
+        orderInfo.setTotalPrice(resultSet.getDouble("totalPrice"));
+        orderInfoList.add(orderInfo);
+    }
+
+    @Override
+    public Map<String, Map<Product, Integer>> getOrderProduct(int userId) {
+        connection = ConnectionPool.getConnectionThreadLocal().get();
         try (PreparedStatement stm = connection.prepareStatement(ORDER_PRODUCTS)) {
             stm.setInt(1, userId);
             ResultSet resultSet = stm.executeQuery();
-            while (resultSet.next()) {
-                Product product = new Product();
-                converterResultSet.getProduct(product, resultSet);
-                int currentId = resultSet.getInt("orderId");
-                if (orderId == 0) {
-                    orderId = currentId;
-                }
-                if (orderId != currentId) {
-                  orderProduct.put(String.valueOf(orderId),productMap);
-                  productMap = new HashMap<>();
-                  orderId = currentId;
-                }
-                productMap.put(product,product.getQuantity());
-            }
-            orderProduct.put(String.valueOf(orderId),productMap);
-            return orderProduct;
+            return getOrderProductMap(resultSet);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
+    @Override
+    public Map<String, Map<Product, Integer>> getAllOrderProduct() {
+        connection = ConnectionPool.getConnectionThreadLocal().get();
+        try (PreparedStatement stm = connection.prepareStatement(ALL_ORDER_PRODUCTS)) {
+            stm.setInt(1, 5);
+            stm.setInt(2, 6);
+            ResultSet resultSet = stm.executeQuery();
+           return getOrderProductMap(resultSet);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private Map<String, Map<Product, Integer>> getOrderProductMap(ResultSet resultSet) throws SQLException {
+        Map<String, Map<Product, Integer>> orderProduct = new HashMap<>();
+        Map<Product, Integer> productMap = new HashMap<>();
+        ConverterResultSet converterResultSet = new ConverterResultSet();
+        int orderId = 0;
+        while (resultSet.next()) {
+            Product product = new Product();
+            converterResultSet.getProduct(product, resultSet);
+            int currentId = resultSet.getInt("orderId");
+            if (orderId == 0) {
+                orderId = currentId;
+            }
+            if (orderId != currentId) {
+                orderProduct.put(String.valueOf(orderId),productMap);
+                productMap = new HashMap<>();
+                orderId = currentId;
+            }
+            productMap.put(product,product.getQuantity());
+        }
+        orderProduct.put(String.valueOf(orderId),productMap);
+        return orderProduct;
+    }
     private Map<Integer, String> getIntegerStringMap(String selectQuery, String idName, String typeName) {
         Map<Integer, String> map = new HashMap<>();
         connection = ConnectionPool.getConnectionThreadLocal().get();

@@ -18,7 +18,10 @@ import static com.example.electronicshop.constants.ServletsName.LOGIN_SERVLET;
 import static com.example.electronicshop.constants.ServletsName.PRODUCT_LIST_SERVLET;
 import static com.example.electronicshop.dao.MySqlUserDao.EMAIL;
 import static com.example.electronicshop.dao.MySqlUserDao.PASSWORD;
+import static com.example.electronicshop.security.SecurityFilter.ERROR_MESSAGE;
+import static com.example.electronicshop.security.SecurityFilter.REQUEST_GO_TO;
 import static com.example.electronicshop.service.impl.UploadAvatar.SPECIFIC_USER;
+import static com.example.electronicshop.servlets.CartServlets.REQUEST_CAME_FROM;
 
 public class LoginUserService implements LoginService {
     public static final String LOGIN_ERROR = "com.example.electronicshop.login.error";
@@ -36,6 +39,8 @@ public class LoginUserService implements LoginService {
         HttpSession session = request.getSession();
         LoginUser loginUser = validateLoginForm.readRequest(request);
         Map<String,String> error = validateLoginForm.validate(loginUser);
+        String cameFrom = session.getAttribute(REQUEST_GO_TO) == null ?(String) session.getAttribute(REQUEST_CAME_FROM) :
+                (String) session.getAttribute(REQUEST_GO_TO);
         if (error.isEmpty()){
           LoginUser dbUser = transactionManager.doWithoutTransaction(() -> userDao.loginUser(loginUser.getEmail()));
           if(dbUser != null) {
@@ -52,7 +57,10 @@ public class LoginUserService implements LoginService {
           }
         }
         if (error.isEmpty()) {
-            response.sendRedirect(PRODUCT_LIST_SERVLET);
+            session.removeAttribute(REQUEST_CAME_FROM);
+            session.removeAttribute(REQUEST_GO_TO);
+            session.removeAttribute(ERROR_MESSAGE);
+            response.sendRedirect(cameFrom);
         } else {
             session.setAttribute(LOGIN_ERROR, error);
             response.sendRedirect(LOGIN_SERVLET);

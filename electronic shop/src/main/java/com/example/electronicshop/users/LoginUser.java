@@ -10,6 +10,7 @@ public class LoginUser {
     private int userId;
     private String avatarUrl;
     private String firstName;
+    private String userRole;
 
     public String getEmail() {
         return email;
@@ -59,11 +60,20 @@ public class LoginUser {
         this.firstName = firstName;
     }
 
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
+    }
+
     public SpecificUser getSpecificUser() {
         SpecificUser specificUser = new SpecificUser();
         specificUser.setFirstName(firstName);
         specificUser.setAvatarUrl(avatarUrl);
         specificUser.setUserId(userId);
+        specificUser.setUserRole(userRole);
         return specificUser;
     }
 }

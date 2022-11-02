@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="customTag" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
   <meta charset="utf-8">
@@ -94,6 +95,9 @@
                     <li class="active"><a href="index.jsp"><fmt:message key="home"/></a></li>
                     <li><a href="/shop"><fmt:message key="shop"/></a></li>
                     <li><a href="/cart"><fmt:message key="cart"/></a></li>
+                  <c:if test='${sessionScope.get("specificUser").getUserRole().equals("admin")}'>
+                    <li><a href="/confirm"><fmt:message key="orderProcessing"/></a></li>
+                  </c:if>
                 </ul>
             </div>
         </div>

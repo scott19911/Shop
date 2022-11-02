@@ -97,9 +97,12 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/index.jsp"><fmt:message key="home" /></a></li>
-                    <li><a href="${pageContext.request.contextPath}/shop"><fmt:message key="shop" /></a></li>
-                    <li><a href="/cart"><fmt:message key="cart" /></a></li>
+                    <li><a href="/index.jsp"><fmt:message key="home"/></a></li>
+                    <li><a href="${pageContext.request.contextPath}/shop"><fmt:message key="shop"/></a></li>
+                    <li><a href="/cart"><fmt:message key="cart"/></a></li>
+                    <c:if test='${sessionScope.get("specificUser").getUserRole().equals("admin")}'>
+                        <li><a href="/confirm"><fmt:message key="orderProcessing"/></a></li>
+                    </c:if>
                 </ul>
             </div>
         </div>
@@ -139,24 +142,46 @@
                                 <th class="product-quantity"><fmt:message key="stDes" /></th>
                                 <th class="product-quantity"><fmt:message key="deliveryType" /></th>
                                 <th class="product-subtotal"><fmt:message key="totPrice" /></th>
+                                <c:if test='${sessionScope.goTo.equals("/confirm")}'>
+                                    <th class="product-subtotal"><fmt:message key="update" /></th>
+                                </c:if>
                             </tr>
                             </thead>
                             <tbody>
                             <c:forEach var="orderInfo" items="${sessionScope.orderInfo.orderInfoList}">
                                 <tr class="cart_item">
                                     <td class="product-thumbnail">
-                                        ${orderInfo.orderNumber}
+                                            ${orderInfo.orderNumber}
                                     </td>
                                     <td class="product-name">
-                                        <fmt:formatDate type="date" value="${orderInfo.orderDate}" pattern="dd.MM.yyyy HH:MM"/>
+                                        <fmt:formatDate type="date" value="${orderInfo.orderDate}"
+                                                        pattern="dd.MM.yyyy HH:MM"/>
                                     </td>
 
                                     <td class="product-price">
-                                       ${orderInfo.orderStatus}
+                                        <c:if test='${!sessionScope.goTo.equals("/confirm")}'>
+                                            ${orderInfo.orderStatus}
+                                        </c:if>
+                                        <c:if test='${sessionScope.goTo.equals("/confirm")}'>
+                                        <form method="post" action="/confirm">
+                                            <select name="status">
+                                                <c:forEach items="${sessionScope.orderInfo.getStatusMap().entrySet()}"
+                                                           var="orderStatus">
+                                                    <option value="${orderStatus.getKey()}"
+                                                            <c:if test="${orderStatus.getKey().equals(orderInfo.orderStatus)}">
+                                                                selected
+                                                            </c:if>
+                                                    >${orderStatus.getValue()}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </c:if>
                                     </td>
 
                                     <td class="product-quantity">
                                             ${orderInfo.statusDescription}
+                                        <c:if test='${sessionScope.goTo.equals("/confirm")}'>
+                                            <input type="text" name="description">
+                                        </c:if>
                                     </td>
 
                                     <td class="product-subtotal">
@@ -165,9 +190,15 @@
                                     <td class="product-subtotal">
                                             ${orderInfo.totalPrice}
                                     </td>
+                                    <c:if test='${sessionScope.goTo.equals("/confirm")}'>
+                                        <td>
+                                            <input type="submit" value="<fmt:message key="update"/>" name="update_cart" class="button">
+                                           </form>
+                                        </td>
+                                    </c:if>
                                 </tr>
                                 <tr>
-                                    <td class="product-subtotal" colspan="6">
+                                    <td class="product-subtotal" colspan="7">
                                         <customtag:orderDetails orderId="${orderInfo.orderNumber}"/>
                                     </td>
                                 </tr>
