@@ -8,12 +8,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="customTag" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Registration</title>
+    <title><fmt:message key="Registration"/></title>
     <!-- Google Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
           type='text/css'>
@@ -45,34 +46,14 @@
 <div class="header-area">
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
-                <customTag:login></customTag:login>
+            <div class="col-md-7">
+                <customTag:login/>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div class="header-right">
                     <ul class="list-unstyled list-inline">
-                        <a href="${pageContext.request.contextPath}/reg">Sign up</a>
-                        <li class="dropdown dropdown-small">
-                            <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span
-                                    class="key">currency :</span><span class="value">USD </span><b
-                                    class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">USD</a></li>
-                                <li><a href="#">INR</a></li>
-                                <li><a href="#">GBP</a></li>
-                            </ul>
-                        </li>
-
-                        <li class="dropdown dropdown-small">
-                            <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span
-                                    class="key">language :</span><span class="value">English </span><b
-                                    class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">English</a></li>
-                                <li><a href="#">French</a></li>
-                                <li><a href="#">German</a></li>
-                            </ul>
-                        </li>
+                        <a href="${pageContext.request.contextPath}/reg"><fmt:message key="sign.up" /></a>
+                        <customTag:language/>
                     </ul>
                 </div>
             </div>
@@ -105,13 +86,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="index.jsp">Home</a></li>
-                    <li><a href="${pageContext.request.contextPath}/shop">Shop page</a></li>
-                    <li><a href="single-product.html">Single product</a></li>
-                    <li><a href="/cart">Cart</a></li>
-                    <li><a href="checkout.html">Checkout</a></li>
-                    <li><a href="#">Others</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="index.jsp"><fmt:message key="home"/></a></li>
+                    <li><a href="${pageContext.request.contextPath}/shop"><fmt:message key="shop"/></a></li>
+                    <li><a href="/cart"><fmt:message key="cart"/></a></li>
                 </ul>
             </div>
         </div>
@@ -123,7 +100,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="product-bit-title text-center">
-                    <h2>Registration</h2>
+                    <h2><fmt:message key="Registration"/></h2>
                 </div>
             </div>
         </div>
@@ -148,7 +125,7 @@
                                                 returning customer please login at the top of the page.</p>
                                             <p id="billing_first_name_field"
                                                class="form-row form-row-first validate-required">
-                                                <label class="" for="billing_first_name">First Name <abbr
+                                                <label class="" for="billing_first_name"><fmt:message key="fName"/><abbr
                                                         title="required"
                                                         class="required">*</abbr>
                                                 </label>
@@ -160,7 +137,7 @@
                                             </p>
                                             <p id="billing_last_name_field"
                                                class="form-row form-row-last validate-required">
-                                                <label class="" for="billing_last_name">Last Name <abbr title="required"
+                                                <label class="" for="billing_last_name"><fmt:message key="lName"/> <abbr title="required"
                                                                                                         class="required">*</abbr>
                                                 </label>
                                                 <input type="text" value="${requestScope.get('com.example.electronicshop.registration.bean').getLastName()}" placeholder="" id="billing_last_name"
@@ -171,7 +148,7 @@
                                             <div class="clear"></div>
                                             <p id="billing_email_field"
                                                class="form-row form-row-first validate-required validate-email">
-                                                <label class="" for="billing_email">Email Address <abbr title="required"
+                                                <label class="" for="billing_email"><fmt:message key="email"/><abbr title="required"
                                                                                                         class="required">*</abbr>
                                                 </label>
                                                 <input type="text" value="${requestScope.get('com.example.electronicshop.registration.bean').getEmail()}" placeholder="" id="billing_email"
@@ -181,7 +158,7 @@
                                             </p>
 
                                             <p id="account_password_field" class="form-row validate-required">
-                                                <label class="" for="account_password">Account password <abbr
+                                                <label class="" for="account_password"><fmt:message key="pas"/><abbr
                                                         title="required" class="required">*</abbr>
                                                 </label>
                                                 <input type="password" value="" placeholder="Password"
@@ -191,7 +168,7 @@
                                             </p>
                                             <customTag:captcha/>
                                             <p id="account_password_field" class="form-row validate-required">
-                                                <label class="" for="captcha">Test code <abbr
+                                                <label class="" for="captcha"><fmt:message key="Veri"/><abbr
                                                         title="required" class="required">*</abbr>
                                                 </label>
                                                 <input type="text" value="" placeholder="Captcha"
@@ -200,14 +177,14 @@
                                             <p id="errorMassage" style="color:red"> ${requestScope.get("com.example.electronicshop.registration.error").get("captcha")}
                                             </p>
                                             <div class="cont">
-                                            <p class="notifications">Receive notifications about promotions</p>
+                                            <p class="notifications"><fmt:message key="Receive"/></p>
                                             <label class="switch">
                                                 <input type="checkbox" name="notifications" value="true">
                                                 <span class="slider round"></span>
                                             </label>
                                             </div>
                                             <div class="form-row place-order">
-                                                <input type="submit" data-value="Place order" value="Place order"
+                                                <input type="submit" data-value="Place order" value="<fmt:message key="Registration"/>"
                                                        id="place_order" name="woocommerce_checkout_place_order"
                                                        class="button alt">
                                             </div>
@@ -341,6 +318,6 @@
 <!-- Main Script -->
 <script src="js/main.js"></script>
 <script src="/js/validateJs.js"></script>
-
+<script src="js/paginationUrl.js"></script>
 </body>
 </html>

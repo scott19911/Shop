@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="customTag" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
   <meta charset="utf-8">
@@ -42,31 +43,15 @@
 <div class="header-area">
   <div class="container">
     <div class="row">
-      <div class="col-md-8">
-        <customTag:login></customTag:login>
+      <div class="col-md-7">
+        <customTag:login/>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-5">
         <div class="header-right">
           <ul class="list-unstyled list-inline">
-            <a href="/reg" >Sign up</a>
-            <li class="dropdown dropdown-small">
-              <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">currency :</span><span class="value">USD </span><b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">USD</a></li>
-                <li><a href="#">INR</a></li>
-                <li><a href="#">GBP</a></li>
-              </ul>
-            </li>
-
-            <li class="dropdown dropdown-small">
-              <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">language :</span><span class="value">English </span><b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">English</a></li>
-                <li><a href="#">French</a></li>
-                <li><a href="#">German</a></li>
-              </ul>
-            </li>
+            <a href="/reg" ><fmt:message key="sign.up" /></a>
+            <customTag:language/>
           </ul>
         </div>
       </div>
@@ -85,7 +70,7 @@
 
       <div class="col-sm-6">
         <div class="shopping-item">
-          <a href="/cart">Cart - <span class="cart-amunt">₴${sessionScope.cartInfo.totalPrice}</span> <i class="fa fa-shopping-cart"></i> <span
+          <a href="/cart"><fmt:message key="cart"/>- <span class="cart-amunt">₴${sessionScope.cartInfo.totalPrice}</span> <i class="fa fa-shopping-cart"></i> <span
                   class="product-count">${sessionScope.cartInfo.totalQuantity}</span></a>
         </div>
       </div>
@@ -106,14 +91,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="index.html">Home</a></li>
-                    <li><a href="/shop">Shop page</a></li>
-                    <li><a href="single-product.html">Single product</a></li>
-                    <li><a href="/cart">Cart</a></li>
-                    <li><a href="checkout.html">Checkout</a></li>
-                    <li><a href="#">Category</a></li>
-                    <li><a href="#">Others</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li class="active"><a href="index.jsp"><fmt:message key="home"/></a></li>
+                    <li><a href="/shop"><fmt:message key="shop"/></a></li>
+                    <li><a href="/cart"><fmt:message key="cart"/></a></li>
                 </ul>
             </div>
         </div>
@@ -613,5 +593,6 @@
 
 <!-- Main Script -->
 <script src="js/main.js"></script>
+<script src="js/paginationUrl.js"></script>
 </body>
 </html>
