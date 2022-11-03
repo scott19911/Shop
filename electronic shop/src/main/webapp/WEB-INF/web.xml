@@ -57,7 +57,7 @@
 
     <context-param>
         <param-name>locales</param-name>
-        <param-value>/locales.properties</param-value>
+        <param-value>WEB-INF/classes/locales.properties</param-value>
     </context-param>
     <context-param>
         <param-name>dbType</param-name>
