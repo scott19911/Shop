@@ -32,7 +32,7 @@ public class CartServiceImpl implements CartService {
 
 
     @Override
-    public int totalQuantity() {
+    public int totalQuantity(Map<Product, Integer> cart) {
         int quantity = 0;
         for (Entry<Product, Integer> entry : cart.entrySet()
         ) {
@@ -42,7 +42,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public double cartPrice() {
+    public double cartPrice(Map<Product, Integer> cart) {
         double totalPrice = 0;
         for (Entry<Product, Integer> entry : cart.entrySet()
         ) {
@@ -52,7 +52,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void updateCart(HttpServletRequest request) {
+    public Map<Product, Integer> updateCart(HttpServletRequest request) {
         Map<String, String[]> parameterMap = request.getParameterMap();
         Map<Product, Integer> cart = null;
         String[] stringsID = parameterMap.get(ID);
@@ -88,7 +88,7 @@ public class CartServiceImpl implements CartService {
         if (cart != null && cart.isEmpty()) {
             request.getSession(false).removeAttribute(CART_INFO);
         }
-        setCart(cart);
+        return cart;
     }
 
     public void updateStableProductQuantity(Map<Product, Integer> tempCart, int quantity, Product productStable) {
@@ -121,13 +121,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartInfo getCartInfo() {
+    public CartInfo getCartInfo(Map<Product, Integer> cart) {
         CartInfo cartInfo = new CartInfo();
         if (cart == null || cart.isEmpty()) {
             return cartInfo;
         }
-        cartInfo.setTotalPrice(cartPrice());
-        cartInfo.setTotalQuantity(totalQuantity());
+        cartInfo.setTotalPrice(cartPrice(cart));
+        cartInfo.setTotalQuantity(totalQuantity(cart));
         cartInfo.setCart(cart);
         return cartInfo;
     }
