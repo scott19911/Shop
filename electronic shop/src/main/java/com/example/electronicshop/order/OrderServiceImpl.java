@@ -93,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDetails orderVerifier(HttpServletRequest request, HttpServletResponse response){
+    public OrderDetails orderVerifier(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         OrderDetails orderDetails = validateOrder.readRequest(request);
         errorMap = validateOrder.validate(orderDetails);
@@ -101,6 +101,8 @@ public class OrderServiceImpl implements OrderService {
         SpecificUser user = (SpecificUser) session.getAttribute(SPECIFIC_USER);
         if (cartInfo == null || cartInfo.getCart() == null) {
             errorMap.put("cartError", "Cart is empty");
+            session.setAttribute("error", errorMap);
+            response.sendRedirect(CART_PAGE);
         } else {
             cartInfo.setCart(orderDetails.getOrderCart());
             orderDetails.setTotalPrice(cartInfo.getTotalPrice());
