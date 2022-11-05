@@ -10,12 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.electronicshop.dao.MySqlUserDao.AVATAR_URL;
+import static com.example.electronicshop.dao.MySqlUserDao.BLOCKED;
 import static com.example.electronicshop.dao.MySqlUserDao.EMAIL;
 import static com.example.electronicshop.dao.MySqlUserDao.FIRST_NAME;
 import static com.example.electronicshop.dao.MySqlUserDao.LAST_NAME;
 import static com.example.electronicshop.dao.MySqlUserDao.PASSWORD;
 import static com.example.electronicshop.dao.MySqlUserDao.RECEIVE_MAILING;
 import static com.example.electronicshop.dao.MySqlUserDao.SALT;
+import static com.example.electronicshop.dao.MySqlUserDao.UNBLOCK;
 import static com.example.electronicshop.dao.MySqlUserDao.USER_ID;
 import static com.example.electronicshop.dao.ProductRepositoryImpl.CATEGORY_ID;
 import static com.example.electronicshop.dao.ProductRepositoryImpl.CATEGORY_NAME;
@@ -49,6 +51,8 @@ public class ConverterResultSet {
                 user.setLastName(resultSet.getString(LAST_NAME));
                 user.setFirstName(resultSet.getString(FIRST_NAME));
                 user.setAvatarUdl(resultSet.getString(AVATAR_URL));
+                user.setBlocked(resultSet.getBoolean(BLOCKED));
+                user.setWhenUnblock(resultSet.getTimestamp(UNBLOCK));
                 list.add(user);
             }
         } catch (SQLException ex) {

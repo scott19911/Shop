@@ -1,38 +1,23 @@
 package com.example.electronicshop.order.processing;
 
-import com.example.electronicshop.dao.OrderRepository;
-import com.example.electronicshop.dao.TransactionManager;
-import com.example.electronicshop.order.UserOrders;
-import com.example.electronicshop.validate.ValidateOrder;
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
-import java.io.IOException;
-import java.sql.Connection;
+import java.util.Map;
 
-public class ManagerService {
-    private final OrderRepository orderRepository;
-    private final TransactionManager transactionManager;
+public interface ManagerService {
+    /**
+     * Show all available orders
+     * @param request - for getting orders
+     * @param response on request
+     */
+    void showUserOrders(HttpServletRequest request, HttpServletResponse response);
 
-    public ManagerService(OrderRepository orderRepository, TransactionManager transactionManager) {
-        this.orderRepository = orderRepository;
-        this.transactionManager = transactionManager;
-    }
-
-    public void showUserOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        UserOrders userOrders = transactionManager.doInTransaction(() -> {
-            UserOrders userOrder = new UserOrders();
-            userOrder.setOrderInfoList(orderRepository.getAllOrders());
-            userOrder.setOrderProduct(orderRepository.getAllOrderProduct());
-            userOrder.setStatusMap(orderRepository.getStatus());
-            return userOrder;
-        }, Connection.TRANSACTION_READ_COMMITTED);
-        session.setAttribute("orderInfo", userOrders);
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("orders.jsp");
-        requestDispatcher.forward(request, response);
-    }
+    /**
+     * Set new status for order
+     * @param request - data where we need to change status
+     * @return - map with error
+     */
+    Map<String, String> setNewStatus(HttpServletRequest request);
 }
+

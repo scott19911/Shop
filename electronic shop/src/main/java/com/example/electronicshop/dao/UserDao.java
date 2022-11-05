@@ -57,6 +57,6 @@ public interface UserDao {
      * @return - data for user authorization
      */
     LoginUser loginUser(String email);
-
-
+    void blockUser(int userID);
+    void unblockUser(int userID);
 }

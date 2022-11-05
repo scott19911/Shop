@@ -11,6 +11,7 @@ public class LoginUser {
     private String avatarUrl;
     private String firstName;
     private String userRole;
+    private boolean blocked;
 
     public String getEmail() {
         return email;
@@ -18,6 +19,14 @@ public class LoginUser {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
     }
 
     public String getSalt() {

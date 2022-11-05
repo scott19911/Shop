@@ -103,6 +103,7 @@
                     <li class="active"><a href="/cart"><fmt:message key="cart"/></a></li>
                     <c:if test='${sessionScope.get("specificUser").getUserRole().equals("admin")}'>
                         <li><a href="/confirm"><fmt:message key="orderProcessing"/></a></li>
+                        <li><a href="/userList"><fmt:message key="userinfo"/></a></li>
                     </c:if>
                 </ul>
             </div>

@@ -65,7 +65,7 @@
     <div class="row">
       <div class="col-sm-6">
         <div class="logo">
-          <h1><a href="index.html">e<span>Electronics</span></a></h1>
+          <h1><a href="index.jsp">e<span>Electronics</span></a></h1>
         </div>
       </div>
 
@@ -97,6 +97,7 @@
                     <li><a href="/cart"><fmt:message key="cart"/></a></li>
                   <c:if test='${sessionScope.get("specificUser").getUserRole().equals("admin")}'>
                     <li><a href="/confirm"><fmt:message key="orderProcessing"/></a></li>
+                    <li><a href="/userList"><fmt:message key="userinfo"/></a></li>
                   </c:if>
                 </ul>
             </div>

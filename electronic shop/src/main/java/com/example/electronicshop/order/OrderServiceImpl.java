@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import static com.example.electronicshop.constants.Pages.CART_PAGE;
+import static com.example.electronicshop.constants.Pages.ORDER_PAGE;
+import static com.example.electronicshop.constants.ServletsName.PRODUCT_LIST_SERVLET;
 import static com.example.electronicshop.service.impl.UploadAvatar.SPECIFIC_USER;
 import static com.example.electronicshop.servlets.CartServlets.CART_INFO;
 
@@ -28,6 +30,7 @@ public class OrderServiceImpl implements OrderService {
     private final TransactionManager transactionManager;
     private final ValidateOrder validateOrder;
     private Map<String, String> errorMap;
+    public static final String ORDER_INFO = "orderInfo";
 
     public OrderServiceImpl(OrderRepository orderRepository, TransactionManager transactionManager, ValidateOrder validateOrder) {
         this.orderRepository = orderRepository;
@@ -85,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
         if (errorMap  == null || errorMap.isEmpty()) {
             session.removeAttribute("error");
             session.removeAttribute(CART_INFO);
-            response.sendRedirect("/shop");
+            response.sendRedirect(PRODUCT_LIST_SERVLET);
         }
     }
 
@@ -119,9 +122,9 @@ public class OrderServiceImpl implements OrderService {
                 userOrder.setOrderProduct(orderRepository.getOrderProduct(specificUser.getUserId()));
                 return userOrder;
             }, Connection.TRANSACTION_READ_COMMITTED);
-            session.setAttribute("orderInfo", userOrders);
+            session.setAttribute(ORDER_INFO, userOrders);
         }
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("orders.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(ORDER_PAGE);
         requestDispatcher.forward(request,response);
     }
 }

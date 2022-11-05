@@ -93,6 +93,16 @@ public class UserMapDao implements UserDao {
     }
 
     @Override
+    public void blockUser(int userID) {
+
+    }
+
+    @Override
+    public void unblockUser(int userID) {
+
+    }
+
+    @Override
     public User selectUserById(int userId) {
         if (userId > users.size()) {
             return null;

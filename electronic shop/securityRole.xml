@@ -12,9 +12,17 @@
 
         <url-pattern>/order</url-pattern>
 
-        <role>user</role >
+        <role>user</role>
 
-        <role>admin</role >
+        <role>admin</role>
+
+    </constraint>
+
+    <constraint>
+
+        <url-pattern>/userList</url-pattern>
+
+        <role>admin</role>
 
     </constraint>
 

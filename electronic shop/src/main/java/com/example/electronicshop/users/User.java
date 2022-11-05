@@ -1,5 +1,7 @@
 package com.example.electronicshop.users;
 
+import java.util.Date;
+
 /**
  * User data storage class
  */
@@ -8,6 +10,8 @@ public class User {
      * user first name
      */
     private String firstName;
+    private boolean blocked;
+    private Date whenUnblock;
     /**
      * user last name
      */
@@ -35,6 +39,26 @@ public class User {
     private String salt;
 
     public User() {
+    }
+
+    public Date getWhenUnblock() {
+        return whenUnblock;
+    }
+
+    public void setWhenUnblock(Date whenUnblock) {
+        this.whenUnblock = whenUnblock;
+    }
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
+    public String getAvatarUdl() {
+        return avatarUdl;
     }
 
     public String getSalt() {

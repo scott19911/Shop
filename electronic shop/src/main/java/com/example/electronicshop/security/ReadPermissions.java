@@ -17,6 +17,11 @@ import java.util.List;
 import java.util.Map;
 
 public class ReadPermissions {
+    /**
+     * Read configuration file
+     * @param securityFile - configuration file
+     * @return - map where key a user role and value list of security url
+     */
     public Map<String, List<String>> readFile(String securityFile){
         File xmlFile = new File(securityFile);
         Document doc = null;
@@ -41,21 +46,25 @@ public class ReadPermissions {
                 Element element = (Element) constraintNode;
                 String urlPattern = element.getElementsByTagName("url-pattern").item(0).getTextContent();
                 NodeList roles = element.getElementsByTagName("role");
-                for (int j = 0; j < roles.getLength(); j++) {
-                    roleList.add(element.getElementsByTagName("role").item(j).getTextContent());
-                    String role = element.getElementsByTagName("role").item(j).getTextContent();
-                    if (securityPermissions.get(role) != null) {
-                        List<String> urlList = securityPermissions.get(role);
-                        urlList.add(urlPattern);
-                        securityPermissions.put(role, urlList);
-                    } else {
-                        List<String> urlList = new ArrayList<>();
-                        urlList.add(urlPattern);
-                        securityPermissions.put(role, urlList);
-                    }
-                }
+                setRolePermission(roles,roleList,element,urlPattern,securityPermissions);
             }
         }
         return securityPermissions;
+    }
+    private void setRolePermission(NodeList roles, List<String> roleList, Element element,
+                                   String urlPattern, Map<String, List<String>> securityPermissions){
+        for (int j = 0; j < roles.getLength(); j++) {
+            roleList.add(element.getElementsByTagName("role").item(j).getTextContent());
+            String role = element.getElementsByTagName("role").item(j).getTextContent();
+            if (securityPermissions.get(role) != null) {
+                List<String> urlList = securityPermissions.get(role);
+                urlList.add(urlPattern);
+                securityPermissions.put(role, urlList);
+            } else {
+                List<String> urlList = new ArrayList<>();
+                urlList.add(urlPattern);
+                securityPermissions.put(role, urlList);
+            }
+        }
     }
 }

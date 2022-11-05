@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Objects;
+
 
 import static com.example.electronicshop.service.impl.UploadAvatar.SPECIFIC_USER;
 import static com.example.electronicshop.servlets.DrawImageServlets.IMAGE_STORAGE_PATH;
@@ -26,7 +26,7 @@ public class ImageServiceImpl implements ImageService {
         String imageStorage = session.getServletContext().getInitParameter(IMAGE_STORAGE_PATH);
         String imageURL = req.getParameter(PRODUCT_IMG);
         String imageFullPath;
-        imageFullPath = imageStorage + Objects.requireNonNullElse(imageURL, UNKNOWN_AVATAR_URL);
+        imageFullPath = imageStorage + (imageURL.isBlank() ? UNKNOWN_AVATAR_URL : imageURL);
         BufferedImage bufferedImage = ImageIO.read(new File(imageFullPath));
         OutputStream osImage = resp.getOutputStream();
         ImageIO.write(bufferedImage, "jpeg", osImage);

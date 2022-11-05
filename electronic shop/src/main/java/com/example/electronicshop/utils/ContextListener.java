@@ -13,18 +13,23 @@ import com.example.electronicshop.dao.TransactionManager;
 import com.example.electronicshop.dao.UserDao;
 import com.example.electronicshop.order.OrderService;
 import com.example.electronicshop.order.OrderServiceImpl;
+import com.example.electronicshop.order.processing.ManagerServiceImpl;
 import com.example.electronicshop.products.ReadProductRequest;
 import com.example.electronicshop.products.ReadProductRequestImpl;
+import com.example.electronicshop.security.ReadPermissions;
+import com.example.electronicshop.security.SecurityConfig;
 import com.example.electronicshop.service.ImageService;
 import com.example.electronicshop.service.LoginService;
 import com.example.electronicshop.service.ProductService;
 import com.example.electronicshop.service.RegistrationService;
 import com.example.electronicshop.service.UploadService;
+import com.example.electronicshop.service.UserBlockerService;
 import com.example.electronicshop.service.impl.ImageServiceImpl;
 import com.example.electronicshop.service.impl.LoginUserService;
 import com.example.electronicshop.service.impl.ProductServiceImpl;
 import com.example.electronicshop.service.impl.RegistrationServiceImpl;
 import com.example.electronicshop.service.impl.UploadAvatar;
+import com.example.electronicshop.service.impl.UserBlockerServiceImpl;
 import com.example.electronicshop.servletFilters.localization.CookiesLocalization;
 import com.example.electronicshop.servletFilters.localization.SessionLocalization;
 import com.example.electronicshop.servletFilters.localization.LocalizationStrategy;
@@ -55,12 +60,15 @@ public class ContextListener implements ServletContextListener {
     public static final String CART_SERVICE = "cartService";
     public static final String ORDER_SERVICE = "orderService";
     public static final String STRATEGY_LOCALIZATION = "localization";
+    public static final String MANAGER_SERVICE = "managerService";
+    public static final String UNBLOCK_SERVICE = "unblockService";
     private String localeStorage;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         context = sce.getServletContext();
         String localesFileName = context.getInitParameter("locales");
+        String securityFileName = context.getInitParameter("permission");
         String localesFileRealPath = context.getRealPath(localesFileName);
         Properties locales = new Properties();
         try {
@@ -71,6 +79,8 @@ public class ContextListener implements ServletContextListener {
         localeStorage = context.getInitParameter(LOCALE_STORAGE);
         context.setAttribute("locales", locales);
         initPool();
+        ReadPermissions readPermissions = new ReadPermissions();
+        SecurityConfig securityConfig = new SecurityConfig(readPermissions.readFile(securityFileName));
         try {
             initService();
         } catch (SQLException e) {
@@ -103,7 +113,6 @@ public class ContextListener implements ServletContextListener {
         CartRepository cartRepository = new CartRepositoryImpl();
         CartService cart = new CartServiceImpl(cartRepository, transactionManager);
         context.setAttribute(CART_SERVICE, cart);
-
         LocalizationStrategy strategy;
         if (localeStorage.equalsIgnoreCase(SESSION_LOCALE_STORAGE)) {
             strategy = new SessionLocalization();
@@ -111,10 +120,13 @@ public class ContextListener implements ServletContextListener {
             strategy = new CookiesLocalization();
         }
         context.setAttribute(STRATEGY_LOCALIZATION, strategy);
-
         OrderRepository orderRepository = new OrderRepositoryImpl();
         ValidateOrder validateOrder = new ValidateOrderImpl();
-        OrderService orderService = new OrderServiceImpl(orderRepository, transactionManager, validateOrder);
-        context.setAttribute(ORDER_SERVICE, orderService);
+        OrderService orderService = new OrderServiceImpl(orderRepository,transactionManager,validateOrder);
+        context.setAttribute(ORDER_SERVICE,orderService);
+        ManagerServiceImpl managerService = new ManagerServiceImpl(orderRepository,transactionManager);
+        context.setAttribute(MANAGER_SERVICE,managerService);
+        UserBlockerService userBlockerService = new UserBlockerServiceImpl(userDao,transactionManager);
+        context.setAttribute(UNBLOCK_SERVICE,userBlockerService);
     }
 }

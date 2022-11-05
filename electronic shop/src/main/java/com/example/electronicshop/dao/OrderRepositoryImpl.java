@@ -41,7 +41,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     public static final String STATUS = "status";
     public static final String PAYMENT_TYPE = "type";
     public static final String DELIVERY_TYPE = "type";
-    private final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT);
+    public final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ROOT);
     public static final String ORDER_INFORMATION = "SELECT ord.orderId, orderDate, order_status.status, description,delivery.Type as delivery, totalPrice\n" +
             " FROM electronics_shop.order as ord inner join delivery on ShipperId = deliveryID \n" +
             "inner join order_status on ord.statusId = order_status.statusId WHERE customerID =?";

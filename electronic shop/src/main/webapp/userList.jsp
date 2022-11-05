@@ -15,7 +15,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Orders</title>
+    <title><fmt:message key="userinfo"/></title>
 
     <!-- Google Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
@@ -55,7 +55,7 @@
             <div class="col-md-5">
                 <div class="header-right">
                     <ul class="list-unstyled list-inline">
-                        <a href="/reg"><fmt:message key="sign.up" /></a>
+                        <a href="/reg"><fmt:message key="sign.up"/></a>
                         <customtag:language/>
                     </ul>
                 </div>
@@ -75,7 +75,8 @@
 
             <div class="col-sm-6">
                 <div class="shopping-item">
-                    <a href="/cart"><fmt:message key="cart" /> - <span class="cart-amunt">₴${sessionScope.cartInfo.totalPrice}</span> <i
+                    <a href="/cart"><fmt:message key="cart"/> - <span
+                            class="cart-amunt">₴${sessionScope.cartInfo.totalPrice}</span> <i
                             class="fa fa-shopping-cart"></i> <span
                             class="product-count">${sessionScope.cartInfo.totalQuantity}</span></a>
                 </div>
@@ -102,7 +103,7 @@
                     <li><a href="/cart"><fmt:message key="cart"/></a></li>
                     <c:if test='${sessionScope.get("specificUser").getUserRole().equals("admin")}'>
                         <li><a href="/confirm"><fmt:message key="orderProcessing"/></a></li>
-                        <li><a href="/userList"><fmt:message key="userinfo"/></a></li>
+                        <li class="active"><a href="/userList"><fmt:message key="userinfo"/></a></li>
                     </c:if>
                 </ul>
             </div>
@@ -115,7 +116,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="product-bit-title text-center">
-                    <h2><fmt:message key="orders" /></h2>
+                    <h2><fmt:message key="userinfo"/></h2>
                 </div>
             </div>
         </div>
@@ -127,88 +128,57 @@
     <div class="container">
         <div class="row">
 
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="product-content-right">
                     <div class="woocommerce">
-                        <p id="errorMassage1"
-                           style="color:red;font-size: xx-large"><c:if
-                                test='${sessionScope.get("specificUser") == null}'>${sessionScope.get("error").get("userError")}</c:if>
-                        </p>
                         <table cellspacing="0" class="shop_table cart">
                             <thead>
                             <tr>
-                                <th class="product-thumbnail"><fmt:message key="Norders" /></th>
-                                <th class="product-name"><fmt:message key="date" /></th>
-                                <th class="product-price"><fmt:message key="status" /></th>
-                                <th class="product-quantity"><fmt:message key="stDes" /></th>
-                                <th class="product-quantity"><fmt:message key="deliveryType" /></th>
-                                <th class="product-subtotal"><fmt:message key="totPrice" /></th>
-                                <c:if test='${sessionScope.goTo.equals("/confirm")}'>
-                                    <th class="product-subtotal"><fmt:message key="update" /></th>
-                                </c:if>
+                                <th class="product-thumbnail"><fmt:message key="id"/></th>
+                                <th class="product-name"></th>
+                                <th class="product-price"><fmt:message key="fName"/></th>
+                                <th class="product-quantity"><fmt:message key="lName"/></th>
+                                <th class="product-quantity"><fmt:message key="email"/></th>
+                                <th class="product-subtotal"><fmt:message key="mailing"/></th>
+                                <th class="product-subtotal"><fmt:message key="date"/></th>
+                                <th class="product-subtotal"><fmt:message key="block"/></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach var="orderInfo" items="${sessionScope.orderInfo.orderInfoList}">
+                            <c:forEach var="user" items="${sessionScope.userList}">
 
 
-                                    <tr class="cart_item">
+                                <tr class="cart_item">
                                     <td class="product-thumbnail">
-                                            ${orderInfo.orderNumber}
+                                            ${user.id}
+                                    </td>
+                                    <td class="product-subtotal">
+                                        <img src="${pageContext.request.contextPath}/drawAvatar?productImg=${user.avatarUdl}" width="100" height="100">
+                                    </td>
+                                    <td class="product-quantity">
+                                            ${user.firstName}
+                                    </td>
+                                    <td class="product-subtotal">
+                                            ${user.lastName}
+                                    </td>
+                                    <td class="product-subtotal">
+                                            ${user.email}
+                                    </td>
+                                    <td class="product-subtotal">
+                                            ${user.mailing}
                                     </td>
                                     <td class="product-name">
-                                        <fmt:formatDate type="date" value="${orderInfo.orderDate}"
-                                                        pattern="dd.MM.yyyy HH:MM"/>
+                                        ${user.whenUnblock}
                                     </td>
 
                                     <td class="product-price">
-                                        <c:if test='${!sessionScope.goTo.equals("/confirm")}'>
-                                            ${orderInfo.orderStatus}
+                                        <c:if test='${user.blocked}'>
+                                            <form method="post" action="/userList">
+                                                <input type="hidden" name="id" value="${user.id}">
+                                                <input type="submit" value="<fmt:message key="update"/>"
+                                                       name="update_cart" class="button">
+                                            </form>
                                         </c:if>
-                                        <c:if test='${sessionScope.goTo.equals("/confirm")}'>
-                                        <form method="post" action="/confirm">
-                                            <select name="status">
-                                                <c:forEach items="${sessionScope.orderInfo.getStatusMap().entrySet()}"
-                                                           var="orderStatus">
-                                                    <option value="${orderStatus.getKey()}"
-                                                            <c:if test='${orderStatus.getValue().equals(orderInfo.orderStatus)}'>
-                                                                selected
-                                                            </c:if>
-                                                    >${orderStatus.getValue()}</option>
-                                                </c:forEach>
-                                            </select>
-                                            </c:if>
-                                    </td>
-
-                                    <td class="product-quantity">
-                                            ${orderInfo.statusDescription}
-                                        <c:if test='${sessionScope.goTo.equals("/confirm")}'>
-                                            <c:forEach var="errorStatus" items="${sessionScope.err.entrySet()}">
-                                            <c:if test="${errorStatus.getKey() == orderInfo.orderNumber}">
-                                                <p id="error${errorStatus}" style="color:red"> ${errorStatus.getValue()}
-                                                </p>
-                                            </c:if>
-                                            </c:forEach>
-                                            <input type="hidden" name="id" value="${orderInfo.orderNumber}">
-                                            <input type="text" name="description">
-                                        </c:if>
-                                    </td>
-                                    <td class="product-subtotal">
-                                            ${orderInfo.deliveryType}
-                                    </td>
-                                    <td class="product-subtotal">
-                                            ${orderInfo.totalPrice}
-                                    </td>
-                                    <c:if test='${sessionScope.goTo.equals("/confirm")}'>
-                                        <td>
-                                            <input type="submit" value="<fmt:message key="update"/>" name="update_cart" class="button">
-                                           </form>
-                                        </td>
-                                    </c:if>
-                                </tr>
-                                <tr>
-                                    <td class="product-subtotal" colspan="7">
-                                        <customtag:orderDetails orderId="${orderInfo.orderNumber}"/>
                                     </td>
                                 </tr>
                             </c:forEach>

@@ -14,7 +14,6 @@ public class SecurityConfig {
         SecurityConfig.mapConfig = mapConfig;
     }
 
-
     public static Set<String> getAllAppRoles() {
         return mapConfig.keySet();
     }

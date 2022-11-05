@@ -68,8 +68,6 @@ public class SecurityFilter implements Filter {
                 return;
             }
         }
-        String goTo = request.getRequestURI();
-        session.setAttribute(REQUEST_GO_TO, goTo);
         session.setAttribute(REQUEST_CAME_FROM, referrer);
         chain.doFilter(wrapRequest, response);
     }
