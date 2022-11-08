@@ -10,10 +10,11 @@ import java.util.Set;
 public class SecurityConfig {
     private static Map<String, List<String>> mapConfig;
 
-    public SecurityConfig(Map<String, List<String>> mapConfig) {
+    public SecurityConfig() {
+    }
+    public static void setMapConfig(Map<String, List<String>> mapConfig) {
         SecurityConfig.mapConfig = mapConfig;
     }
-
     public static Set<String> getAllAppRoles() {
         return mapConfig.keySet();
     }

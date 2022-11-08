@@ -40,8 +40,6 @@ public class SecurityFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
         SpecificUser loginUser = (SpecificUser) session.getAttribute(SPECIFIC_USER);
         HttpServletRequest wrapRequest = request;
@@ -53,18 +51,11 @@ public class SecurityFilter implements Filter {
         }
         if (SecurityUtils.isSecurityPage(request)) {
             if (loginUser == null) {
-                String goTo = request.getRequestURI();
-                session.setAttribute(REQUEST_GO_TO, goTo);
-                session.setAttribute(ERROR_MESSAGE,"Sorry you need Sign in");
-                response.sendRedirect(referrer);
+                setErrorLoginAndReturnBackToPage(request,response,session,referrer);
                 return;
             }
-            boolean hasPermission = SecurityUtils.hasPermission(wrapRequest);
-            if (!hasPermission) {
-                request.setAttribute(ERROR_MESSAGE, "Sorry you can't go there");
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/ErrorPage.jsp");
-                session.setAttribute(REQUEST_CAME_FROM, referrer);
-                dispatcher.forward(request, response);
+            boolean hasPermission = setPermissionError(wrapRequest,response,session,referrer);
+            if (hasPermission) {
                 return;
             }
         }
@@ -77,5 +68,27 @@ public class SecurityFilter implements Filter {
         //default
     }
 
-
+    private void setErrorLoginAndReturnBackToPage(HttpServletRequest request,HttpServletResponse response,
+                                                     HttpSession session, String referrer){
+        String goTo = request.getRequestURI();
+        session.setAttribute(REQUEST_GO_TO, goTo);
+        session.setAttribute(ERROR_MESSAGE,"Sorry you need Sign in");
+        try {
+            response.sendRedirect(referrer);
+        } catch (IOException ex) {
+          ex.printStackTrace();
+        }
+    }
+    private boolean setPermissionError(HttpServletRequest wrapRequest,HttpServletResponse response,
+                                       HttpSession session,String referrer) throws ServletException, IOException {
+        boolean hasPermission = SecurityUtils.hasPermission(wrapRequest);
+        if (!hasPermission) {
+            wrapRequest.setAttribute(ERROR_MESSAGE, "Sorry you can't go there");
+            RequestDispatcher dispatcher = wrapRequest.getRequestDispatcher("/ErrorPage.jsp");
+            session.setAttribute(REQUEST_CAME_FROM, referrer);
+            dispatcher.forward(wrapRequest, response);
+            return true;
+        }
+        return false;
+    }
 }

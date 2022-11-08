@@ -16,7 +16,7 @@ import com.example.electronicshop.order.OrderServiceImpl;
 import com.example.electronicshop.order.processing.ManagerServiceImpl;
 import com.example.electronicshop.products.ReadProductRequest;
 import com.example.electronicshop.products.ReadProductRequestImpl;
-import com.example.electronicshop.security.ReadPermissions;
+import com.example.electronicshop.security.PermissionReader;
 import com.example.electronicshop.security.SecurityConfig;
 import com.example.electronicshop.service.ImageService;
 import com.example.electronicshop.service.LoginService;
@@ -79,8 +79,8 @@ public class ContextListener implements ServletContextListener {
         localeStorage = context.getInitParameter(LOCALE_STORAGE);
         context.setAttribute("locales", locales);
         initPool();
-        ReadPermissions readPermissions = new ReadPermissions();
-        SecurityConfig securityConfig = new SecurityConfig(readPermissions.readFile(securityFileName));
+        PermissionReader readPermissions = new PermissionReader();
+        SecurityConfig.setMapConfig(readPermissions.readFile(securityFileName));
         try {
             initService();
         } catch (SQLException e) {

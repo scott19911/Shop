@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ReadPermissions {
+public class PermissionReader {
     /**
      * Read configuration file
      * @param securityFile - configuration file
